@@ -76,15 +76,30 @@ function fetch_and_render_notifications() {
                 // const time_ago = frappe.datetime.get_time_diff_now(notif.creation);
                 const time_ago = frappe.datetime.prettyDate(notif.creation);
 
+                // const item = $(`
+                //     <li class="notification-item" 
+                //         data-log-name="${notif.name}"
+                //         data-doc-type="${notif.document_type}" 
+                //         data-doc-name="${notif.document_name}">
+                //         <div class="subject">${notif.subject}</div>
+                //         <div class="time">${time_ago}</div>
+                //     </li>
+                // `);
                 const item = $(`
-                    <li class="notification-item" 
-                        data-log-name="${notif.name}"
-                        data-doc-type="${notif.document_type}" 
-                        data-doc-name="${notif.document_name}">
-                        <div class="subject">${notif.subject}</div>
-                        <div class="time">${time_ago}</div>
-                    </li>
-                `);
+                  <li class="notification-item" 
+                      tabindex="0"
+                      data-log-name="${notif.name}"
+                      data-doc-type="${notif.document_type}" 
+                      data-doc-name="${notif.document_name}">
+                      <div class="notification-icon">
+                          <i class="fa fa-info-circle"></i> </div>
+                      <div class="notification-content">
+                          <div class="subject">${notif.subject}</div>
+                          <div class="time">${time_ago}</div>
+                      </div>
+                      <div class="notification-unread-dot"></div>
+                  </li>
+              `);
                 list.append(item);
             });
         } else {
@@ -93,240 +108,7 @@ function fetch_and_render_notifications() {
         }
     });
 }
-// Attach event listeners for the notification bell
-// function setup_notification_events() {
-//     console.log("Setting up notification events");
-    
-//     let clickInProgress = false;
-//     let dropdownVisible = false;
-    
-//     // Bell container click handler
-//     $(document).on('click', '.notification-bell-container', function(e) {
-//         console.log("Bell clicked");
-        
-//         if (clickInProgress) {
-//             console.log("Click in progress, skipping");
-//             return;
-//         }
-//         clickInProgress = true;
-        
-//         e.stopPropagation();
-//         e.preventDefault();
-        
-//         const $dropdown = $('.notification-dropdown');
-//         const isCurrentlyVisible = dropdownVisible;
-        
-//         console.log("Before toggle - dropdown visible:", isCurrentlyVisible);
-        
-//         // Always close all dropdowns first
-//         closeAllNotificationDropdowns();
-        
-//         // If it wasn't visible, open it
-//         if (!isCurrentlyVisible) {
-//             openNotificationDropdown($dropdown);
-//             console.log("Dropdown opened");
-//         } else {
-//             console.log("Dropdown closed");
-//         }
-        
-//         // Reset flag after a short delay
-//         setTimeout(() => {
-//             clickInProgress = false;
-//         }, 150);
-//     });
 
-//     // Notification item click handler
-//     $(document).on('click', '.notification-item', function(e) {
-//         // Don't process if it's a no-notifications message
-//         if ($(this).hasClass('no-notifications')) {
-//             e.stopPropagation();
-//             return;
-//         }
-        
-//         console.log("Notification item clicked");
-//         const log_name = $(this).data('log-name');
-//         const doc_type = $(this).data('doc-type');
-//         const doc_name = $(this).data('doc-name');
-
-//         if (!log_name || !doc_type || !doc_name) {
-//             console.error("Missing notification data:", { log_name, doc_type, doc_name });
-//             return;
-//         }
-
-//         console.log("Processing notification:", log_name);
-
-//         // Close dropdown immediately when item is clicked
-//         closeAllNotificationDropdowns();
-
-//         // Mark as read using multiple approaches for reliability
-//         markNotificationAsRead(log_name)
-//             .then(() => {
-//                 console.log("Successfully marked as read:", log_name);
-//                 // Refresh notifications
-//                 fetch_and_render_notifications();
-//                 // Navigate to the document
-//                 navigateToDocument(doc_type, doc_name);
-//             })
-//             .catch((error) => {
-//                 console.error("Error processing notification:", error);
-//                 // Even if marking fails, still navigate and refresh
-//                 fetch_and_render_notifications();
-//                 navigateToDocument(doc_type, doc_name);
-//             });
-//     });
-
-//     // Close dropdown if clicked outside
-//     $(document).on('click', function(e) {
-//         if (!$(e.target).closest('.notification-bell-container').length && 
-//             !$(e.target).closest('.notification-dropdown').length) {
-            
-//             closeAllNotificationDropdowns();
-//         }
-//     });
-
-//     // Close on escape key
-//     $(document).on('keydown', function(e) {
-//         if (e.key === 'Escape' && dropdownVisible) {
-//             closeAllNotificationDropdowns();
-//         }
-//     });
-
-//     // Prevent dropdown from closing when clicking inside it
-//     $(document).on('click', '.notification-dropdown', function(e) {
-//         e.stopPropagation();
-//     });
-
-//     // Helper function to close all notification dropdowns
-//     function closeAllNotificationDropdowns() {
-//         const $dropdown = $('.notification-dropdown');
-//         if ($dropdown.length) {
-//             $dropdown.removeClass('show').css({
-//                 'display': 'none',
-//                 'visibility': 'hidden',
-//                 'opacity': '0'
-//             });
-//             dropdownVisible = false;
-//             console.log("All notification dropdowns closed");
-//         }
-//     }
-
-//     // Helper function to open notification dropdown
-//     function openNotificationDropdown($dropdown) {
-//         $dropdown.addClass('show').css({
-//             'display': 'block',
-//             'visibility': 'visible',
-//             'opacity': '1'
-//         });
-//         dropdownVisible = true;
-        
-//         // Focus first notification item for keyboard accessibility
-//         setTimeout(() => {
-//             $dropdown.find('.notification-item:first').focus();
-//         }, 100);
-//     }
-
-//     // Helper function to mark notification as read
-//     function markNotificationAsRead(log_name) {
-//         return new Promise((resolve, reject) => {
-//             // Try multiple approaches for reliability
-//             const markAsRead = () => {
-//                 // Approach 1: Use update with get_doc first (most reliable)
-//                 frappe.db.get_doc("Notification Log", log_name)
-//                     .then((doc) => {
-//                         if (doc.read) {
-//                             console.log("Notification already read");
-//                             resolve();
-//                             return;
-//                         }
-//                         doc.read = 1;
-//                         return frappe.db.update("Notification Log", doc);
-//                     })
-//                     .then(() => {
-//                         console.log("Notification marked as read via update");
-//                         resolve();
-//                     })
-//                     .catch((error) => {
-//                         console.warn("Update approach failed, trying set_value:", error);
-//                         // Approach 2: Use set_value as fallback
-//                         frappe.db.set_value("Notification Log", log_name, "read", 1)
-//                             .then(() => {
-//                                 console.log("Notification marked as read via set_value");
-//                                 resolve();
-//                             })
-//                             .catch((setValueError) => {
-//                                 console.warn("Set_value approach failed, trying call:", setValueError);
-//                                 // Approach 3: Use frappe.call as last resort
-//                                 frappe.call({
-//                                     method: 'frappe.client.set_value',
-//                                     args: {
-//                                         doctype: 'Notification Log',
-//                                         name: log_name,
-//                                         fieldname: 'read',
-//                                         value: 1
-//                                     },
-//                                     callback: function(r) {
-//                                         if (r.exc) {
-//                                             console.error("All marking approaches failed");
-//                                             reject(r.exc);
-//                                         } else {
-//                                             console.log("Notification marked as read via call");
-//                                             resolve();
-//                                         }
-//                                     }
-//                                 });
-//                             });
-//                     });
-//             };
-
-//             markAsRead();
-//         });
-//     }
-
-//     // Helper function to navigate to document
-//     function navigateToDocument(doc_type, doc_name) {
-//         if (doc_type && doc_name) {
-//             console.log("Navigating to:", doc_type, doc_name);
-//             try {
-//                 frappe.set_route('Form', doc_type, doc_name);
-//             } catch (error) {
-//                 console.error("Navigation error:", error);
-//                 // Fallback navigation
-//                 window.location.href = `/app/${frappe.router.slug(doc_type)}/${doc_name}`;
-//             }
-//         } else {
-//             console.error("Invalid document type or name for navigation");
-//         }
-//     }
-
-//     // Add keyboard navigation support
-//     $(document).on('keydown', '.notification-dropdown', function(e) {
-//         if (!dropdownVisible) return;
-
-//         const $items = $('.notification-item:not(.no-notifications)');
-//         const $focused = $(':focus');
-//         let index = $items.index($focused);
-
-//         switch(e.key) {
-//             case 'ArrowDown':
-//                 e.preventDefault();
-//                 index = (index + 1) % $items.length;
-//                 $items.eq(index).focus();
-//                 break;
-//             case 'ArrowUp':
-//                 e.preventDefault();
-//                 index = (index - 1 + $items.length) % $items.length;
-//                 $items.eq(index).focus();
-//                 break;
-//             case 'Enter':
-//                 if ($focused.hasClass('notification-item')) {
-//                     $focused.trigger('click');
-//                 }
-//                 break;
-//         }
-//     });
-
-//     console.log("Notification events setup completed");
-// }
 
 function setup_notification_events() {
     console.log("Setting up notification events");
@@ -784,18 +566,13 @@ if (report_links) {
       </div>
     </div>`;
 }
-
+  // Main navbar HTML structure with notification bell
   //   navbar = `
   //   <div class="overlay" data-overlay-first-page></div>
   //   <div class="overlay" data-overlay-first-page></div>
   //   <div class="menu" data-menu-first-page>
   //     <div class="profile__img__close__nav">
-  //     <div class="menu_profile__image__name">
-  //       <!-- <div class="menu_profile__image">
-  //       <img src="./assests/images/profile-imp.png" alt="profile_img" />
-  //       </div> -->
-    
-  //     </div>
+  //     <div class="menu_profile__image__name"></div>
   //     <div class="close__navbar__icon" data-first-page-close-nav>
   //       <i class="fa fa-x"></i>
   //     </div>
@@ -804,70 +581,66 @@ if (report_links) {
   //     <div class="menu__companies">
       
   //     <span class="close_mennu" onclick="closeFirstPageNav()">Close</span>
-  
-     
-   
-
   //  ${mobile_links}  
   //     </div>
-    
-      
-    
-  //     <div class="menu__profile">
 
+  //     <div class="menu__profile">
+  //       <div class="dropdown">
+  //         <a style ="color:#fff" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  //         My Profile
+  //         </a>
+  //         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">		  
+  //          <button class="dropdown-item" onclick="frappe.ui.toolbar.route_to_user()">My Settings</button>
+  //          <button class="dropdown-item" onclick="frappe.ui.toolbar.clear_cache()">Reload</button>
+  //        </div>  
+  //       </div>  
+  //       <button class="btn border border-white text-white" onclick="frappe.app.logout()">Log out</button>
+  //     </div>
+  //   </div>
     
-     
-  //   <div class="dropdown">
-  //     <a style ="color:#fff" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-  //     My Profile
-  //     </a>
-  //     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">		  
-  //      <button class="dropdown-item" onclick="frappe.ui.toolbar.route_to_user()">My Settings</button>
-  //      <button class="dropdown-item" onclick="frappe.ui.toolbar.clear_cache()">Reload</button>
-  //    </div>  
-  //   </div>  
-   
-  //     <button class="btn border border-white text-white" onclick="frappe.app.logout()">Log out</button>
-  //     </div>
-  //   </div>
   //   <header class="header">
-  //     <div class="logo__navlinks">
-  //     <!-- logo -->
-  //     <a class="mylogo nav-link icon" onclick='window.location.reload()' href="/app" data-logo>
-  //     <i class="fa fa-home"></i>
-  //     </a> 
-  //     ${navitems}
-  //     </div>
-     
-      
-      
-  //     <div class="profile__image__name mr-3">
-  //       <div class="profile__image">
+  //       <div class="logo__navlinks">
+  //           <a class="mylogo nav-link icon" onclick='window.location.reload()' href="/app" data-logo>
+  //               <i class="fa fa-home"></i>
+  //           </a> 
+  //           ${navitems}
   //       </div>
-  //       <span class="nav-link nav-item">${frappe.boot.user.first_name}</span>
-  //       <button class="ml-3 mr-5  btn nav-link nav-item" onclick = "frappe.app.logout()">Logout</button>
-  //   <div class="dropdown nav-item">
-  //       <a style ="color:#fff" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-  //       My Profile
-  //       </a>
-  //     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">		  
-  //       <button class="dropdown-item" onclick="frappe.ui.toolbar.route_to_user()">My Settings</button>
-  //       <button class="dropdown-item" onclick="frappe.ui.toolbar.clear_cache()">Reload</button>
-  //     </div>
-  //   </div>
-          
-  
-  //     </div>
-  //     <div class="open-navbarbtn" data-first-page-open-nav onclick = "openFirstPageNav()">
-  //       <i class="fa fa-bars"></i>
-  //     </div>
-  //     </div>
+        
+  //       <div class="profile__image__name mr-3">
+  //           <span class="nav-link nav-item">${frappe.boot.user.first_name}</span>
+  //           <button class="ml-3 mr-2 btn nav-link nav-item" onclick="frappe.app.logout()">Logout</button>
+            
+  //           <div class="notification-bell-container nav-item">
+  //               <i class="fa fa-bell notification-bell-icon"></i>
+  //               <span class="notification-badge">0</span>
+  //               <div class="notification-dropdown">
+  //                   <div class="notification-header">Notifications</div>
+  //                   <ul class="notification-list">
+  //                       </ul>
+  //                   <div class="notification-footer">
+  //                       <a href="/app/notification-log">View All</a>
+  //                   </div>
+  //               </div>
+  //           </div>
+  //           <div class="dropdown nav-item">
+  //               <a style ="color:#fff" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  //               My Profile
+  //               </a>
+  //               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">		  
+  //                   <button class="dropdown-item" onclick="frappe.ui.toolbar.route_to_user()">My Settings</button>
+  //                   <button class="dropdown-item" onclick="frappe.ui.toolbar.clear_cache()">Reload</button>
+  //               </div>
+  //           </div>
+  //       </div>
+
+  //       <div class="open-navbarbtn" data-first-page-open-nav onclick="openFirstPageNav()">
+  //           <i class="fa fa-bars"></i>
+  //       </div>
   //   </header>
-  //   `  
-  
-  
-  // Main navbar HTML structure with notification bell
-    navbar = `
+  //   `
+
+  //*------ GEMINI CODE 
+  navbar = `
     <div class="overlay" data-overlay-first-page></div>
     <div class="overlay" data-overlay-first-page></div>
     <div class="menu" data-menu-first-page>
@@ -892,9 +665,10 @@ if (report_links) {
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">		  
            <button class="dropdown-item" onclick="frappe.ui.toolbar.route_to_user()">My Settings</button>
            <button class="dropdown-item" onclick="frappe.ui.toolbar.clear_cache()">Reload</button>
+           <div class="dropdown-divider"></div>
+           <button class="dropdown-item" onclick="frappe.app.logout()">Log out</button>
          </div>  
         </div>  
-        <button class="btn border border-white text-white" onclick="frappe.app.logout()">Log out</button>
       </div>
     </div>
     
@@ -908,7 +682,6 @@ if (report_links) {
         
         <div class="profile__image__name mr-3">
             <span class="nav-link nav-item">${frappe.boot.user.first_name}</span>
-            <button class="ml-3 mr-2 btn nav-link nav-item" onclick="frappe.app.logout()">Logout</button>
             
             <div class="notification-bell-container nav-item">
                 <i class="fa fa-bell notification-bell-icon"></i>
@@ -929,6 +702,8 @@ if (report_links) {
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">		  
                     <button class="dropdown-item" onclick="frappe.ui.toolbar.route_to_user()">My Settings</button>
                     <button class="dropdown-item" onclick="frappe.ui.toolbar.clear_cache()">Reload</button>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item" onclick="frappe.app.logout()">Logout</button>
                 </div>
             </div>
         </div>
@@ -938,6 +713,81 @@ if (report_links) {
         </div>
     </header>
     `
+
+  //!----------  DEEPSEEK CODE  -----------
+  // navbar = `
+  //   <div class="overlay" data-overlay-first-page></div>
+  //   <div class="overlay" data-overlay-first-page></div>
+  //   <div class="menu" data-menu-first-page>
+  //     <div class="profile__img__close__nav">
+  //     <div class="menu_profile__image__name"></div>
+  //     <div class="close__navbar__icon" data-first-page-close-nav>
+  //       <i class="fa fa-x"></i>
+  //     </div>
+  //     </div>
+    
+  //     <div class="menu__companies">
+      
+  //     <span class="close_mennu" onclick="closeFirstPageNav()">Close</span>
+  //  ${mobile_links}  
+  //     </div>
+
+  //     <div class="menu__profile">
+  //       <div class="dropdown">
+  //         <a style ="color:#fff" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  //         My Profile
+  //         </a>
+  //         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">		  
+  //          <button class="dropdown-item" onclick="frappe.ui.toolbar.route_to_user()">My Settings</button>
+  //          <button class="dropdown-item" onclick="frappe.ui.toolbar.clear_cache()">Reload</button>
+  //          <div class="dropdown-divider"></div>
+  //          <button class="dropdown-item" onclick="frappe.app.logout()">Log out</button>
+  //        </div>  
+  //       </div>  
+  //     </div>
+  //   </div>
+    
+  //   <header class="header">
+  //       <div class="logo__navlinks">
+  //           <a class="mylogo nav-link icon" onclick='window.location.reload()' href="/app" data-logo>
+  //               <i class="fa fa-home"></i>
+  //           </a> 
+  //           ${navitems}
+  //       </div>
+        
+  //       <div class="profile__image__name mr-3">
+  //           <span class="nav-link nav-item">${frappe.boot.user.first_name}</span>
+            
+  //           <div class="notification-bell-container nav-item">
+  //               <i class="fa fa-bell notification-bell-icon"></i>
+  //               <span class="notification-badge">0</span>
+  //               <div class="notification-dropdown">
+  //                   <div class="notification-header">Notifications</div>
+  //                   <ul class="notification-list">
+  //                       </ul>
+  //                   <div class="notification-footer">
+  //                       <a href="/app/notification-log">View All</a>
+  //                   </div>
+  //               </div>
+  //           </div>
+  //           <div class="dropdown nav-item">
+  //               <a style ="color:#fff" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  //               My Profile
+  //               </a>
+  //               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">		  
+  //                   <button class="dropdown-item" onclick="frappe.ui.toolbar.route_to_user()">My Settings</button>
+  //                   <button class="dropdown-item" onclick="frappe.ui.toolbar.clear_cache()">Reload</button>
+  //                   <div class="dropdown-divider"></div>
+  //                   <button class="dropdown-item" onclick="frappe.app.logout()">Log out</button>
+  //               </div>
+  //           </div>
+  //       </div>
+
+  //       <div class="open-navbarbtn" data-first-page-open-nav onclick="openFirstPageNav()">
+  //           <i class="fa fa-bars"></i>
+  //       </div>
+  //   </header>
+  //   `
 
   return navbar
 }

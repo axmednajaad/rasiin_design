@@ -1,0 +1,97 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-09-28 17:53:10.142845",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_g7da",
+  "sms_gateway_url",
+  "sender_name",
+  "column_break_usuq",
+  "enabled",
+  "validity",
+  "section_break_rkcm",
+  "sms_api_username",
+  "sms_api_password"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_g7da",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "sms_gateway_url",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "SMS Gateway URL",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sender_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Sender Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_usuq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled"
+  },
+  {
+   "fieldname": "validity",
+   "fieldtype": "Int",
+   "label": "Validity"
+  },
+  {
+   "fieldname": "section_break_rkcm",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "sms_api_username",
+   "fieldtype": "Password",
+   "in_list_view": 1,
+   "label": "Sms Api Username",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sms_api_password",
+   "fieldtype": "Password",
+   "in_list_view": 1,
+   "label": "Sms Api Password",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-09-28 18:00:59.637346",
+ "modified_by": "Administrator",
+ "module": "Rasiin Design",
+ "name": "Custom Sms Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
