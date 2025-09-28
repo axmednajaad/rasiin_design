@@ -153,20 +153,20 @@ doc_events = {
 
 scheduler_events = {
     "daily": [
-        "rasiin_design.rasiin_design.scheduled_tasks.trigger_overdue_notifications"
+        "rasiin_design.scheduled_tasks.trigger_overdue_notifications"
     ],
     "cron": {
         # Run every day at 8 AM
         "0 6 * * *": [
-            "rasiin_design.rasiin_design.scheduled_tasks.trigger_overdue_notifications"
+            "rasiin_design.scheduled_tasks.trigger_overdue_notifications"
         ],
         # Run every day at 11 AM
         "0 11 * * *": [
-            "rasiin_design.rasiin_design.scheduled_tasks.trigger_overdue_notifications"
+            "rasiin_design.scheduled_tasks.trigger_overdue_notifications"
         ],
         # Optional: Run at 3 PM for follow-ups
         "0 15 * * *": [
-            "rasiin_design.rasiin_design.scheduled_tasks.trigger_overdue_notifications"
+            "rasiin_design.scheduled_tasks.trigger_overdue_notifications"
         ]
     },
 #	"all": [

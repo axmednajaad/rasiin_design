@@ -11,6 +11,7 @@
   "column_break_usuq",
   "enabled",
   "validity",
+  "sms_character_limit",
   "section_break_rkcm",
   "sms_api_username",
   "sms_api_password"
@@ -66,13 +67,19 @@
    "in_list_view": 1,
    "label": "Sms Api Password",
    "reqd": 1
+  },
+  {
+   "default": "150",
+   "fieldname": "sms_character_limit",
+   "fieldtype": "Int",
+   "label": "Sms Character Limit"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-09-28 18:00:59.637346",
+ "modified": "2025-09-28 22:02:06.078845",
  "modified_by": "Administrator",
  "module": "Rasiin Design",
  "name": "Custom Sms Settings",
