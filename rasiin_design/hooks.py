@@ -57,6 +57,9 @@ app_include_js = [
 
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
+doctype_js = {
+    "Custom Notification" : "public/js/custom_notification.js"
+}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -136,6 +139,14 @@ app_include_js = [
 #		"on_trash": "method"
 #	}
 # }
+
+doc_events = {
+    "*": {
+        "on_update": "rasiin_design.rasiin_design.doctype.custom_notification.custom_notification.evaluate_custom_notifications",
+        "on_submit": "rasiin_design.rasiin_design.doctype.custom_notification.custom_notification.evaluate_custom_notifications",
+        "on_cancel": "rasiin_design.rasiin_design.doctype.custom_notification.custom_notification.evaluate_custom_notifications"
+    }
+}
 
 # Scheduled Tasks
 # ---------------
