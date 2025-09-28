@@ -1,0 +1,15 @@
+#controls{
+    display: flex;
+    justify-content: end;
+    max-height: 10px;
+}
+
+#report_page{
+
+display: flex;
+width: 100%;
+
+}
+#dyreport{
+    flex:1
+}

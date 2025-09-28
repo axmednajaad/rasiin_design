@@ -1,0 +1,7 @@
+{
+  "js/rasiin_design.js": [
+    "public/js/new_design.js",
+    "public/js/custom_workspace.js"
+  ],
+  "css/rasiin_design.css": ["public/css/anfac_retail.css"]
+}

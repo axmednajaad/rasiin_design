@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <link href="/dist/css/bulma/tabulator_bulma.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="index.css" /> -->
+   
+
+
+    
+    <style>
+      * {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+.main {
+  display: flex;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  /* flex: 0.15; */
+  height: 100vh;
+  overflow-y: scroll;
+  padding-left: 15px;
+  padding-right: 15px;
+  background-color: #0C4872;
+  color: white;
+}
+
+@media screen and (max-width: 700px) {
+  .sidebar {
+    display: none;
+  }
+
+  .openSidebar {
+    display: flex;
+    position: fixed;
+  }
+}
+
+.logo {
+  margin-top: 9px;
+}
+
+.logo a {
+  font-size: 18px;
+  text-transform: capitalize;
+  font-weight: bold;
+  color: white;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 15px;
+}
+
+.links a {
+  color: white;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 0;
+  border-radius: 6px;
+  transition: color 150ms ease-in-out;
+}
+
+.link:hover {
+  background-color: whitesmoke;
+  color: black;
+}
+
+.active_link {
+  background-color: whitesmoke;
+  color: black !important;
+}
+
+.page_section {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  flex: 1;
+}
+/*  */
+.pageHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  /* padding-top: 9px; */
+  /* padding-bottom: 10px; */
+  /* background-color: rgb(12, 12, 24); */
+  /* color: white; */
+  font-size: 18px;
+  font-weight: bold;
+  height: fit-content;
+}
+
+.menubtn,
+.close_menu {
+  display: none;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 700px) {
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .menubtn,
+  .close_menu {
+    display: block;
+  }
+  .pageHeader {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .headerInput {
+    margin-top: 15px;
+    margin-left: 9px;
+  }
+
+  .page_section {
+    width: 100%;
+    flex: 1;
+  }
+}
+
+.headerLfet {
+  display: flex;
+  gap: 9.99px;
+  padding-left: 9px;
+}
+
+.menubtn {
+  font-size: 19px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 19px;
+}
+
+.headerInput {
+  border: 1px solid white;
+  background-color: white;
+  height: fit-content;
+  border-radius: 6px;
+  padding: 5px 0;
+}
+
+.headerInput input {
+  border: none;
+  outline: none;
+  padding-left: 5px;
+}
+
+.flexAct {
+  display: flex;
+  align-items: center;
+  word-wrap: none;
+  color: white;
+}
+
+.section_one {
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.boxes {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 15px;
+}
+
+@media screen and (max-width: 700px) {
+  .boxes {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.section_one {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.box {
+  background-color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 65px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px,
+    rgba(0, 0, 0, 0.1) 0px 2px 4px 0px,
+    rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+  border-radius: 6px;
+}
+
+.box_txt {
+  display: flex;
+  flex-direction: column;
+}
+
+.box_txt span:first-child {
+  font-size: 16px;
+}
+
+.box_txt span:last-child {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.box_icon {
+  background-color: green;
+  color: white;
+  width: 70px;
+  height: 100%;
+}
+
+.box_icon i {
+  width: 100%;
+  height: 100%;
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.charts_wrapper_one {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+@media screen and (max-width: 700px) {
+  .charts_wrapper_one {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.chart_one_wrapper {
+  width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px,
+    rgba(0, 0, 0, 0.1) 0px 2px 4px 0px,
+    rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+  border-radius: 6px;
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+table,
+tr {
+  border: 1px solid rgba(128, 128, 128, 0.5);
+  border-collapse: collapse;
+}
+
+td,
+th {
+  text-align: start;
+  padding: 3px 2px;
+}
+
+table {
+  width: 100%;
+}
+
+.table_sec {
+  /* width: 1067px; */
+  /* margin: 0 auto; */
+  margin-inline: 10px;
+  margin-top: 30px;
+}
+
+.blue_text {
+  color: rgb(41, 168, 177);
+}
+
+.bg_blue {
+  background-color: rgb(41, 168, 177);
+  color: white;
+  width: fit-content;
+  padding: 2px 9px;
+  border-radius: 6px;
+}
+
+    </style>
+  
+
+</head>
+  <body>
+    <main class="main">
+      <!-- {{ withsidebar }} -->
+      {% if withsidebar %}
+      <!-- <aside class="sidebar">
+        <div class="logo">
+          <a href="">Finance Report</a>
+          <span>
+            <i class="fa-solid fa-x close_menu"></i>
+          </span>
+        </div>
+        <div class="links">
+          <a href="#" class="link active_link">
+            <span onclick="get_patient_visit()">🏢</span>
+            <span onclick="get_patient_visit()">Patient Visit</span>
+          </a>
+          <a href="#" class="link">
+            <span onclick="get_report_doctor_wise_visit()">🏢</span>
+            <span onclick="get_report_doctor_wise_visit()">Doctor/Dep wise Visit</span>
+          </a>
+          <a href="#" class="link">
+            <span onclick="get_report_diagnose()">🏢</span>
+            <span onclick="get_report_diagnose()">Diagnose</span>
+          </a>
+          <a href="#" class="link">
+            <span onclick="get_report_lab()">🏢</span>
+            <span onclick="get_report_lab()">Lab Reports</span>
+          </a>
+          <a href="#" class="link">
+            <span onclick="get_report_radiolgy()">🏢</span>
+            <span onclick="get_report_radiolgy()">Radiolgy</span>
+          </a>
+          <a href="#" class="link">
+            <span onclick="get_report_inpatient()">🏢</span>
+            <span onclick="get_report_inpatient()">Inpatient</span>
+          </a>
+          <a href="#" class="link">
+            <span onclick="get_theater()">🏢</span>
+            <span onclick="get_theater()">Theater </span>
+          </a>
+        
+          </a>
+          
+        </div>
+      </aside> -->
+
+      {% endif %}
+      <section class="page_section">
+        <header class="pageHeader">
+          <div class="headerLfet">
+            <span class="">
+              <i class="fa-solid fa-bars menubtn"></i>
+            </span>
+            <!-- <span>Sheikh zyed hospital</span> -->
+          </div>
+          <div class="headerRight">
+            <!-- <label>From Date</label> -->
+            <div class="headerInput">
+              <div id = "from_date"></div>
+            </div>
+
+            <div class="headerInput">
+              <!-- <label>To Date</label> -->
+              <div class="headerInput">
+                <div id = "to_date"></div>
+              </div>
+            </div>
+            <div class="headerInput">
+              <!-- <label>To Date</label> -->
+              <div class="headerInput">
+                <div id = "print"></div>
+              </div>
+            </div>
+            <!-- <a href="" class="flexAct">
+              <span>Bed Status</span>
+            </a>
+            <a href="" class="flexAct">
+              <span>Status</span>
+            </a> -->
+          </div>
+        </header>
+
+        <section class="section_one">
+          <div class="boxes">
+            {% for  summary in summaries %}
+            <div class="box">
+              <span class="box_icon"><i class="{{ summary['icon'] }}"></i></span>
+              <div class="box_txt">
+                <span>{{summary["title"]}}</span>
+                <span>{{ summary["data"] }}</span>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+          <div class="charts_wrapper_one">
+
+     
+
+            {% for chart in charts %}
+            <div class="chart_one_wrapper">
+              <!-- <h2>Monthly Income Overview</h2> -->
+              <div id="{{chart.chart_type}}"></div>
+            </div>
+
+            {% endfor %}
+         
+
+
+        
+       
+          </div>
+          <div style = "height: 700px;"id="tbl"></div>
+        </section>
+  
+      </section>
+      
+    </main>
+ 
+{% if loading  %}
+    <!-- <script src="./index.js"></script> -->
+    <!-- <script src="rasiin_design/rasiin_design/public/js/lib/highcharts/code"></script> -->
+    <script src="{{ frappe.utils.get_url('assets/rasiin_design/js/lib/highcharts/code/highcharts.js' ) }}" ></script>
+    <script src="{{ frappe.utils.get_url('assets/rasiin_design/js/lib/highcharts/code/modules/exporting.js' ) }}" ></script>
+    <script src="{{ frappe.utils.get_url('assets/rasiin_design/js/lib/highcharts/code/modules/export-data.js' ) }}" ></script>
+    <!-- <script src="{{ frappe.utils.get_url('assets/rasiin_design/js/lib/highcharts/code/highcharts-more.js' ) }}" ></script> -->
+    <script src="{{ frappe.utils.get_url('assets/rasiin_design/js/lib/highcharts/code/modules/heatmap.js' ) }}" ></script>
+        <!-- <script src="{{ frappe.utils.get_url('https://code.highcharts.com/modules/heatmap.js' ) }}" ></script> -->
+    <!-- <script src="https://code.highcharts.com/modules/heatmap.js"></script> -->
+    
+    <!-- <script src="{{ frappe.utils.get_url('assets/rasiin_design/js/lib/highcharts/code/modules/treemap.js' ) }}" ></script> -->
+    <script src="{{ frappe.utils.get_url('assets/rasiin_design/js/lib/highcharts/code/modules/data.js' ) }}" ></script>
+    <script src="{{ frappe.utils.get_url('assets/rasiin_design/js/lib/highcharts/code/modules/drilldown.js' ) }}" ></script>
+
+    <script src="{{ frappe.utils.get_url('assets/rasiin_design/js/lib/highcharts/code/modules/accessibility.js' ) }}" ></script>
+  
+
+    {% endif %}
+    
+
+
+   
+    <!-- /home/dacad/frappe-bench/apps/rasiin_design/rasiin_design/public/js/lib/highcharts/code/modules/heatmap.js -->
+     
+<script>
+
+   charts = '{{ charts|tojson|safe }}'
+   charts = JSON.parse(charts)
+
+   charts.forEach( chart => {
+    if(chart.chart_type == "pie"){
+      // console.log(chart.chart_title)
+      pie_chart(chart.data , chart.chart_title, chart.chart_subtitle)
+    }
+    else{
+      column_chart(chart.series[0] , chart.drilldown , chart.chart_title, chart.chart_subtitle , chart.yAxis)
+    }
+   })
+
+
+
+
+function column_chart(series , drilldown ,  chart_title, chart_subtitle , yAxis){
+  Highcharts.chart('column', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        align: 'left',
+        text: chart_title
+    },
+    subtitle: {
+        align: 'left',
+        text: chart_subtitle
+    },
+    accessibility: {
+        announceNewData: {
+            enabled: true
+        }
+    },
+    xAxis: {
+        type: 'category'
+    },
+    yAxis: {
+        title: {
+            text:yAxis
+        }
+
+    },
+    legend: {
+        enabled: false
+    },
+    plotOptions: {
+        series: {
+            borderWidth: 0,
+            dataLabels: {
+                enabled: true,
+                format: '{point.y:.1f}'
+            }
+        }
+    },
+
+    tooltip: {
+        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
+    },
+
+    series:  series,
+    drilldown: drilldown
+});
+
+
+}
+   
+function pie_chart(data , chart_title, yAxis ="", chart_subtitle) {
+  Highcharts.chart('pie', {
+    chart: {
+        type: 'pie'
+    },
+    title: {
+        text: chart_title,
+        align: 'left'
+    },
+    subtitle: {
+        text: chart_subtitle,
+        align: 'left'
+    },
+    tooltip: {
+        pointFormat:'{series.name}: <b>{point.y}</b>'
+    },
+    accessibility: {
+        point: {
+            valueSuffix: '%'
+        }
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            borderWidth: 2,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b><br>{point.y}',
+                distance: 20
+            }
+        }
+    },
+    series: [{
+        // Disable mouse tracking on load, enable after custom animation
+        enableMouseTracking: false,
+        animation: {
+            duration: 2000
+        },
+        colorByPoint: true,
+        data: data
+    }]
+});
+
+
+
+}
+
+
+
+table = '{{ table|tojson|safe }}'
+table = JSON.parse(table)
+var table = new Tabulator("#tbl", {
+    height:"3311px",
+    layout:"fitDataFill",
+    columns:table[0]["columns"],
+    data: table[0]["data"],
+
+});
+
+
+
+
+
+var menuBtn = document.querySelector('.menubtn')
+var closeMenuBtn = document.querySelector('.close_menu')
+var sidebar = document.querySelector('.sidebar')
+var navLinks = document.querySelectorAll('.link')
+function openSidebar() {
+  sidebar.classList.add('openSidebar')
+}
+
+function closeSidebar() {
+  sidebar.classList.remove('openSidebar')
+}
+
+function handleDocumentClick(event) {
+  var isMenuBtn = event.target.matches('.menubtn')
+  var isSidebar = event.target.closest('.sidebar')
+
+  if (!isMenuBtn && !isSidebar) {
+    closeSidebar()
+  }
+}
+
+function handleNavLink(link) {
+  navLinks.forEach(function (el) {
+    el.classList.remove('active_link')
+  })
+
+  link.classList.add('active_link')
+}
+
+
+
+menuBtn.addEventListener('click', openSidebar)
+closeMenuBtn.addEventListener('click', closeSidebar)
+document.addEventListener('click', handleDocumentClick)
+navLinks.forEach((link) => {
+  link.addEventListener('click', () => {
+    handleNavLink(link)
+  })
+})
+
+</script>
+
+  </body>
+</html>

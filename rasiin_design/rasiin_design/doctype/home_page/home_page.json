@@ -1,0 +1,164 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "field:label",
+ "beta": 1,
+ "creation": "2023-03-16 13:40:27.417928",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "label",
+  "sequence_id",
+  "for_user",
+  "parent_page",
+  "module",
+  "column_break_3",
+  "image_icon",
+  "icon",
+  "color",
+  "restrict_to_domain",
+  "hide_custom",
+  "public",
+  "content",
+  "section_break_13",
+  "home_shortcut",
+  "roles"
+ ],
+ "fields": [
+  {
+   "fieldname": "label",
+   "fieldtype": "Data",
+   "label": "Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "sequence_id",
+   "fieldtype": "Float",
+   "label": "Sequence Id",
+   "read_only": 1
+  },
+  {
+   "fieldname": "for_user",
+   "fieldtype": "Data",
+   "label": "For User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "parent_page",
+   "fieldtype": "Data",
+   "label": "Parent Page",
+   "read_only": 1
+  },
+  {
+   "fieldname": "module",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Module",
+   "options": "Module Def"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "icon",
+   "fieldtype": "Data",
+   "label": "Icon"
+  },
+  {
+   "fieldname": "restrict_to_domain",
+   "fieldtype": "Link",
+   "label": "Restrict to Domain",
+   "options": "Domain",
+   "search_index": 1
+  },
+  {
+   "default": "0",
+   "description": "Checking this will hide custom doctypes and reports cards in Links section",
+   "fieldname": "hide_custom",
+   "fieldtype": "Check",
+   "label": "Hide Custom DocTypes and Reports"
+  },
+  {
+   "default": "0",
+   "fieldname": "public",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Public",
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "default": "[]",
+   "fieldname": "content",
+   "fieldtype": "Long Text",
+   "hidden": 1,
+   "label": "Content"
+  },
+  {
+   "fieldname": "roles",
+   "fieldtype": "Table",
+   "label": "Roles",
+   "options": "Has Role"
+  },
+  {
+   "fieldname": "home_shortcut",
+   "fieldtype": "Table",
+   "label": "Home Shortcut",
+   "options": "Home Shortcut"
+  },
+  {
+   "fieldname": "section_break_13",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Color",
+   "label": "Color"
+  },
+  {
+   "fieldname": "image_icon",
+   "fieldtype": "Attach",
+   "label": "Image Icon"
+  }
+ ],
+ "links": [],
+ "modified": "2025-01-18 17:04:43.590020",
+ "modified_by": "Administrator",
+ "module": "Rasiin Design",
+ "name": "Home Page",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "import": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Workspace Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "All",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

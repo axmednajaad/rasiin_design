@@ -1,0 +1,111 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Demo system</title>
+        <link rel="stylesheet" href="style.css">
+       
+
+</head> -->
+
+
+<div class="content-wrap" style="background-color: #e89b21 !important; color: black !important; border-radius: 6px; padding: 8px;">
+    <div class=" main">
+        <div class="container">
+<div  style="min-height: 700px; background-color: #e89b21; color: black !important; ">
+
+        <!-- .................... section 1 navabar ...................... -->
+        <div class="d-flex justify-content-end align-items-center">
+                <span class="nav-link nav-item text-white">{{frappe.db.get_value("User" , frappe.session.user , "full_name")}}</span>
+                <button class="ml-3 mr-5 text-white cursor-pointer font-bold" onclick = "frappe.app.logout()">Logout</button>
+                <div class="dropdown nav-item">
+                        <a style ="color:#fff" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        My Profile
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <button class="dropdown-item" onclick="frappe.ui.toolbar.route_to_user()">My Settings</button>
+                                <button class="dropdown-item" onclick="frappe.ui.toolbar.clear_cache()">Reload</button>
+                         
+                        </div>
+                      </div>
+        
+        </div>
+               <div class="flex flex-row float-right mr-4 mt-4">
+                <!-- .......one .. -->
+               
+                <!-- <nav>
+                        <ul class="flex flex-row">
+                                
+                             <li><a class="px-0 text-lg" href="#"><span class="text-white"><i class="fa fa-commenting-o">
+                                </i></span></a></li>
+                                <span class="bg-green-800 text-white w-6 h-6 rounded-full flex flex-col justify-center items-center ">4</span>
+                             <li><a class="pl-6 px-0" href="#"><span class="text-white text-lg"><i class="fa fa-clock-o"></i></span>
+                        </a></li><span class="bg-green-800 text-white w-6 h-6 rounded-full flex flex-col justify-center items-center ">4</span>
+                </ul>
+                </nav> -->
+                <!-- ...........two -->
+                <!-- <div> -->
+                        <!-- <div id="btn_2" class="mx-10 flex flex-row bg-gray-100 w-32 h-7 pt-1 rounded-lg"> -->
+                             <!-- <img class="w-8 h-8 rounded-full mx-2" src="./images/abdi.jpg" alt=""> -->
+                             <!-- <p class="">Abdirsaq</p>
+                        </div> -->
+                     <!-- <div id="show_2" >
+                             <h3 class="py-2">Documentation</h3>
+                             <h3 class="py-2">Support</h3>
+                             <h3 class="py-2">My profile</h3>
+                             <h3 class="py-2">Log out </h3>
+
+                             
+                     </div> -->
+                    <!-- </div> -->
+
+              
+
+        </div><br />
+
+
+
+<!-- ......................... section 2 ............................ -->
+
+
+        <section class="flex items-center justify-center mt-20 mb-20">
+                <div class=" sec_2 grid md:grid-cols-5 flex gap-5">
+
+                    {% for d in data %}
+                   
+
+                        <div class="app_btn justify-center" id = "{{d.name}}"">
+                                <div class="bof bg-white w-20 h-16 flex justify-center items-center rounded-lg" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
+                                        <!-- <span class="text-white"><i class=`fa fa-{{d.icon}}`></i></span> -->
+                                        <!-- <svg class="icon lg" style = "color:white" id = {{d.name}}>
+                                            <use  fill="white" stroke="white"   href="#icon-{{d.icon}}"></use>
+                                        </svg>  -->
+                                        <i class="fas {{d.icon}} text-[#e89b21] fa-lg text-3xl"></i>
+                                        <!-- <i class="fa fa-user text-white fa-lg"></i> -->
+                                       
+                                </div>
+                                <h1 class="pl-2 pt-2 text-start text-white text-wrap w-[80px]" id = "{{d.name}}">{{d.label}} </h1>
+                        </div>
+ {% endfor %}
+
+                        
+
+
+                        
+
+
+                </div>
+        </section>
+      
+
+
+        <!-- <script src="main.js"></script> -->
+    </div>
+
+
+    </div>
+    </div>
+    </div>  
+    

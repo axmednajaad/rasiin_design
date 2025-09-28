@@ -1,0 +1,285 @@
+.form-tabs-list {
+    z-index: 0 !important;
+}
+#show{
+    background-color: grey;
+    position: fixed;
+    margin-right: 300px;
+}
+h1{
+    color: white;
+}
+#show_2{
+    background-color: white;
+    position: fixed;
+    width: 200px;
+    height: 180px;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+#show{
+    background-color: white;
+    position: fixed;
+    width: 500px;
+    height: 200px;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 10px;
+    
+}
+#btn_2:hover{
+    cursor: pointer;
+}
+#btn:hover{
+    cursor: pointer;
+}
+.bof:hover{
+    background-color: rgb(134, 127, 127);
+    border-radius: 5px;
+    cursor: pointer;
+    color: black;
+    
+}
+
+/* ...............responsitive for mobile  ................... */
+
+@media only screen and (max-width: 600px) {
+.sec_2{
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+.mob{
+    display: none;
+}
+
+
+}
+
+/* .................................................desing for Tablet............. */
+
+@media (min-width: 600px) and (max-width: 1024px) {
+
+    .sec_2{
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+    }
+  
+
+} 
+
+/* --- Notification Bell Styles --- */
+.notification-bell-container {
+position: relative;
+display: flex;
+align-items: center;
+cursor: pointer;
+margin-right: 20px;
+}
+
+.notification-bell-icon {
+font-size: 1.2rem;
+color: white;
+}
+
+.notification-badge {
+position: absolute;
+top: -8px;
+right: -10px;
+background-color: red;
+color: white;
+border-radius: 50%;
+padding: 2px 6px;
+font-size: 0.7rem;
+font-weight: bold;
+border: 1px solid white;
+display: none;
+}
+
+/* FIXED: Notification Dropdown */
+/* .notification-dropdown {
+display: none;
+position: absolute;
+top: 100% !important;
+right: 0 !important;
+width: 350px;
+background-color: white;
+border: 1px solid #d1d8dd;
+border-radius: 6px;
+box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+z-index: 99999 !important;
+overflow: hidden;
+transition: opacity 0.2s ease, visibility 0.2s ease;
+} */
+
+/* FIXED: Use more specific selector and !important */
+/* .notification-bell-container .notification-dropdown.show,
+.notification-dropdown.show {
+display: block !important;
+visibility: visible !important;
+opacity: 1 !important;
+} */
+
+/* Hidden state */
+/* .notification-dropdown:not(.show) {
+display: none !important;
+visibility: hidden !important;
+opacity: 0 !important;
+} */
+/* 
+.notification-header {
+padding: 12px 15px;
+font-weight: 600;
+border-bottom: 1px solid #d1d8dd;
+background-color: #f8f9fa;
+}
+
+.notification-list {
+list-style: none;
+padding: 0;
+margin: 0;
+max-height: 400px;
+overflow-y: auto;
+}
+
+.notification-item {
+padding: 12px 15px;
+border-bottom: 1px solid #e5e5e5;
+cursor: pointer;
+transition: background-color 0.2s;
+}
+
+.notification-item:last-child {
+border-bottom: none;
+}
+
+.notification-item:hover {
+background-color: #f0f4f7;
+}
+
+.notification-item .subject {
+font-weight: 500;
+color: #212529;
+margin-bottom: 4px;
+}
+
+.notification-item .time {
+font-size: 0.8rem;
+color: #6c757d;
+}
+
+.no-notifications {
+padding: 20px;
+text-align: center;
+color: #6c757d;
+}
+
+.notification-footer {
+padding: 8px 15px;
+text-align: center;
+border-top: 1px solid #d1d8dd;
+background-color: #f8f9fa;
+}
+.notification-footer a {
+color: var(--primary-color);
+text-decoration: none;
+font-weight: 500;
+} */
+
+
+/* Improved Notification Dropdown Styles */
+.notification-dropdown {
+display: none;
+position: absolute;
+top: 100% !important;
+right: 0 !important;
+width: 350px;
+background-color: white;
+border: 1px solid #d1d8dd;
+border-radius: 6px;
+box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+z-index: 99999 !important;
+overflow: hidden;
+/* Prevent text selection for better UX */
+user-select: none;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+}
+
+.notification-bell-container .notification-dropdown.show,
+.notification-dropdown.show {
+display: block !important;
+visibility: visible !important;
+opacity: 1 !important;
+}
+
+.notification-header {
+padding: 12px 15px;
+font-weight: 600;
+border-bottom: 1px solid #d1d8dd;
+background-color: #f8f9fa;
+/* Prevent header from being scrolled */
+position: sticky;
+top: 0;
+z-index: 1;
+}
+
+.notification-list {
+list-style: none;
+padding: 0;
+margin: 0;
+max-height: 400px;
+overflow-y: auto;
+/* Smooth scrolling */
+scroll-behavior: smooth;
+/* Hide scrollbar for cleaner look (optional) */
+scrollbar-width: thin;
+scrollbar-color: #c1c1c1 transparent;
+}
+
+/* Custom scrollbar for webkit browsers */
+.notification-list::-webkit-scrollbar {
+width: 6px;
+}
+
+.notification-list::-webkit-scrollbar-track {
+background: transparent;
+}
+
+.notification-list::-webkit-scrollbar-thumb {
+background-color: #c1c1c1;
+border-radius: 3px;
+}
+
+.notification-list::-webkit-scrollbar-thumb:hover {
+background-color: #a1a1a1;
+}
+
+.notification-item {
+padding: 12px 15px;
+border-bottom: 1px solid #e5e5e5;
+cursor: pointer;
+transition: background-color 0.2s;
+/* Prevent text selection */
+user-select: none;
+-webkit-user-select: none;
+}
+
+.notification-item:last-child {
+border-bottom: none;
+}
+
+.notification-item:hover {
+background-color: #f0f4f7;
+}
+
+.notification-footer {
+padding: 8px 15px;
+text-align: center;
+border-top: 1px solid #d1d8dd;
+background-color: #f8f9fa;
+/* Stick footer to bottom */
+position: sticky;
+bottom: 0;
+}

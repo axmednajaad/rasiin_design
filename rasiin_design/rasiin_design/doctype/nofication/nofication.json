@@ -1,0 +1,110 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-06-28 14:12:12.806898",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "date",
+  "time",
+  "message",
+  "for",
+  "user",
+  "for_department",
+  "department",
+  "for_all",
+  "seen"
+ ],
+ "fields": [
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "time",
+   "fieldtype": "Time",
+   "label": "Time"
+  },
+  {
+   "fieldname": "message",
+   "fieldtype": "Data",
+   "label": "Message"
+  },
+  {
+   "default": "0",
+   "fieldname": "for",
+   "fieldtype": "Check",
+   "label": "for User"
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User"
+  },
+  {
+   "default": "0",
+   "fieldname": "for_department",
+   "fieldtype": "Check",
+   "label": "For Department"
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Department"
+  },
+  {
+   "default": "0",
+   "fieldname": "for_all",
+   "fieldtype": "Check",
+   "label": "For All"
+  },
+  {
+   "default": "0",
+   "fieldname": "seen",
+   "fieldtype": "Check",
+   "label": "Seen"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-06-29 09:36:19.247626",
+ "modified_by": "Administrator",
+ "module": "Rasiin Design",
+ "name": "Nofication",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "All",
+   "select": 1,
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

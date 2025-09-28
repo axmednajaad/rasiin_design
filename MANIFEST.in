@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include rasiin_design *.css
+recursive-include rasiin_design *.csv
+recursive-include rasiin_design *.html
+recursive-include rasiin_design *.ico
+recursive-include rasiin_design *.js
+recursive-include rasiin_design *.json
+recursive-include rasiin_design *.md
+recursive-include rasiin_design *.png
+recursive-include rasiin_design *.py
+recursive-include rasiin_design *.svg
+recursive-include rasiin_design *.txt
+recursive-exclude rasiin_design *.pyc

@@ -1,0 +1,129 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-09-28 11:47:06.666357",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_ppx7",
+  "enabled",
+  "title",
+  "document_type",
+  "column_break_mzae",
+  "send_on",
+  "condition",
+  "message_section",
+  "channel",
+  "subject",
+  "message",
+  "recipients_section",
+  "recipients"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_ppx7",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled"
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title",
+   "reqd": 1
+  },
+  {
+   "fieldname": "document_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Document Type",
+   "options": "DocType",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_mzae",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "send_on",
+   "fieldtype": "Select",
+   "label": "Send On",
+   "options": "Save\nSubmit\nCancel"
+  },
+  {
+   "description": "e.g. {\\\"status\\\": \\\"Open\\\", \\\"total\\\": [\\\">\\\", 1000]}",
+   "fieldname": "condition",
+   "fieldtype": "Code",
+   "label": "Condition"
+  },
+  {
+   "fieldname": "message_section",
+   "fieldtype": "Section Break",
+   "label": "Message"
+  },
+  {
+   "fieldname": "channel",
+   "fieldtype": "Select",
+   "label": "Channel",
+   "options": "System Notification\nEmail\nSms"
+  },
+  {
+   "description": "You can use Jinja templating. e.g. {{ doc.name }} has been updated.",
+   "fieldname": "subject",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Subject",
+   "reqd": 1
+  },
+  {
+   "description": "You can use Jinja templating. e.g. Details: {{ doc.description }}",
+   "fieldname": "message",
+   "fieldtype": "Text Editor",
+   "label": "Message"
+  },
+  {
+   "fieldname": "recipients_section",
+   "fieldtype": "Section Break",
+   "label": "Recipients"
+  },
+  {
+   "fieldname": "recipients",
+   "fieldtype": "Table",
+   "label": "Recipients",
+   "options": "Custom Notification Recipient",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-09-28 15:34:11.708535",
+ "modified_by": "Administrator",
+ "module": "Rasiin Design",
+ "name": "Custom Notification",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

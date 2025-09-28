@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- <link rel="stylesheet" href="index.css" /> -->
+   
+
+
+    
+    <style>
+      * {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+.main {
+  display: flex;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  /* flex: 0.15; */
+  height: 100vh;
+  overflow-y: scroll;
+  padding-left: 15px;
+  padding-right: 15px;
+  background-color: #0C4872;
+  color: white;
+}
+
+@media screen and (max-width: 700px) {
+  .sidebar {
+    display: none;
+  }
+
+  .openSidebar {
+    display: flex;
+    position: fixed;
+  }
+}
+
+.logo {
+  margin-top: 9px;
+}
+
+.logo a {
+  font-size: 18px;
+  text-transform: capitalize;
+  font-weight: bold;
+  color: white;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 15px;
+}
+
+.links a {
+  color: white;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 0;
+  border-radius: 6px;
+  transition: color 150ms ease-in-out;
+}
+
+.link:hover {
+  background-color: whitesmoke;
+  color: black;
+}
+
+.active_link {
+  background-color: whitesmoke;
+  color: black !important;
+}
+
+.page_section {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  flex: 1;
+}
+/*  */
+.pageHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  /* padding-top: 9px; */
+  /* padding-bottom: 10px; */
+  /* background-color: rgb(12, 12, 24); */
+  /* color: white; */
+  font-size: 18px;
+  font-weight: bold;
+  height: fit-content;
+}
+
+.menubtn,
+.close_menu {
+  display: none;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 700px) {
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .menubtn,
+  .close_menu {
+    display: block;
+  }
+  .pageHeader {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .headerInput {
+    margin-top: 15px;
+    margin-left: 9px;
+  }
+
+  .page_section {
+    width: 100%;
+    flex: 1;
+  }
+}
+
+.headerLfet {
+  display: flex;
+  gap: 9.99px;
+  padding-left: 9px;
+}
+
+.menubtn {
+  font-size: 19px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 19px;
+}
+
+.headerInput {
+  border: 1px solid white;
+  background-color: white;
+  height: fit-content;
+  border-radius: 6px;
+  padding: 5px 0;
+}
+
+.headerInput input {
+  border: none;
+  outline: none;
+  padding-left: 5px;
+}
+
+.flexAct {
+  display: flex;
+  align-items: center;
+  word-wrap: none;
+  color: white;
+}
+
+.section_one {
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.boxes {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 15px;
+}
+
+@media screen and (max-width: 700px) {
+  .boxes {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.section_one {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.box {
+  background-color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 65px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px,
+    rgba(0, 0, 0, 0.1) 0px 2px 4px 0px,
+    rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+  border-radius: 6px;
+}
+
+.box_txt {
+  display: flex;
+  flex-direction: column;
+}
+
+.box_txt span:first-child {
+  font-size: 16px;
+}
+
+.box_txt span:last-child {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.box_icon {
+  background-color: green;
+  color: white;
+  width: 70px;
+  height: 100%;
+}
+
+.box_icon i {
+  width: 100%;
+  height: 100%;
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.charts_wrapper_one {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+@media screen and (max-width: 700px) {
+  .charts_wrapper_one {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.chart_one_wrapper {
+  width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px,
+    rgba(0, 0, 0, 0.1) 0px 2px 4px 0px,
+    rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+  border-radius: 6px;
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+table,
+tr {
+  border: 1px solid rgba(128, 128, 128, 0.5);
+  border-collapse: collapse;
+}
+
+td,
+th {
+  text-align: start;
+  padding: 3px 2px;
+}
+
+table {
+  width: 100%;
+}
+
+.table_sec {
+  /* width: 1067px; */
+  /* margin: 0 auto; */
+  margin-inline: 10px;
+  margin-top: 30px;
+}
+
+.blue_text {
+  color: rgb(41, 168, 177);
+}
+
+.bg_blue {
+  background-color: rgb(41, 168, 177);
+  color: white;
+  width: fit-content;
+  padding: 2px 9px;
+  border-radius: 6px;
+}
+
+    </style>
+  
+
+</head>
+  <body>
+    <main class="main">
+      <!-- {{ withsidebar }} -->
+      {% if withsidebar %}
+      <aside class="sidebar">
+        <div class="logo">
+          <a href="">Finance Report</a>
+          <span>
+            <i class="fa-solid fa-x close_menu"></i>
+          </span>
+        </div>
+        <div class="links">
+          <a href="#" class="link active_link">
+            <span>🏢</span>
+            <span>From Office</span>
+          </a>
+          <a href="#" class="link">
+            <span onclick="get_hmtl_sales()">🏢</span>
+            <span onclick="get_hmtl_sales()">Sales Report</span>
+          </a>
+          <a href="#" class="link">
+            <span>🏢</span>
+            <span>OPD-Out Patient</span>
+          </a>
+          <a href="#" class="link">
+            <span>🏢</span>
+            <span>OPD-Out Patient</span>
+          </a>
+          <a href="#" class="link">
+            <span>🏢</span>
+            <span>OPD-Out Patient</span>
+          </a>
+          <a href="#" class="link">
+            <span>🏢</span>
+            <span>OPD-Out Patient</span>
+          </a>
+          <a href="#" class="link">
+            <span>🏢</span>
+            <span>OPD-Out Patient</span>
+          </a>
+          <a href="#" class="link">
+            <span>🏢</span>
+            <span>OPD-Out Patient</span>
+          </a>
+          <a href="#" class="link">
+            <span>🏢</span>
+            <span>OPD-Out Patient</span>
+          </a>
+          <a href="#" class="link">
+            <span>🏢</span>
+            <span>OPD-Out Patient</span>
+          </a>
+          <a href="#" class="link">
+            <span>🏢</span>
+            <span>OPD-Out Patient</span>
+          </a>
+          <a href="#" class="link">
+            <span>🏢</span>
+            <span>OPD-Out Patient</span>
+          </a>
+          <a href="#" class="link">
+            <span>🏢</span>
+            <span>OPD-Out Patient</span>
+          </a>
+          <a href="#" class="link">
+            <span>🏢</span>
+            <span>OPD-Out Patient</span>
+          </a>
+        </div>
+      </aside>
+
+      {% endif %}
+      <section class="page_section">
+        <header class="pageHeader">
+          <div class="headerLfet">
+            <span class="">
+              <i class="fa-solid fa-bars menubtn"></i>
+            </span>
+            <!-- <span>Sheikh zyed hospital</span> -->
+          </div>
+          <div class="headerRight">
+            <!-- <label>From Date</label> -->
+            <div class="headerInput">
+              <div id = "from_date"></div>
+            </div>
+
+            <div class="headerInput">
+              <!-- <label>To Date</label> -->
+              <div class="headerInput">
+                <div id = "to_date"></div>
+              </div>
+            </div>
+            <div class="headerInput">
+              <!-- <label>To Date</label> -->
+              <div class="headerInput">
+                <div id = "print"></div>
+              </div>
+            </div>
+            <!-- <a href="" class="flexAct">
+              <span>Bed Status</span>
+            </a>
+            <a href="" class="flexAct">
+              <span>Status</span>
+            </a> -->
+          </div>
+        </header>
+
+        <section class="section_one">
+          <div class="boxes">
+            <div class="box">
+              <span class="box_icon"><i class="fa-solid fa-bed"></i></span>
+              <div class="box_txt">
+                <span>OPD Income</span>
+                <span>Rs.0.00</span>
+              </div>
+            </div>
+            <div class="box">
+              <span class="box_icon"><i class="fa-solid fa-bed"></i></span>
+              <div class="box_txt">
+                <span>IPD Income</span>
+                <span>Rs.0.00</span>
+              </div>
+            </div>
+            <div class="box">
+              <span class="box_icon">
+                <i class="fa-solid fa-truck-medical"></i>
+              </span>
+              <div class="box_txt">
+                <span>Ambulance Income</span>
+                <span>Rs.0.00</span>
+              </div>
+            </div>
+            <div class="box">
+              <span class="box_icon">
+                <i class="fa-solid fa-mortar-pestle"></i>
+              </span>
+              <div class="box_txt">
+                <span>Pharmacy Income</span>
+                <span>Rs.0.00</span>
+              </div>
+            </div>
+            <div class="box">
+              <span class="box_icon">
+                <i class="fa-solid fa-scissors"></i>
+              </span>
+              <div class="box_txt">
+                <span>Operations</span>
+                <span>Rs.0.00</span>
+              </div>
+            </div>
+            <div class="box">
+              <span class="box_icon">
+                <i class="fa-solid fa-droplet"></i>
+              </span>
+              <div class="box_txt">
+                <span>Blood bank income</span>
+                <span>Rs.0.00</span>
+              </div>
+            </div>
+            <div class="box">
+              <span class="box_icon">
+                <i class="fa-solid fa-money-bill"></i>
+              </span>
+              <div class="box_txt">
+                <span>General income</span>
+                <span>Rs.0.00</span>
+              </div>
+            </div>
+            <div class="box">
+              <span class="box_icon">
+                <i class="fa-solid fa-dollar-sign"></i>
+              </span>
+              <div class="box_txt">
+                <span>Expenses</span>
+                <span>Rs.0.00</span>
+              </div>
+            </div>
+            <div class="box">
+              <span class="box_icon">
+                <i class="fa-solid fa-dollar-sign"></i>
+              </span>
+              <div class="box_txt">
+                <span>Expenses</span>
+                <span>Rs.0.00</span>
+              </div>
+            </div>
+            <div class="box">
+              <span class="box_icon">
+                <i class="fa-solid fa-dollar-sign"></i>
+              </span>
+              <div class="box_txt">
+                <span>Expenses</span>
+                <span>Rs.0.00</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="charts_wrapper_one">
+            <div class="chart_one_wrapper">
+              <div id="myChart"></div>
+              <!-- <p class="highcharts-description">
+                  A basic column chart comparing estimated corn and wheat production
+                  in some countries.
+          
+                  The chart is making use of the axis crosshair feature, to highlight
+                  the hovered country.
+              </p> -->
+            </div>
+
+            <div class="chart_one_wrapper">
+              <h2>Monthly Income Overview</h2>
+              <div id="myChart2"></div>
+            </div>
+            <div class="chart_one_wrapper">
+              <h2>Live Data</h2>
+              <div id="myChart3"></div>
+            </div>
+            <div class="chart_one_wrapper">
+              <h2>Per Weak Sales</h2>
+              <div id="myChart4"></div>
+            </div>
+            <div class="chart_one_wrapper">
+              <h2>Bar Race</h2>
+              <figure class="highcharts-figure">
+                <div id="parent-container">
+                <div id="play-controls">
+                  <button id="play-pause-button" class="fa fa-play" title="play"></button>
+                  <input id="play-range" type="range" value="1960" min="1960" max="2018" />
+                </div>
+                <div id="myChart5"></div>
+              </div>
+                <p class="highcharts-description">
+                    Bar chart showing the world population by countries from 1960 to 2018.
+                </p>
+            </figure>
+             
+            </div>
+
+
+            <div class="chart_one_wrapper">
+              <h2>Per Weak Sales</h2>
+              <div id="myChart6"></div>
+            </div>
+       
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>
+                  <input type="checkbox" />
+                </th>
+                <th>Number</th>
+                <th>Order date</th>
+                <th>Customer</th>
+                <th>Website</th>
+                <th>SalesPerson</th>
+                <th>Activities</th>
+                <th>Company</th>
+                <th>Total</th>
+                <th>Invoice status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <input type="checkbox" />
+                </td>
+                <td>0099</td>
+                <td>13/24/2023 04:06:20</td>
+                <td>Deric Addict</td>
+                <td></td>
+                <td style="display: flex; align-items: center; gap: 9px">
+                  <img
+                    src="https://i.pinimg.com/originals/87/2a/e3/872ae3358323ef1e40ec95ab12775626.jpg"
+                    height="30px"
+                    width="30px"
+                    style="border-radius: 50%"
+                    alt="img"
+                  />
+                  <span>Michell Admin</span>
+                </td>
+                <td>🕛</td>
+                <td>Company</td>
+                <td class="blue_text">$3333</td>
+                <td><span class="bg_blue">To invoice</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+  
+      </section>
+      
+    </main>
+
+    <!-- <script src="./index.js"></script> -->
+    <!-- <script src="rasiin_design/rasiin_design/public/js/lib/highcharts/code"></script> -->
+    <script src="{{ frappe.utils.get_url('assets/rasiin_design/js/lib/highcharts/code/highcharts.js' ) }}" ></script>
+    <script src="{{ frappe.utils.get_url('assets/rasiin_design/js/lib/highcharts/code/modules/exporting.js' ) }}" ></script>
+    <script src="{{ frappe.utils.get_url('assets/rasiin_design/js/lib/highcharts/code/modules/export-data.js' ) }}" ></script>
+    <!-- <script src="{{ frappe.utils.get_url('assets/rasiin_design/js/lib/highcharts/code/highcharts-more.js' ) }}" ></script> -->
+    <script src="{{ frappe.utils.get_url('assets/rasiin_design/js/lib/highcharts/code/modules/heatmap.js' ) }}" ></script>
+        <!-- <script src="{{ frappe.utils.get_url('https://code.highcharts.com/modules/heatmap.js' ) }}" ></script> -->
+    <!-- <script src="https://code.highcharts.com/modules/heatmap.js"></script> -->
+    
+    <!-- <script src="{{ frappe.utils.get_url('assets/rasiin_design/js/lib/highcharts/code/modules/treemap.js' ) }}" ></script> -->
+    <script src="{{ frappe.utils.get_url('assets/rasiin_design/js/lib/highcharts/code/modules/data.js' ) }}" ></script>
+    <script src="{{ frappe.utils.get_url('assets/rasiin_design/js/lib/highcharts/code/modules/drilldown.js' ) }}" ></script>
+
+    <script src="{{ frappe.utils.get_url('assets/rasiin_design/js/lib/highcharts/code/modules/accessibility.js' ) }}" ></script>
+  
+
+    
+    
+
+
+   
+    <!-- /home/dacad/frappe-bench/apps/rasiin_design/rasiin_design/public/js/lib/highcharts/code/modules/heatmap.js -->
+     
+<script>
+   cat = '{{ cata|tojson|safe }}'
+   cat = JSON.parse(cat)
+   series = '{{ series|tojson|safe }}'
+   series = JSON.parse(series)
+  Highcharts.chart('myChart', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Corn vs wheat estimated production for 2020',
+        align: 'left'
+    },
+    subtitle: {
+        text:
+            'Source: <a target="_blank" ' +
+            'href="https://www.indexmundi.com/agriculture/?commodity=corn">indexmundi</a>',
+        align: 'left'
+    },
+    xAxis: {
+        // categories: ["USA", "China", "Brazil", "EU", "India", "Russia"],
+        categories : cat,
+        
+        crosshair: true,
+        accessibility: {
+            description: 'Countries'
+        }
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: '1000 metric tons (MT)'
+        }
+    },
+    tooltip: {
+        valueSuffix: ' (1000 MT)'
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series:series
+
+    // series: [
+    //     {
+    //         name: 'Corn',
+    //         data: [406292, 260000, 107000, 68300, 27500, 14500]
+    //     },
+    //     {
+    //         name: 'Wheat',
+    //         data: [51086, 136000, 5500, 141000, 107180, 77000]
+    //     }
+    // ]
+
+
+
+});
+
+(function (H) {
+    H.seriesTypes.pie.prototype.animate = function (init) {
+        const series = this,
+            chart = series.chart,
+            points = series.points,
+            {
+                animation
+            } = series.options,
+            {
+                startAngleRad
+            } = series;
+
+        function fanAnimate(point, startAngleRad) {
+            const graphic = point.graphic,
+                args = point.shapeArgs;
+
+            if (graphic && args) {
+
+                graphic
+                    // Set inital animation values
+                    .attr({
+                        start: startAngleRad,
+                        end: startAngleRad,
+                        opacity: 1
+                    })
+                    // Animate to the final position
+                    .animate({
+                        start: args.start,
+                        end: args.end
+                    }, {
+                        duration: animation.duration / points.length
+                    }, function () {
+                        // On complete, start animating the next point
+                        if (points[point.index + 1]) {
+                            fanAnimate(points[point.index + 1], args.end);
+                        }
+                        // On the last point, fade in the data labels, then
+                        // apply the inner size
+                        if (point.index === series.points.length - 1) {
+                            series.dataLabelsGroup.animate({
+                                opacity: 1
+                            },
+                            void 0,
+                            function () {
+                                points.forEach(point => {
+                                    point.opacity = 1;
+                                });
+                                series.update({
+                                    enableMouseTracking: true
+                                }, false);
+                                chart.update({
+                                    plotOptions: {
+                                        pie: {
+                                            innerSize: '40%',
+                                            borderRadius: 8
+                                        }
+                                    }
+                                });
+                            });
+                        }
+                    });
+            }
+        }
+
+        if (init) {
+            // Hide points on init
+            points.forEach(point => {
+                point.opacity = 0;
+            });
+        } else {
+            fanAnimate(points[0], startAngleRad);
+        }
+    };
+}(Highcharts));
+
+Highcharts.chart('myChart2', {
+    chart: {
+        type: 'pie'
+    },
+    title: {
+        text: 'Departamental Strength of the Company',
+        align: 'left'
+    },
+    subtitle: {
+        text: 'Custom animation of pie series',
+        align: 'left'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    accessibility: {
+        point: {
+            valueSuffix: '%'
+        }
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            borderWidth: 2,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b><br>{point.percentage}%',
+                distance: 20
+            }
+        }
+    },
+    series: [{
+        // Disable mouse tracking on load, enable after custom animation
+        enableMouseTracking: false,
+        animation: {
+            duration: 2000
+        },
+        colorByPoint: true,
+        data: [{
+            name: 'Customer Support',
+            y: 21.3
+        }, {
+            name: 'Development',
+            y: 18.7
+        }, {
+            name: 'Sales',
+            y: 20.2
+        }, {
+            name: 'Marketing',
+            y: 14.2
+        }, {
+            name: 'Other',
+            y: 25.6
+        }]
+    }]
+});
+
+
+
+
+const onChartLoad = function () {
+    const chart = this,
+        series = chart.series[0];
+
+    setInterval(function () {
+        const x = (new Date()).getTime(), // current time
+            y = Math.random();
+
+        series.addPoint([x, y], true, true);
+    }, 1000);
+};
+
+// Create the initial data
+const data = (function () {
+    const data = [];
+    const time = new Date().getTime();
+
+    for (let i = -19; i <= 0; i += 1) {
+        data.push({
+            x: time + i * 1000,
+            y: Math.random()
+        });
+    }
+    return data;
+}());
+
+// Plugin to add a pulsating marker on add point
+Highcharts.addEvent(Highcharts.Series, 'addPoint', e => {
+    const point = e.point,
+        series = e.target;
+
+    if (!series.pulse) {
+        series.pulse = series.chart.renderer.circle()
+            .add(series.markerGroup);
+    }
+
+    setTimeout(() => {
+        series.pulse
+            .attr({
+                x: series.xAxis.toPixels(point.x, true),
+                y: series.yAxis.toPixels(point.y, true),
+                r: series.options.marker.radius,
+                opacity: 1,
+                fill: series.color
+            })
+            .animate({
+                r: 20,
+                opacity: 0
+            }, {
+                duration: 1000
+            });
+    }, 1);
+});
+
+
+Highcharts.chart('myChart3', {
+  chart: {
+    type: 'bar',
+    height: 600
+  },
+  title: {
+    text: 'Server Monitoring Demo'
+  },
+  legend: {
+    enabled: false
+  },
+  subtitle: {
+    text: 'Instance Load'
+  },
+  data: {
+    csvURL: 'https://demo-live-data.highcharts.com/vs-load.csv',
+    enablePolling: true,
+    dataRefreshRate: 1
+  },
+  plotOptions: {
+    bar: {
+      colorByPoint: true
+    },
+    series: {
+      zones: [{
+        color: '#4CAF50',
+        value: 0
+      }, {
+        color: '#8BC34A',
+        value: 10
+      }, {
+        color: '#CDDC39',
+        value: 20
+      }, {
+        color: '#CDDC39',
+        value: 30
+      }, {
+        color: '#FFEB3B',
+        value: 40
+      }, {
+        color: '#FFEB3B',
+        value: 50
+      }, {
+        color: '#FFC107',
+        value: 60
+      }, {
+        color: '#FF9800',
+        value: 70
+      }, {
+        color: '#FF5722',
+        value: 80
+      }, {
+        color: '#F44336',
+        value: 90
+      }, {
+        color: '#F44336',
+        value: Number.MAX_VALUE
+      }],
+      dataLabels: {
+        enabled: true,
+        format: '{point.y:.0f}%'
+      }
+    }
+  },
+  tooltip: {
+    valueDecimals: 1,
+    valueSuffix: '%'
+  },
+  xAxis: {
+    type: 'category',
+    labels: {
+      style: {
+        fontSize: '10px'
+      }
+    }
+  },
+  yAxis: {
+    max: 100,
+    title: false,
+    plotBands: [{
+      from: 0,
+      to: 30,
+      color: '#E8F5E9'
+    }, {
+      from: 30,
+      to: 70,
+      color: '#FFFDE7'
+    }, {
+      from: 70,
+      to: 100,
+      color: '#FFEBEE'
+    }]
+  }
+});
+// Create the chart
+Highcharts.chart('myChart4', {
+
+chart: {
+    type: 'heatmap',
+    marginTop: 40,
+    marginBottom: 80,
+    plotBorderWidth: 1
+},
+
+
+title: {
+    text: 'Sales per employee per weekday',
+    style: {
+        fontSize: '1em'
+    }
+},
+
+xAxis: {
+    categories: ['Alexander', 'Marie', 'Maximilian', 'Sophia', 'Lukas',
+        'Maria', 'Leon', 'Anna', 'Tim', 'Laura']
+},
+
+yAxis: {
+    categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    title: null,
+    reversed: true
+},
+
+accessibility: {
+    point: {
+        descriptionFormat: '{(add index 1)}. ' +
+            '{series.xAxis.categories.(x)} sales ' +
+            '{series.yAxis.categories.(y)}, {value}.'
+    }
+},
+
+colorAxis: {
+    min: 0,
+    minColor: '#FFFFFF',
+    maxColor: Highcharts.getOptions().colors[0]
+},
+
+legend: {
+    align: 'right',
+    layout: 'vertical',
+    margin: 0,
+    verticalAlign: 'top',
+    y: 25,
+    symbolHeight: 280
+},
+
+tooltip: {
+    format: '<b>{series.xAxis.categories.(point.x)}</b> sold<br>' +
+        '<b>{point.value}</b> items on <br>' +
+        '<b>{series.yAxis.categories.(point.y)}</b>'
+},
+
+series: [{
+    name: 'Sales per employee',
+    borderWidth: 1,
+    data: [[0, 0, 10], [0, 1, 19], [0, 2, 8], [0, 3, 24], [0, 4, 67],
+        [1, 0, 92], [1, 1, 58], [1, 2, 78], [1, 3, 117], [1, 4, 48],
+        [2, 0, 35], [2, 1, 15], [2, 2, 123], [2, 3, 64], [2, 4, 52],
+        [3, 0, 72], [3, 1, 132], [3, 2, 114], [3, 3, 19], [3, 4, 16],
+        [4, 0, 38], [4, 1, 5], [4, 2, 8], [4, 3, 117], [4, 4, 115],
+        [5, 0, 88], [5, 1, 32], [5, 2, 12], [5, 3, 6], [5, 4, 120],
+        [6, 0, 13], [6, 1, 44], [6, 2, 88], [6, 3, 98], [6, 4, 96],
+        [7, 0, 31], [7, 1, 1], [7, 2, 82], [7, 3, 32], [7, 4, 30],
+        [8, 0, 85], [8, 1, 97], [8, 2, 123], [8, 3, 64], [8, 4, 84],
+        [9, 0, 47], [9, 1, 114], [9, 2, 31], [9, 3, 48], [9, 4, 91]],
+    dataLabels: {
+        enabled: true,
+        color: '#000000'
+    }
+}],
+
+responsive: {
+    rules: [{
+        condition: {
+            maxWidth: 500
+        },
+        chartOptions: {
+            yAxis: {
+                labels: {
+                    format: '{substr value 0 1}'
+                }
+            }
+        }
+    }]
+}
+
+});
+
+
+
+const startYear = 1960,
+    endYear = 2018,
+    btn = document.getElementById('play-pause-button'),
+    input = document.getElementById('play-range'),
+    nbr = 20;
+
+let dataset, chart;
+
+
+/*
+ * Animate dataLabels functionality
+ */
+(function (H) {
+    const FLOAT = /^-?\d+\.?\d*$/;
+
+    // Add animated textSetter, just like fill/strokeSetters
+    H.Fx.prototype.textSetter = function () {
+        let startValue = this.start.replace(/ /g, ''),
+            endValue = this.end.replace(/ /g, ''),
+            currentValue = this.end.replace(/ /g, '');
+
+        if ((startValue || '').match(FLOAT)) {
+            startValue = parseInt(startValue, 10);
+            endValue = parseInt(endValue, 10);
+
+            // No support for float
+            currentValue = Highcharts.numberFormat(
+                Math.round(startValue + (endValue - startValue) * this.pos),
+                0
+            );
+        }
+
+        this.elem.endText = this.end;
+
+        this.elem.attr(this.prop, currentValue, null, true);
+    };
+
+    // Add textGetter, not supported at all at this moment:
+    H.SVGElement.prototype.textGetter = function () {
+        const ct = this.text.element.textContent || '';
+        return this.endText ? this.endText : ct.substring(0, ct.length / 2);
+    };
+
+    // Temporary change label.attr() with label.animate():
+    // In core it's simple change attr(...) => animate(...) for text prop
+    H.wrap(H.Series.prototype, 'drawDataLabels', function (proceed) {
+        const attr = H.SVGElement.prototype.attr,
+            chart = this.chart;
+
+        if (chart.sequenceTimer) {
+            this.points.forEach(point =>
+                (point.dataLabels || []).forEach(
+                    label =>
+                        (label.attr = function (hash) {
+                            if (
+                                hash &&
+                                hash.text !== undefined &&
+                                chart.isResizing === 0
+                            ) {
+                                const text = hash.text;
+
+                                delete hash.text;
+
+                                return this
+                                    .attr(hash)
+                                    .animate({ text });
+                            }
+                            return attr.apply(this, arguments);
+
+                        })
+                )
+            );
+        }
+
+        const ret = proceed.apply(
+            this,
+            Array.prototype.slice.call(arguments, 1)
+        );
+
+        this.points.forEach(p =>
+            (p.dataLabels || []).forEach(d => (d.attr = attr))
+        );
+
+        return ret;
+    });
+}(Highcharts));
+
+
+function getData(year) {
+    const output = Object.entries(dataset)
+        .map(country => {
+            const [countryName, countryData] = country;
+            return [countryName, Number(countryData[year])];
+        })
+        .sort((a, b) => b[1] - a[1]);
+    return [output[0], output.slice(1, nbr)];
+}
+
+function getSubtitle() {
+    const population = (getData(input.value)[0][1] / 1000000000).toFixed(2);
+    return `<span style="font-size: 80px">${input.value}</span>
+        <br>
+        <span style="font-size: 22px">
+            Total: <b>: ${population}</b> billion
+        </span>`;
+}
+
+(async () => {
+
+    dataset = await fetch(
+        'https://demo-live-data.highcharts.com/population.json'
+    ).then(response => response.json());
+
+
+    chart = Highcharts.chart('myChart5', {
+        chart: {
+            animation: {
+                duration: 500
+            },
+            marginRight: 50
+        },
+        title: {
+            text: 'World population by country',
+            align: 'left'
+        },
+        subtitle: {
+            useHTML: true,
+            text: getSubtitle(),
+            floating: true,
+            align: 'right',
+            verticalAlign: 'middle',
+            y: -80,
+            x: -100
+        },
+
+        legend: {
+            enabled: false
+        },
+        xAxis: {
+            type: 'category'
+        },
+        yAxis: {
+            opposite: true,
+            tickPixelInterval: 150,
+            title: {
+                text: null
+            }
+        },
+        plotOptions: {
+            series: {
+                animation: false,
+                groupPadding: 0,
+                pointPadding: 0.1,
+                borderWidth: 0,
+                colorByPoint: true,
+                dataSorting: {
+                    enabled: true,
+                    matchByName: true
+                },
+                type: 'bar',
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+        series: [
+            {
+                type: 'bar',
+                name: startYear,
+                data: getData(startYear)[1]
+            }
+        ],
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 550
+                },
+                chartOptions: {
+                    xAxis: {
+                        visible: false
+                    },
+                    subtitle: {
+                        x: 0
+                    },
+                    plotOptions: {
+                        series: {
+                            dataLabels: [{
+                                enabled: true,
+                                y: 8
+                            }, {
+                                enabled: true,
+                                format: '{point.name}',
+                                y: -8,
+                                style: {
+                                    fontWeight: 'normal',
+                                    opacity: 0.7
+                                }
+                            }]
+                        }
+                    }
+                }
+            }]
+        }
+    });
+})();
+
+/*
+ * Pause the timeline, either when the range is ended, or when clicking the pause button.
+ * Pausing stops the timer and resets the button to play mode.
+ */
+function pause(button) {
+    button.title = 'play';
+    button.className = 'fa fa-play';
+    clearTimeout(chart.sequenceTimer);
+    chart.sequenceTimer = undefined;
+}
+
+/*
+ * Update the chart. This happens either on updating (moving) the range input,
+ * or from a timer when the timeline is playing.
+ */
+function update(increment) {
+    if (increment) {
+        input.value = parseInt(input.value, 10) + increment;
+    }
+    if (input.value >= endYear) {
+        // Auto-pause
+        pause(btn);
+    }
+
+    chart.update(
+        {
+            subtitle: {
+                text: getSubtitle()
+            }
+        },
+        false,
+        false,
+        false
+    );
+
+    chart.series[0].update({
+        name: input.value,
+        data: getData(input.value)[1]
+    });
+}
+
+/*
+ * Play the timeline.
+ */
+function play(button) {
+    button.title = 'pause';
+    button.className = 'fa fa-pause';
+    chart.sequenceTimer = setInterval(function () {
+        update(1);
+    }, 500);
+}
+
+btn.addEventListener('click', function () {
+    if (chart.sequenceTimer) {
+        pause(this);
+    } else {
+        play(this);
+    }
+});
+/*
+ * Trigger the update on the range bar click.
+ */
+input.addEventListener('click', function () {
+    update();
+});
+
+
+Highcharts.chart('myChart6', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        align: 'left',
+        text: 'Browser market shares. January, 2022'
+    },
+    subtitle: {
+        align: 'left',
+        text: 'Click the columns to view versions. Source: <a href="http://statcounter.com" target="_blank">statcounter.com</a>'
+    },
+    accessibility: {
+        announceNewData: {
+            enabled: true
+        }
+    },
+    xAxis: {
+        type: 'category'
+    },
+    yAxis: {
+        title: {
+            text: 'Total percent market share'
+        }
+
+    },
+    legend: {
+        enabled: false
+    },
+    plotOptions: {
+        series: {
+            borderWidth: 0,
+            dataLabels: {
+                enabled: true,
+                format: '{point.y:.1f}%'
+            }
+        }
+    },
+
+    tooltip: {
+        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+    },
+
+    series: [
+        {
+            name: 'Browsers',
+            colorByPoint: true,
+            data: [
+                {
+                    name: 'Chrome',
+                    y: 63.06,
+                    drilldown: 'Chrome'
+                },
+                {
+                    name: 'Safari',
+                    y: 19.84,
+                    drilldown: 'Safari'
+                },
+                {
+                    name: 'Firefox',
+                    y: 4.18,
+                    drilldown: 'Firefox'
+                },
+                {
+                    name: 'Edge',
+                    y: 4.12,
+                    drilldown: 'Edge'
+                },
+                {
+                    name: 'Opera',
+                    y: 2.33,
+                    drilldown: 'Opera'
+                },
+                {
+                    name: 'Internet Explorer',
+                    y: 0.45,
+                    drilldown: 'Internet Explorer'
+                },
+                {
+                    name: 'Other',
+                    y: 1.582,
+                    drilldown: null
+                }
+            ]
+        }
+    ],
+    drilldown: {
+        breadcrumbs: {
+            position: {
+                align: 'right'
+            }
+        },
+        series: [
+            {
+                name: 'Chrome',
+                id: 'Chrome',
+                data: [
+                    [
+                        'v65.0',
+                        0.1
+                    ],
+                    [
+                        'v64.0',
+                        1.3
+                    ],
+                    [
+                        'v63.0',
+                        53.02
+                    ],
+                    [
+                        'v62.0',
+                        1.4
+                    ],
+                    [
+                        'v61.0',
+                        0.88
+                    ],
+                    [
+                        'v60.0',
+                        0.56
+                    ],
+                    [
+                        'v59.0',
+                        0.45
+                    ],
+                    [
+                        'v58.0',
+                        0.49
+                    ],
+                    [
+                        'v57.0',
+                        0.32
+                    ],
+                    [
+                        'v56.0',
+                        0.29
+                    ],
+                    [
+                        'v55.0',
+                        0.79
+                    ],
+                    [
+                        'v54.0',
+                        0.18
+                    ],
+                    [
+                        'v51.0',
+                        0.13
+                    ],
+                    [
+                        'v49.0',
+                        2.16
+                    ],
+                    [
+                        'v48.0',
+                        0.13
+                    ],
+                    [
+                        'v47.0',
+                        0.11
+                    ],
+                    [
+                        'v43.0',
+                        0.17
+                    ],
+                    [
+                        'v29.0',
+                        0.26
+                    ]
+                ]
+            },
+            {
+                name: 'Firefox',
+                id: 'Firefox',
+                data: [
+                    [
+                        'v58.0',
+                        1.02
+                    ],
+                    [
+                        'v57.0',
+                        7.36
+                    ],
+                    [
+                        'v56.0',
+                        0.35
+                    ],
+                    [
+                        'v55.0',
+                        0.11
+                    ],
+                    [
+                        'v54.0',
+                        0.1
+                    ],
+                    [
+                        'v52.0',
+                        0.95
+                    ],
+                    [
+                        'v51.0',
+                        0.15
+                    ],
+                    [
+                        'v50.0',
+                        0.1
+                    ],
+                    [
+                        'v48.0',
+                        0.31
+                    ],
+                    [
+                        'v47.0',
+                        0.12
+                    ]
+                ]
+            },
+            {
+                name: 'Internet Explorer',
+                id: 'Internet Explorer',
+                data: [
+                    [
+                        'v11.0',
+                        6.2
+                    ],
+                    [
+                        'v10.0',
+                        0.29
+                    ],
+                    [
+                        'v9.0',
+                        0.27
+                    ],
+                    [
+                        'v8.0',
+                        0.47
+                    ]
+                ]
+            },
+            {
+                name: 'Safari',
+                id: 'Safari',
+                data: [
+                    [
+                        'v11.0',
+                        3.39
+                    ],
+                    [
+                        'v10.1',
+                        0.96
+                    ],
+                    [
+                        'v10.0',
+                        0.36
+                    ],
+                    [
+                        'v9.1',
+                        0.54
+                    ],
+                    [
+                        'v9.0',
+                        0.13
+                    ],
+                    [
+                        'v5.1',
+                        0.2
+                    ]
+                ]
+            },
+            {
+                name: 'Edge',
+                id: 'Edge',
+                data: [
+                    [
+                        'v16',
+                        2.6
+                    ],
+                    [
+                        'v15',
+                        0.92
+                    ],
+                    [
+                        'v14',
+                        0.4
+                    ],
+                    [
+                        'v13',
+                        0.1
+                    ]
+                ]
+            },
+            {
+                name: 'Opera',
+                id: 'Opera',
+                data: [
+                    [
+                        'v50.0',
+                        0.96
+                    ],
+                    [
+                        'v49.0',
+                        0.82
+                    ],
+                    [
+                        'v12.1',
+                        0.14
+                    ]
+                ]
+            }
+        ]
+    }
+});
+
+
+
+const menuBtn = document.querySelector('.menubtn')
+const closeMenuBtn = document.querySelector('.close_menu')
+const sidebar = document.querySelector('.sidebar')
+const navLinks = document.querySelectorAll('.link')
+function openSidebar() {
+  sidebar.classList.add('openSidebar')
+}
+
+function closeSidebar() {
+  sidebar.classList.remove('openSidebar')
+}
+
+function handleDocumentClick(event) {
+  const isMenuBtn = event.target.matches('.menubtn')
+  const isSidebar = event.target.closest('.sidebar')
+
+  if (!isMenuBtn && !isSidebar) {
+    closeSidebar()
+  }
+}
+
+function handleNavLink(link) {
+  navLinks.forEach(function (el) {
+    el.classList.remove('active_link')
+  })
+
+  link.classList.add('active_link')
+}
+
+
+
+menuBtn.addEventListener('click', openSidebar)
+closeMenuBtn.addEventListener('click', closeSidebar)
+document.addEventListener('click', handleDocumentClick)
+navLinks.forEach((link) => {
+  link.addEventListener('click', () => {
+    handleNavLink(link)
+  })
+})
+
+</script>
+
+  </body>
+</html>
