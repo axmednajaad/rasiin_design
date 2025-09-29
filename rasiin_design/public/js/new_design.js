@@ -1086,7 +1086,7 @@ function make_header_nav(data) {
       // Wait for DOM to be ready before setting up events
         setTimeout(() => {
             setup_notification_events();
-            fetch_and_render_notifications();
+            // fetch_and_render_notifications();
         }, 100);
 
     // $('.header_sec').empty('')
@@ -1134,6 +1134,12 @@ frappe.ui.Page = class Page {
       // make_header_nav(navbardata)
       // get_notification()
 
+      make_header_nav(navbardata);
+      // Initial fetch of notifications
+      fetch_and_render_notifications();
+
+
+
       // Real-time listener for new notifications
       // frappe.realtime.on("new_notice", (data) => {
       frappe.realtime.on("new_notification", (data) => {
@@ -1141,11 +1147,11 @@ frappe.ui.Page = class Page {
         frappe.show_alert("New Notification", 5);
         // Refresh bell when a new notice comes in
         fetch_and_render_notifications();
-      })
 
-      make_header_nav(navbardata);
-      // Initial fetch of notifications
-      fetch_and_render_notifications();
+        // exit it
+        return;
+      });
+
 
     }
     // else{
