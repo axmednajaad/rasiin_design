@@ -21,6 +21,7 @@ abbr    = frappe.db.get_value("Company" , company , "abbr")
 curren =  frappe.db.get_value("Company" , company , "default_currency")
 base_template_path = "frappe/www/printview.html"
 pattern = r'[^A-Za-z0-9 ]'
+
 @frappe.whitelist()
 def get_report_design(from_date =  getdate() , to_date = getdate() ,withsidebar = 1 , loading = 1):
 	

@@ -198,6 +198,7 @@ scheduler_events = {
 # override_whitelisted_methods = {
 #	"frappe.desk.doctype.event.event.get_events": "rasiin_design.event.get_events"
 # }
+
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,

@@ -67,15 +67,90 @@ def evaluate_custom_notifications(doc, method):
         frappe.log_error(f"Custom Notification Error for {doc.doctype} {doc.name}: {e}", "Custom Notification Evaluation")
 
 def check_condition(doc, condition_str):
-    """Checks if the Jinja condition is met."""
-    if not condition_str:
-        return True  # No condition means it always passes
+    """Checks if the condition is met."""
+    if not condition_str or not condition_str.strip():
+        return True
 
+    condition_str = condition_str.strip()
+    
     try:
-        # Evaluate the Jinja expression. A non-empty, non-zero, non-false result is considered True.
-        return frappe.render_template(condition_str, {"doc": doc})
+        # Handle JSON-style conditions
+        if condition_str.startswith('{') and condition_str.endswith('}'):
+            return evaluate_dict_condition(doc, condition_str)
+        else:
+            # Handle Python expression conditions
+            return evaluate_expression_condition(doc, condition_str)
     except Exception as e:
-        frappe.log_error(f"Error evaluating condition for doc {doc.name}: {e}", "Custom Notification Condition Error")
+        frappe.log_error(f"Error evaluating condition '{condition_str}' for doc {doc.doctype} {doc.name}: {e}", "Custom Notification Condition Error")
+        return False
+
+def evaluate_dict_condition(doc, condition_str):
+    """Evaluate JSON-style conditions"""
+    import json
+    import operator
+    
+    # Map operator strings to actual operator functions
+    operator_map = {
+        ">": operator.gt,
+        ">=": operator.ge,
+        "<": operator.lt,
+        "<=": operator.le,
+        "==": operator.eq,
+        "!=": operator.ne,
+        "in": lambda a, b: a in b if hasattr(b, '__contains__') else False,
+        "not in": lambda a, b: a not in b if hasattr(b, '__contains__') else True,
+    }
+    
+    try:
+        conditions = json.loads(condition_str)
+        
+        for field, expected_value in conditions.items():
+            # Remove 'doc.' prefix if present
+            clean_field = field.replace('doc.', '')
+            actual_value = doc.get(clean_field)
+            
+            # Handle comparison operators [">", 1000]
+            if isinstance(expected_value, list) and len(expected_value) == 2:
+                op_str, compare_value = expected_value
+                
+                # If compare_value is a string starting with 'doc.', get the field value
+                if isinstance(compare_value, str) and compare_value.startswith('doc.'):
+                    compare_field = compare_value.replace('doc.', '')
+                    compare_value = doc.get(compare_field)
+                
+                if op_str in operator_map:
+                    if not operator_map[op_str](actual_value, compare_value):
+                        return False
+                else:
+                    frappe.log_error(f"Unknown operator '{op_str}' in condition", "Custom Notification Condition Error")
+                    return False
+            else:
+                # Direct equality check
+                if actual_value != expected_value:
+                    return False
+        
+        return True
+        
+    except json.JSONDecodeError as e:
+        frappe.log_error(f"Invalid JSON condition: {condition_str}. Error: {e}", "Custom Notification Condition Error")
+        return False
+
+def evaluate_expression_condition(doc, condition_str):
+    """Evaluate Python expression conditions safely."""
+    # Create a safe context
+    context = {
+        "doc": doc,
+        "frappe": frappe,
+        "now": frappe.utils.now,
+        "datetime": datetime
+    }
+    
+    try:
+        # Use safe_eval for security
+        result = frappe.safe_eval(condition_str, context)
+        return bool(result)
+    except Exception as e:
+        frappe.log_error(f"Failed to evaluate expression: {condition_str}. Error: {e}", "Custom Notification Condition Error")
         return False
 
 def get_recipients(doc, recipient_rules):
@@ -100,10 +175,11 @@ def get_recipients(doc, recipient_rules):
     
     return list(users)
 
+
 def send_notification(doc, user, subject, message, channel):
     """Creates the Notification Log and sends emails/SMS as configured."""
-    # Always create the system notification (bell icon)
-    frappe.get_doc({
+    # Create the Notification Log
+    notification_log = frappe.get_doc({
         "doctype": "Notification Log",
         "document_type": doc.doctype,
         "document_name": doc.name,
@@ -111,10 +187,36 @@ def send_notification(doc, user, subject, message, channel):
         "subject": subject,
         "type": "Alert",
         "email_content": message
-    }).insert(ignore_permissions=True,
-        # set_name is deprecated in v15+
-        # set_name=False
+    })
+    
+    notification_log.insert(ignore_permissions=True)
+    
+    # PUBLISH REALTIME EVENT for frontend
+    frappe.publish_realtime(
+        event="new_notification",  # Event name that frontend will listen to
+        message={
+            "type": "new_notice",
+            "notification_log": notification_log.name,
+            "for_user": user,
+            "subject": subject,
+            "document_type": doc.doctype,
+            "document_name": doc.name,
+            "timestamp": now()
+        },
+        user=user,  # Only send to the specific user
+        after_commit=True  # Ensure it's sent after the transaction is committed
     )
+    
+    # Also publish a general event for all users (if you want admin/other users to see)
+    # frappe.publish_realtime(
+    #     event="notification_update",  # General event for notification count updates
+    #     message={
+    #         "type": "count_update",
+    #         "for_user": user
+    #     },
+    #     user=user,
+    #     after_commit=True
+    # )
 
     # Send Email
     if channel == "Email":
@@ -138,6 +240,7 @@ def send_notification(doc, user, subject, message, channel):
                 )
             else:
                 frappe.log_error(f"SMS not sent for Custom Notification. User {user} has no mobile number.", "Custom Notification SMS Error")
+
 
 @frappe.whitelist()
 def get_user_link_fields(doctype):

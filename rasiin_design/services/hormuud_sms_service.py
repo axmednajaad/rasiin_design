@@ -1,4 +1,4 @@
-# frappe-bench/apps/medical_app/medical_app/services/hormuud_sms_service.py
+# frappe-bench/apps/rasiin_design/rasiin_design/services/hormuud_sms_service.py
 
 from typing import Dict, Optional
 from frappe.utils.background_jobs import enqueue

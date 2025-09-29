@@ -110,15 +110,424 @@ function fetch_and_render_notifications() {
 }
 
 
+// function setup_notification_events() {
+//     console.log("Setting up notification events");
+    
+//     // State management
+//     let clickInProgress = false;
+//     let dropdownVisible = false;
+//     let processingNotifications = new Set();
+//     let lastClickTime = 0;
+//     const CLICK_DEBOUNCE_DELAY = 300; // ms
+    
+//     // Bell container click handler
+//     $(document).on('click', '.notification-bell-container', function(e) {
+//         console.log("Bell clicked");
+        
+//         const now = Date.now();
+        
+//         // Debounce rapid clicks
+//         if (now - lastClickTime < CLICK_DEBOUNCE_DELAY) {
+//             console.log("Rapid click debounced");
+//             return;
+//         }
+//         lastClickTime = now;
+        
+//         if (clickInProgress) {
+//             console.log("Click in progress, skipping");
+//             return;
+//         }
+//         clickInProgress = true;
+        
+//         e.stopPropagation();
+//         e.preventDefault();
+        
+//         const $dropdown = $('.notification-dropdown');
+//         const isCurrentlyVisible = dropdownVisible;
+        
+//         console.log("Before toggle - dropdown visible:", isCurrentlyVisible);
+        
+//         // Always close all dropdowns first
+//         closeAllNotificationDropdowns();
+        
+//         // If it wasn't visible, open it
+//         if (!isCurrentlyVisible) {
+//             openNotificationDropdown($dropdown);
+//             console.log("Dropdown opened");
+//         } else {
+//             console.log("Dropdown already closed");
+//         }
+        
+//         // Reset flag after a short delay
+//         setTimeout(() => {
+//             clickInProgress = false;
+//         }, 150);
+//     });
+
+//     // Notification item click handler with enhanced debouncing
+//     $(document).on('click', '.notification-item', function(e) {
+//         // Don't process if it's a no-notifications message
+//         if ($(this).hasClass('no-notifications')) {
+//             e.stopPropagation();
+//             return;
+//         }
+        
+//         const now = Date.now();
+//         const log_name = $(this).data('log-name');
+        
+//         // Debounce same notification clicks
+//         if (now - lastClickTime < CLICK_DEBOUNCE_DELAY && processingNotifications.has(log_name)) {
+//             console.log("Same notification click debounced");
+//             e.stopPropagation();
+//             e.preventDefault();
+//             return;
+//         }
+//         lastClickTime = now;
+        
+//         console.log("Notification item clicked");
+//         const doc_type = $(this).data('doc-type');
+//         const doc_name = $(this).data('doc-name');
+
+//         if (!log_name || !doc_type || !doc_name) {
+//             console.error("Missing notification data:", { log_name, doc_type, doc_name });
+//             return;
+//         }
+
+//         // Prevent duplicate processing
+//         if (processingNotifications.has(log_name)) {
+//             console.log("Notification already being processed:", log_name);
+//             return;
+//         }
+
+//         processingNotifications.add(log_name);
+//         console.log("Processing notification:", log_name);
+
+//         // Close dropdown immediately when item is clicked
+//         closeAllNotificationDropdowns();
+
+//         // Mark as read with enhanced error handling
+//         markNotificationAsRead(log_name)
+//             .then(() => {
+//                 console.log("Successfully marked as read:", log_name);
+//                 // Refresh notifications
+//                 fetch_and_render_notifications();
+//                 // Navigate to the document
+//                 navigateToDocument(doc_type, doc_name);
+//             })
+//             .catch((error) => {
+//                 console.error("Error processing notification:", error);
+//                 // Even if marking fails, still navigate and refresh
+//                 fetch_and_render_notifications();
+//                 navigateToDocument(doc_type, doc_name);
+//             })
+//             .finally(() => {
+//                 // Remove from processing set after a delay to prevent rapid re-clicks
+//                 setTimeout(() => {
+//                     processingNotifications.delete(log_name);
+//                 }, 1000);
+//             });
+//     });
+
+//     // Enhanced scroll handling for dropdown
+//     $(document).on('wheel', '.notification-list', function(e) {
+//         if (!dropdownVisible) return;
+        
+//         const $this = $(this);
+//         const delta = e.originalEvent.deltaY;
+        
+//         // Check if we're at the top and scrolling up, or at the bottom and scrolling down
+//         const isAtTop = $this.scrollTop() === 0;
+//         const isAtBottom = $this.scrollTop() + $this.innerHeight() >= this.scrollHeight - 1;
+        
+//         if ((isAtTop && delta < 0) || (isAtBottom && delta > 0)) {
+//             e.preventDefault();
+//             e.stopPropagation();
+//             return false;
+//         }
+//     });
+
+//     // Touch handling for mobile
+//     $(document).on('touchstart', '.notification-list', function(e) {
+//         if (!dropdownVisible) return;
+//         const $this = $(this);
+//         $this.data('initial-touch', e.originalEvent.touches[0].pageY);
+//     });
+
+//     $(document).on('touchmove', '.notification-list', function(e) {
+//         if (!dropdownVisible) return;
+        
+//         const $this = $(this);
+//         const initialTouch = $this.data('initial-touch');
+//         if (!initialTouch) return;
+        
+//         const currentTouch = e.originalEvent.touches[0].pageY;
+//         const deltaY = initialTouch - currentTouch;
+        
+//         const isAtTop = $this.scrollTop() === 0;
+//         const isAtBottom = $this.scrollTop() + $this.innerHeight() >= this.scrollHeight - 1;
+        
+//         // Prevent page scroll when we have more content to scroll in the dropdown
+//         if ((isAtTop && deltaY < 0) || (isAtBottom && deltaY > 0)) {
+//             e.preventDefault();
+//             e.stopPropagation();
+//             return false;
+//         }
+//     });
+
+//     // Enhanced close dropdown when clicked outside - only if dropdown is actually visible
+//     $(document).on('click', function(e) {
+//         if (!dropdownVisible) return;
+        
+//         const $target = $(e.target);
+//         const isClickInsideBell = $target.closest('.notification-bell-container').length > 0;
+//         const isClickInsideDropdown = $target.closest('.notification-dropdown').length > 0;
+        
+//         if (!isClickInsideBell && !isClickInsideDropdown) {
+//             console.log("Click outside, closing dropdown");
+//             closeAllNotificationDropdowns();
+//         }
+//     });
+
+//     // Close on escape key - only if dropdown is visible
+//     $(document).on('keydown', function(e) {
+//         if (e.key === 'Escape' && dropdownVisible) {
+//             console.log("Escape key pressed, closing dropdown");
+//             closeAllNotificationDropdowns();
+//         }
+//     });
+
+//     // Prevent dropdown from closing when clicking inside it
+//     $(document).on('click', '.notification-dropdown', function(e) {
+//         e.stopPropagation();
+//     });
+
+//     // Enhanced helper function to close all notification dropdowns
+//     function closeAllNotificationDropdowns() {
+//         const $dropdown = $('.notification-dropdown');
+        
+//         // Only proceed if dropdown exists and is actually visible
+//         if ($dropdown.length && dropdownVisible) {
+//             $dropdown.removeClass('show').css({
+//                 'display': 'none',
+//                 'visibility': 'hidden',
+//                 'opacity': '0'
+//             });
+//             dropdownVisible = false;
+//             console.log("All notification dropdowns closed");
+            
+//             // Re-enable body scroll if we disabled it
+//             $('body').css('overflow', '');
+//         } else {
+//             console.log("No active dropdown to close");
+//         }
+//     }
+
+//     // Enhanced helper function to open notification dropdown
+//     function openNotificationDropdown($dropdown) {
+//         if (!$dropdown.length) {
+//             console.error("Dropdown element not found");
+//             return;
+//         }
+        
+//         $dropdown.addClass('show').css({
+//             'display': 'block',
+//             'visibility': 'visible',
+//             'opacity': '1'
+//         });
+//         dropdownVisible = true;
+        
+//         console.log("Dropdown opened successfully");
+        
+//         // Optional: Prevent body scroll when dropdown is open (uncomment if needed)
+//         // $('body').css('overflow', 'hidden');
+        
+//         // Focus first notification item for keyboard accessibility
+//         setTimeout(() => {
+//             const $firstItem = $dropdown.find('.notification-item:first');
+//             if ($firstItem.length && !$firstItem.hasClass('no-notifications')) {
+//                 $firstItem.focus();
+//             }
+//         }, 100);
+//     }
+
+//     function markNotificationAsRead(log_name) {
+//         return new Promise((resolve, reject) => {
+//             console.log("Attempting to mark notification as read via server method:", log_name);
+            
+//             frappe.call({
+//                 method: 'rasiin_design.api.notification.mark_notification_as_read',
+//                 args: {
+//                     log_name: log_name
+//                 },
+//                 callback: function(r) {
+//                     if (r.message && r.message.status === 'success') {
+//                         console.log("Notification marked as read successfully via server method");
+//                         resolve();
+//                     } else {
+//                         console.error("Failed to mark notification as read:", r.message);
+//                         // Even if it fails, we reject but the .finally() block in the caller will still navigate
+//                         reject(r.message || "Unknown server error");
+//                     }
+//                 },
+//                 error: function(r) {
+//                     console.error("AJAX Error marking notification as read:", r);
+//                     reject(r);
+//                 }
+//             });
+//         });
+//     }
+
+
+//     // Helper function to navigate to document
+//     function navigateToDocument(doc_type, doc_name) {
+//         if (doc_type && doc_name) {
+//             console.log("Navigating to:", doc_type, doc_name);
+//             try {
+//                 // Add small delay to ensure notification is processed
+//                 setTimeout(() => {
+//                     frappe.set_route('Form', doc_type, doc_name);
+//                 }, 100);
+//             } catch (error) {
+//                 console.error("Navigation error:", error);
+//                 // Fallback navigation
+//                 setTimeout(() => {
+//                     window.location.href = `/app/${frappe.router.slug(doc_type)}/${doc_name}`;
+//                 }, 100);
+//             }
+//         } else {
+//             console.error("Invalid document type or name for navigation");
+//         }
+//     }
+
+//     // Enhanced keyboard navigation support
+//     $(document).on('keydown', '.notification-dropdown', function(e) {
+//         if (!dropdownVisible) return;
+
+//         const $items = $('.notification-item:not(.no-notifications)');
+//         if (!$items.length) return;
+
+//         const $focused = $(':focus');
+//         let index = $items.index($focused);
+
+//         switch(e.key) {
+//             case 'ArrowDown':
+//                 e.preventDefault();
+//                 index = (index + 1) % $items.length;
+//                 $items.eq(index).focus();
+//                 break;
+//             case 'ArrowUp':
+//                 e.preventDefault();
+//                 index = (index - 1 + $items.length) % $items.length;
+//                 $items.eq(index).focus();
+//                 break;
+//             case 'Enter':
+//             case ' ':
+//                 if ($focused.hasClass('notification-item')) {
+//                     e.preventDefault();
+//                     $focused.trigger('click');
+//                 }
+//                 break;
+//             case 'Tab':
+//                 // Allow normal tab behavior but close dropdown if tabbing out
+//                 setTimeout(() => {
+//                     if (!$('.notification-dropdown').find(':focus').length) {
+//                         closeAllNotificationDropdowns();
+//                     }
+//                 }, 10);
+//                 break;
+//         }
+//     });
+
+//     // Add resize handler to close dropdown on mobile orientation changes
+//     $(window).on('resize', function() {
+//         if (dropdownVisible && window.innerWidth < 768) {
+//             closeAllNotificationDropdowns();
+//         }
+//     });
+
+//     console.log("Enhanced notification events setup completed");
+// }
+
 function setup_notification_events() {
     console.log("Setting up notification events");
     
+    // State management
     let clickInProgress = false;
     let dropdownVisible = false;
+    let processingNotifications = new Set();
+    let lastClickTime = 0;
+    const CLICK_DEBOUNCE_DELAY = 300; // ms
+
+    // Define scroll handlers INSIDE the main function to access dropdownVisible
+    function setupNotificationScrollHandlers() {
+        const notificationList = document.querySelector('.notification-list');
+        if (!notificationList) return;
+
+        // Remove any existing listeners to avoid duplicates
+        notificationList.removeEventListener('wheel', handleWheel);
+        notificationList.removeEventListener('touchstart', handleTouchStart);
+        notificationList.removeEventListener('touchmove', handleTouchMove);
+
+        // Add new listeners
+        notificationList.addEventListener('wheel', handleWheel, { passive: false });
+        notificationList.addEventListener('touchstart', handleTouchStart, { passive: true });
+        notificationList.addEventListener('touchmove', handleTouchMove, { passive: false });
+    }
+
+    function handleWheel(e) {
+        if (!dropdownVisible) return;
+        
+        const $this = $(e.currentTarget); // Use currentTarget instead of this
+        const delta = e.deltaY;
+        
+        const isAtTop = $this.scrollTop() === 0;
+        const isAtBottom = $this.scrollTop() + $this.innerHeight() >= $this[0].scrollHeight - 1;
+        
+        if ((isAtTop && delta < 0) || (isAtBottom && delta > 0)) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+    }
+
+    function handleTouchStart(e) {
+        if (!dropdownVisible) return;
+        const $this = $(e.currentTarget);
+        $this.data('initial-touch', e.touches[0].pageY);
+    }
+
+    function handleTouchMove(e) {
+        if (!dropdownVisible) return;
+        
+        const $this = $(e.currentTarget);
+        const initialTouch = $this.data('initial-touch');
+        if (!initialTouch) return;
+        
+        const currentTouch = e.touches[0].pageY;
+        const deltaY = initialTouch - currentTouch;
+        
+        const isAtTop = $this.scrollTop() === 0;
+        const isAtBottom = $this.scrollTop() + $this.innerHeight() >= $this[0].scrollHeight - 1;
+        
+        if ((isAtTop && deltaY < 0) || (isAtBottom && deltaY > 0)) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+    }
     
     // Bell container click handler
     $(document).on('click', '.notification-bell-container', function(e) {
         console.log("Bell clicked");
+        
+        const now = Date.now();
+        
+        // Debounce rapid clicks
+        if (now - lastClickTime < CLICK_DEBOUNCE_DELAY) {
+            console.log("Rapid click debounced");
+            return;
+        }
+        lastClickTime = now;
         
         if (clickInProgress) {
             console.log("Click in progress, skipping");
@@ -141,8 +550,11 @@ function setup_notification_events() {
         if (!isCurrentlyVisible) {
             openNotificationDropdown($dropdown);
             console.log("Dropdown opened");
+            
+            // Setup scroll handlers AFTER dropdown is visible and content is rendered
+            setTimeout(setupNotificationScrollHandlers, 100);
         } else {
-            console.log("Dropdown closed");
+            console.log("Dropdown already closed");
         }
         
         // Reset flag after a short delay
@@ -151,7 +563,7 @@ function setup_notification_events() {
         }, 150);
     });
 
-    // Notification item click handler
+    // Notification item click handler with enhanced debouncing
     $(document).on('click', '.notification-item', function(e) {
         // Don't process if it's a no-notifications message
         if ($(this).hasClass('no-notifications')) {
@@ -159,8 +571,19 @@ function setup_notification_events() {
             return;
         }
         
-        console.log("Notification item clicked");
+        const now = Date.now();
         const log_name = $(this).data('log-name');
+        
+        // Debounce same notification clicks
+        if (now - lastClickTime < CLICK_DEBOUNCE_DELAY && processingNotifications.has(log_name)) {
+            console.log("Same notification click debounced");
+            e.stopPropagation();
+            e.preventDefault();
+            return;
+        }
+        lastClickTime = now;
+        
+        console.log("Notification item clicked");
         const doc_type = $(this).data('doc-type');
         const doc_name = $(this).data('doc-name');
 
@@ -169,12 +592,19 @@ function setup_notification_events() {
             return;
         }
 
+        // Prevent duplicate processing
+        if (processingNotifications.has(log_name)) {
+            console.log("Notification already being processed:", log_name);
+            return;
+        }
+
+        processingNotifications.add(log_name);
         console.log("Processing notification:", log_name);
 
         // Close dropdown immediately when item is clicked
         closeAllNotificationDropdowns();
 
-        // Mark as read using multiple approaches for reliability
+        // Mark as read with enhanced error handling
         markNotificationAsRead(log_name)
             .then(() => {
                 console.log("Successfully marked as read:", log_name);
@@ -188,64 +618,33 @@ function setup_notification_events() {
                 // Even if marking fails, still navigate and refresh
                 fetch_and_render_notifications();
                 navigateToDocument(doc_type, doc_name);
+            })
+            .finally(() => {
+                // Remove from processing set after a delay to prevent rapid re-clicks
+                setTimeout(() => {
+                    processingNotifications.delete(log_name);
+                }, 1000);
             });
     });
 
-    // FIX: Prevent page scroll when scrolling inside dropdown
-    $(document).on('wheel', '.notification-list', function(e) {
-        const $this = $(this);
-        const delta = e.originalEvent.deltaY;
-        
-        // Check if we're at the top and scrolling up, or at the bottom and scrolling down
-        const isAtTop = $this.scrollTop() === 0;
-        const isAtBottom = $this.scrollTop() + $this.innerHeight() >= this.scrollHeight - 1;
-        
-        if ((isAtTop && delta < 0) || (isAtBottom && delta > 0)) {
-            // Prevent the scroll event from bubbling to the parent
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        }
-    });
-
-    // Alternative approach: Use passive event listener for better performance
-    $(document).on('touchstart', '.notification-list', function(e) {
-        // Store the initial touch position
-        const $this = $(this);
-        $this.data('initial-touch', e.originalEvent.touches[0].pageY);
-    });
-
-    $(document).on('touchmove', '.notification-list', function(e) {
+    // Enhanced close dropdown when clicked outside - only if dropdown is actually visible
+    $(document).on('click', function(e) {
         if (!dropdownVisible) return;
         
-        const $this = $(this);
-        const initialTouch = $this.data('initial-touch');
-        const currentTouch = e.originalEvent.touches[0].pageY;
-        const deltaY = initialTouch - currentTouch;
+        const $target = $(e.target);
+        const isClickInsideBell = $target.closest('.notification-bell-container').length > 0;
+        const isClickInsideDropdown = $target.closest('.notification-dropdown').length > 0;
         
-        const isAtTop = $this.scrollTop() === 0;
-        const isAtBottom = $this.scrollTop() + $this.innerHeight() >= this.scrollHeight - 1;
-        
-        // Prevent page scroll when we have more content to scroll in the dropdown
-        if ((isAtTop && deltaY < 0) || (isAtBottom && deltaY > 0)) {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        }
-    });
-
-    // Close dropdown if clicked outside
-    $(document).on('click', function(e) {
-        if (!$(e.target).closest('.notification-bell-container').length && 
-            !$(e.target).closest('.notification-dropdown').length) {
-            
+        if (!isClickInsideBell && !isClickInsideDropdown) {
+            console.log("Click outside, closing dropdown");
             closeAllNotificationDropdowns();
         }
     });
 
-    // Close on escape key
+    // Close on escape key - only if dropdown is visible
     $(document).on('keydown', function(e) {
         if (e.key === 'Escape' && dropdownVisible) {
+            console.log("Escape key pressed, closing dropdown");
             closeAllNotificationDropdowns();
         }
     });
@@ -255,10 +654,12 @@ function setup_notification_events() {
         e.stopPropagation();
     });
 
-    // Helper function to close all notification dropdowns
+    // Enhanced helper function to close all notification dropdowns
     function closeAllNotificationDropdowns() {
         const $dropdown = $('.notification-dropdown');
-        if ($dropdown.length) {
+        
+        // Only proceed if dropdown exists and is actually visible
+        if ($dropdown.length && dropdownVisible) {
             $dropdown.removeClass('show').css({
                 'display': 'none',
                 'visibility': 'hidden',
@@ -269,11 +670,18 @@ function setup_notification_events() {
             
             // Re-enable body scroll if we disabled it
             $('body').css('overflow', '');
+        } else {
+            console.log("No active dropdown to close");
         }
     }
 
-    // Helper function to open notification dropdown
+    // Enhanced helper function to open notification dropdown
     function openNotificationDropdown($dropdown) {
+        if (!$dropdown.length) {
+            console.error("Dropdown element not found");
+            return;
+        }
+        
         $dropdown.addClass('show').css({
             'display': 'block',
             'visibility': 'visible',
@@ -281,69 +689,44 @@ function setup_notification_events() {
         });
         dropdownVisible = true;
         
+        console.log("Dropdown opened successfully");
+        
         // Optional: Prevent body scroll when dropdown is open (uncomment if needed)
         // $('body').css('overflow', 'hidden');
         
         // Focus first notification item for keyboard accessibility
         setTimeout(() => {
-            $dropdown.find('.notification-item:first').focus();
+            const $firstItem = $dropdown.find('.notification-item:first');
+            if ($firstItem.length && !$firstItem.hasClass('no-notifications')) {
+                $firstItem.focus();
+            }
         }, 100);
     }
 
-    // Helper function to mark notification as read
     function markNotificationAsRead(log_name) {
         return new Promise((resolve, reject) => {
-            // Try multiple approaches for reliability
-            const markAsRead = () => {
-                // Approach 1: Use update with get_doc first (most reliable)
-                frappe.db.get_doc("Notification Log", log_name)
-                    .then((doc) => {
-                        if (doc.read) {
-                            console.log("Notification already read");
-                            resolve();
-                            return;
-                        }
-                        doc.read = 1;
-                        return frappe.db.update("Notification Log", doc);
-                    })
-                    .then(() => {
-                        console.log("Notification marked as read via update");
+            console.log("Attempting to mark notification as read via server method:", log_name);
+            
+            frappe.call({
+                method: 'rasiin_design.api.notification.mark_notification_as_read',
+                args: {
+                    log_name: log_name
+                },
+                callback: function(r) {
+                    if (r.message && r.message.status === 'success') {
+                        console.log("Notification marked as read successfully via server method");
                         resolve();
-                    })
-                    .catch((error) => {
-                        console.warn("Update approach failed, trying set_value:", error);
-                        // Approach 2: Use set_value as fallback
-                        frappe.db.set_value("Notification Log", log_name, "read", 1)
-                            .then(() => {
-                                console.log("Notification marked as read via set_value");
-                                resolve();
-                            })
-                            .catch((setValueError) => {
-                                console.warn("Set_value approach failed, trying call:", setValueError);
-                                // Approach 3: Use frappe.call as last resort
-                                frappe.call({
-                                    method: 'frappe.client.set_value',
-                                    args: {
-                                        doctype: 'Notification Log',
-                                        name: log_name,
-                                        fieldname: 'read',
-                                        value: 1
-                                    },
-                                    callback: function(r) {
-                                        if (r.exc) {
-                                            console.error("All marking approaches failed");
-                                            reject(r.exc);
-                                        } else {
-                                            console.log("Notification marked as read via call");
-                                            resolve();
-                                        }
-                                    }
-                                });
-                            });
-                    });
-            };
-
-            markAsRead();
+                    } else {
+                        console.error("Failed to mark notification as read:", r.message);
+                        // Even if it fails, we reject but the .finally() block in the caller will still navigate
+                        reject(r.message || "Unknown server error");
+                    }
+                },
+                error: function(r) {
+                    console.error("AJAX Error marking notification as read:", r);
+                    reject(r);
+                }
+            });
         });
     }
 
@@ -352,22 +735,29 @@ function setup_notification_events() {
         if (doc_type && doc_name) {
             console.log("Navigating to:", doc_type, doc_name);
             try {
-                frappe.set_route('Form', doc_type, doc_name);
+                // Add small delay to ensure notification is processed
+                setTimeout(() => {
+                    frappe.set_route('Form', doc_type, doc_name);
+                }, 100);
             } catch (error) {
                 console.error("Navigation error:", error);
                 // Fallback navigation
-                window.location.href = `/app/${frappe.router.slug(doc_type)}/${doc_name}`;
+                setTimeout(() => {
+                    window.location.href = `/app/${frappe.router.slug(doc_type)}/${doc_name}`;
+                }, 100);
             }
         } else {
             console.error("Invalid document type or name for navigation");
         }
     }
 
-    // Add keyboard navigation support
+    // Enhanced keyboard navigation support
     $(document).on('keydown', '.notification-dropdown', function(e) {
         if (!dropdownVisible) return;
 
         const $items = $('.notification-item:not(.no-notifications)');
+        if (!$items.length) return;
+
         const $focused = $(':focus');
         let index = $items.index($focused);
 
@@ -383,15 +773,33 @@ function setup_notification_events() {
                 $items.eq(index).focus();
                 break;
             case 'Enter':
+            case ' ':
                 if ($focused.hasClass('notification-item')) {
+                    e.preventDefault();
                     $focused.trigger('click');
                 }
+                break;
+            case 'Tab':
+                // Allow normal tab behavior but close dropdown if tabbing out
+                setTimeout(() => {
+                    if (!$('.notification-dropdown').find(':focus').length) {
+                        closeAllNotificationDropdowns();
+                    }
+                }, 10);
                 break;
         }
     });
 
-    console.log("Notification events setup completed");
+    // Add resize handler to close dropdown on mobile orientation changes
+    $(window).on('resize', function() {
+        if (dropdownVisible && window.innerWidth < 768) {
+            closeAllNotificationDropdowns();
+        }
+    });
+
+    console.log("Enhanced notification events setup completed");
 }
+
 
 function make_cust_nav_bar(navbardata) {
   // alert("")
@@ -566,80 +974,6 @@ if (report_links) {
       </div>
     </div>`;
 }
-  // Main navbar HTML structure with notification bell
-  //   navbar = `
-  //   <div class="overlay" data-overlay-first-page></div>
-  //   <div class="overlay" data-overlay-first-page></div>
-  //   <div class="menu" data-menu-first-page>
-  //     <div class="profile__img__close__nav">
-  //     <div class="menu_profile__image__name"></div>
-  //     <div class="close__navbar__icon" data-first-page-close-nav>
-  //       <i class="fa fa-x"></i>
-  //     </div>
-  //     </div>
-    
-  //     <div class="menu__companies">
-      
-  //     <span class="close_mennu" onclick="closeFirstPageNav()">Close</span>
-  //  ${mobile_links}  
-  //     </div>
-
-  //     <div class="menu__profile">
-  //       <div class="dropdown">
-  //         <a style ="color:#fff" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-  //         My Profile
-  //         </a>
-  //         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">		  
-  //          <button class="dropdown-item" onclick="frappe.ui.toolbar.route_to_user()">My Settings</button>
-  //          <button class="dropdown-item" onclick="frappe.ui.toolbar.clear_cache()">Reload</button>
-  //        </div>  
-  //       </div>  
-  //       <button class="btn border border-white text-white" onclick="frappe.app.logout()">Log out</button>
-  //     </div>
-  //   </div>
-    
-  //   <header class="header">
-  //       <div class="logo__navlinks">
-  //           <a class="mylogo nav-link icon" onclick='window.location.reload()' href="/app" data-logo>
-  //               <i class="fa fa-home"></i>
-  //           </a> 
-  //           ${navitems}
-  //       </div>
-        
-  //       <div class="profile__image__name mr-3">
-  //           <span class="nav-link nav-item">${frappe.boot.user.first_name}</span>
-  //           <button class="ml-3 mr-2 btn nav-link nav-item" onclick="frappe.app.logout()">Logout</button>
-            
-  //           <div class="notification-bell-container nav-item">
-  //               <i class="fa fa-bell notification-bell-icon"></i>
-  //               <span class="notification-badge">0</span>
-  //               <div class="notification-dropdown">
-  //                   <div class="notification-header">Notifications</div>
-  //                   <ul class="notification-list">
-  //                       </ul>
-  //                   <div class="notification-footer">
-  //                       <a href="/app/notification-log">View All</a>
-  //                   </div>
-  //               </div>
-  //           </div>
-  //           <div class="dropdown nav-item">
-  //               <a style ="color:#fff" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-  //               My Profile
-  //               </a>
-  //               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">		  
-  //                   <button class="dropdown-item" onclick="frappe.ui.toolbar.route_to_user()">My Settings</button>
-  //                   <button class="dropdown-item" onclick="frappe.ui.toolbar.clear_cache()">Reload</button>
-  //               </div>
-  //           </div>
-  //       </div>
-
-  //       <div class="open-navbarbtn" data-first-page-open-nav onclick="openFirstPageNav()">
-  //           <i class="fa fa-bars"></i>
-  //       </div>
-  //   </header>
-  //   `
-
-  //*------ GEMINI CODE 
   navbar = `
     <div class="overlay" data-overlay-first-page></div>
     <div class="overlay" data-overlay-first-page></div>
@@ -713,81 +1047,6 @@ if (report_links) {
         </div>
     </header>
     `
-
-  //!----------  DEEPSEEK CODE  -----------
-  // navbar = `
-  //   <div class="overlay" data-overlay-first-page></div>
-  //   <div class="overlay" data-overlay-first-page></div>
-  //   <div class="menu" data-menu-first-page>
-  //     <div class="profile__img__close__nav">
-  //     <div class="menu_profile__image__name"></div>
-  //     <div class="close__navbar__icon" data-first-page-close-nav>
-  //       <i class="fa fa-x"></i>
-  //     </div>
-  //     </div>
-    
-  //     <div class="menu__companies">
-      
-  //     <span class="close_mennu" onclick="closeFirstPageNav()">Close</span>
-  //  ${mobile_links}  
-  //     </div>
-
-  //     <div class="menu__profile">
-  //       <div class="dropdown">
-  //         <a style ="color:#fff" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-  //         My Profile
-  //         </a>
-  //         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">		  
-  //          <button class="dropdown-item" onclick="frappe.ui.toolbar.route_to_user()">My Settings</button>
-  //          <button class="dropdown-item" onclick="frappe.ui.toolbar.clear_cache()">Reload</button>
-  //          <div class="dropdown-divider"></div>
-  //          <button class="dropdown-item" onclick="frappe.app.logout()">Log out</button>
-  //        </div>  
-  //       </div>  
-  //     </div>
-  //   </div>
-    
-  //   <header class="header">
-  //       <div class="logo__navlinks">
-  //           <a class="mylogo nav-link icon" onclick='window.location.reload()' href="/app" data-logo>
-  //               <i class="fa fa-home"></i>
-  //           </a> 
-  //           ${navitems}
-  //       </div>
-        
-  //       <div class="profile__image__name mr-3">
-  //           <span class="nav-link nav-item">${frappe.boot.user.first_name}</span>
-            
-  //           <div class="notification-bell-container nav-item">
-  //               <i class="fa fa-bell notification-bell-icon"></i>
-  //               <span class="notification-badge">0</span>
-  //               <div class="notification-dropdown">
-  //                   <div class="notification-header">Notifications</div>
-  //                   <ul class="notification-list">
-  //                       </ul>
-  //                   <div class="notification-footer">
-  //                       <a href="/app/notification-log">View All</a>
-  //                   </div>
-  //               </div>
-  //           </div>
-  //           <div class="dropdown nav-item">
-  //               <a style ="color:#fff" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-  //               My Profile
-  //               </a>
-  //               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">		  
-  //                   <button class="dropdown-item" onclick="frappe.ui.toolbar.route_to_user()">My Settings</button>
-  //                   <button class="dropdown-item" onclick="frappe.ui.toolbar.clear_cache()">Reload</button>
-  //                   <div class="dropdown-divider"></div>
-  //                   <button class="dropdown-item" onclick="frappe.app.logout()">Log out</button>
-  //               </div>
-  //           </div>
-  //       </div>
-
-  //       <div class="open-navbarbtn" data-first-page-open-nav onclick="openFirstPageNav()">
-  //           <i class="fa fa-bars"></i>
-  //       </div>
-  //   </header>
-  //   `
 
   return navbar
 }
@@ -876,8 +1135,9 @@ frappe.ui.Page = class Page {
       // get_notification()
 
       // Real-time listener for new notifications
-      frappe.realtime.on("new_notice", (data) => {
-        console.log("new_notice realtime published : ",data)
+      // frappe.realtime.on("new_notice", (data) => {
+      frappe.realtime.on("new_notification", (data) => {
+        console.log("new_notification realtime published : ",data)
         frappe.show_alert("New Notification", 5);
         // Refresh bell when a new notice comes in
         fetch_and_render_notifications();
