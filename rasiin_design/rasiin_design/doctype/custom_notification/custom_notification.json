@@ -75,7 +75,7 @@
   {
    "description": "You can use Jinja templating. e.g. {{ doc.name }} has been updated.",
    "fieldname": "subject",
-   "fieldtype": "Data",
+   "fieldtype": "Small Text",
    "in_list_view": 1,
    "label": "Subject",
    "reqd": 1
@@ -102,7 +102,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-28 15:34:11.708535",
+ "modified": "2025-10-01 21:08:24.933435",
  "modified_by": "Administrator",
  "module": "Rasiin Design",
  "name": "Custom Notification",

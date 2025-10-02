@@ -9,14 +9,72 @@ from datetime import datetime
 class CustomNotification(Document):
     pass
 
-# This is the main function that will be called by the hooks
+
+# def evaluate_custom_notifications(doc, method):
+#     """
+#     Checks for any matching Custom Notification rules and creates a Notification Log if conditions are met.
+#     """
+#     event_map = {
+#         "on_update": "Save",
+#         "on_submit": "Submit",
+#         "on_cancel": "Cancel",
+#     }
+#     send_on_event = event_map.get(method)
+
+#     if not send_on_event:
+#         return
+
+#     # Get doc_before_save for comparison
+#     doc_before_save = doc.get_doc_before_save()
+
+#     # Skip if this is part of a submit/cancel action
+#     if send_on_event == "Save" and doc_before_save and doc.docstatus != doc_before_save.docstatus:
+#         return
+
+#     try:
+#         custom_notifications = frappe.get_all(
+#             "Custom Notification",
+#             filters={"enabled": 1, "document_type": doc.doctype, "send_on": send_on_event},
+#             fields=["name", "condition", "subject", "message", "channel"],
+#         )
+
+#         for cn in custom_notifications:
+#             if not check_condition(doc, cn.condition):
+#                 continue
+
+#             # Skip if there are no actual field changes (for Save events)
+#             if send_on_event == "Save" and doc_before_save and not has_actual_changes(doc, doc_before_save):
+#                 continue
+
+#             recipient_rules = frappe.get_all(
+#                 "Custom Notification Recipient",
+#                 filters={"parent": cn.name, "parenttype": "Custom Notification"},
+#                 fields=["specific_user", "receiver_by_role", "receiver_by_document_field"]
+#             )
+
+#             recipients = get_recipients(doc, recipient_rules)
+#             if not recipients:
+#                 continue
+
+#             # Enhanced generic context with doc_before_save and old field values
+#             context = build_template_context(doc, doc_before_save)
+            
+#             subject = frappe.render_template(cn.subject, context)
+#             message = frappe.render_template(cn.message, context)
+
+#             for user in recipients:
+#                 send_notification(doc, user, subject, message, cn.channel)
+
+#     except Exception as e:
+#         frappe.log_error(f"Custom Notification Error for {doc.doctype} {doc.name}: {e}", "Custom Notification Evaluation")
+
 def evaluate_custom_notifications(doc, method):
     """
     Checks for any matching Custom Notification rules and creates a Notification Log if conditions are met.
     """
     event_map = {
         "on_update": "Save",
-        "on_submit": "Submit",
+        "on_submit": "Submit", 
         "on_cancel": "Cancel",
     }
     send_on_event = event_map.get(method)
@@ -24,47 +82,116 @@ def evaluate_custom_notifications(doc, method):
     if not send_on_event:
         return
 
-    # --- IMPROVEMENT: PREVENT DUPLICATE NOTIFICATIONS ---
-    # This block checks if a "Save" event is part of a "Submit" or "Cancel" action.
-    # If the document's status is changing, it stops the "Save" notification from firing,
-    # allowing only the more specific "Submit" or "Cancel" event to proceed.
-    if send_on_event == "Save":
-        doc_before_save = doc.get_doc_before_save()
-        if doc_before_save and doc.docstatus != doc_before_save.docstatus:
-            return  # Exit because this is a state-changing event, not a simple save.
-    # --- END OF IMPROVEMENT ---
+    # Get doc_before_save for comparison
+    doc_before_save = doc.get_doc_before_save()
+
+    # Skip if this is part of a submit/cancel action
+    if send_on_event == "Save" and doc_before_save and doc.docstatus != doc_before_save.docstatus:
+        return
 
     try:
         custom_notifications = frappe.get_all(
             "Custom Notification",
-            filters={"enabled": 1, "document_type": doc.doctype, "send_on": send_on_event},
+            filters={
+                "enabled": 1, 
+                "document_type": doc.doctype, 
+                "send_on": send_on_event
+            },
             fields=["name", "condition", "subject", "message", "channel"],
         )
 
+        frappe.logger().info(f"Found {len(custom_notifications)} notifications for {doc.doctype} on {send_on_event}")
+
         for cn in custom_notifications:
-            # The rest of your logic remains the same
+            frappe.logger().debug(f"Processing notification: {cn.name}")
+
+            # Check condition
             if not check_condition(doc, cn.condition):
+                frappe.logger().debug(f"Condition not met for {cn.name}")
                 continue
 
+            # Skip if no actual changes (for Save events)
+            if send_on_event == "Save" and doc_before_save and not has_actual_changes(doc, doc_before_save):
+                frappe.logger().debug(f"No actual changes for {cn.name}")
+                continue
+
+            # Get recipient rules (NEW STRUCTURE)
             recipient_rules = frappe.get_all(
                 "Custom Notification Recipient",
-                filters={"parent": cn.name, "parenttype": "Custom Notification"},
-                fields=["specific_user", "receiver_by_role", "receiver_by_document_field"]
+                filters={"parent": cn.name},
+                fields=["recipient_type", "recipient_value"]
             )
 
+            frappe.logger().debug(f"Found {len(recipient_rules)} recipient rules for {cn.name}")
+
+            # Get recipients
             recipients = get_recipients(doc, recipient_rules)
+            
+            # Validation for empty recipients
             if not recipients:
+                frappe.log_error(f"No valid recipients found for notification {cn.name}", "Custom Notification")
                 continue
 
-            context = {"doc": doc, "now": now, "datetime": datetime, "frappe": frappe}
+            # Create context and render templates
+            context = build_template_context(doc, doc_before_save)
             subject = frappe.render_template(cn.subject, context)
             message = frappe.render_template(cn.message, context)
 
+            frappe.logger().info(f"Sending notification '{cn.name}' to {len(recipients)} recipients")
+
+            # Send notifications
             for user in recipients:
                 send_notification(doc, user, subject, message, cn.channel)
+                
+            # Success logging
+            frappe.logger().info(f"Custom Notification '{cn.name}' successfully sent to {len(recipients)} users: {recipients}")
 
     except Exception as e:
         frappe.log_error(f"Custom Notification Error for {doc.doctype} {doc.name}: {e}", "Custom Notification Evaluation")
+        
+        
+
+def has_actual_changes(doc, doc_before_save):
+    """
+    Check if there are any actual field value changes between current doc and previous version.
+    """
+    # List of fields to ignore when checking for changes
+    ignore_fields = {'modified', 'modified_by', 'amended_from', '_user_tags', '_comments', '_assign', '_liked_by'}
+    
+    for field in doc.meta.get_valid_columns():
+        if field in ignore_fields:
+            continue
+            
+        current_value = doc.get(field)
+        previous_value = doc_before_save.get(field)
+        
+        if current_value != previous_value:
+            return True
+    
+    return False
+
+def build_template_context(doc, doc_before_save):
+    """
+    Build a comprehensive template context with old field values for any document type.
+    """
+    context = {
+        "doc": doc, 
+        "doc_before_save": doc_before_save,
+        "now": now, 
+        "datetime": datetime, 
+        "frappe": frappe
+    }
+    
+    # Add old field values for all fields that changed
+    if doc_before_save:
+        for field in doc.meta.get_valid_columns():
+            if hasattr(doc_before_save, field):
+                old_field_name = f"old_{field}"
+                context[old_field_name] = getattr(doc_before_save, field)
+    
+    return context
+
+
 
 def check_condition(doc, condition_str):
     """Checks if the condition is met."""
@@ -154,26 +281,61 @@ def evaluate_expression_condition(doc, condition_str):
         return False
 
 def get_recipients(doc, recipient_rules):
-    """Gathers a unique list of recipients based on the rules."""
+    """Gathers a unique list of recipients based on the enhanced rules."""
     users = set()
 
     for rule in recipient_rules:
-        # 1. Specific User
-        if rule.specific_user:
-            users.add(rule.specific_user)
+        recipient_type = rule.recipient_type
+        recipient_value = rule.recipient_value
 
-        # 2. Role-based recipients
-        if rule.receiver_by_role:
-            users_with_role = frappe.get_users_with_role(rule.receiver_by_role)
-            users.update(users_with_role)
+        if not recipient_type or not recipient_value:
+            continue
 
-        # 3. Document field recipients
-        if rule.receiver_by_document_field:
-            user_from_field = doc.get(rule.receiver_by_document_field)
-            if user_from_field and frappe.db.exists("User", user_from_field):
-                users.add(user_from_field)
-    
-    return list(users)
+        try:
+            if recipient_type == "User":
+                # Validate and add specific user
+                if frappe.db.exists("User", recipient_value):
+                    user_enabled = frappe.db.get_value("User", recipient_value, "enabled")
+                    if user_enabled:
+                        users.add(recipient_value)
+                        frappe.logger().debug(f"Added user: {recipient_value}")
+                    else:
+                        frappe.log_error(f"User {recipient_value} is disabled", "Custom Notification Recipient")
+                else:
+                    frappe.log_error(f"User {recipient_value} not found", "Custom Notification Recipient")
+
+            elif recipient_type == "Role":
+                # Get all users with the specified role
+                users_with_role = frappe.get_all(
+                    "Has Role",
+                    filters={
+                        "role": recipient_value,
+                        "parenttype": "User"
+                    },
+                    fields=["parent"],
+                    distinct=True
+                )
+                
+                if users_with_role:
+                    for user_role in users_with_role:
+                        user_name = user_role.parent
+                        if user_name and frappe.db.exists("User", user_name):
+                            # Check if user is enabled
+                            if frappe.db.get_value("User", user_name, "enabled"):
+                                users.add(user_name)
+                                frappe.logger().debug(f"Added user {user_name} from role {recipient_value}")
+                    frappe.logger().info(f"Found {len(users_with_role)} users with role {recipient_value}")
+                else:
+                    frappe.log_error(f"No users found with role {recipient_value}", "Custom Notification Recipient")
+
+        except Exception as e:
+            frappe.log_error(f"Error processing recipient rule {recipient_type}: {recipient_value}. Error: {e}", "Custom Notification Recipient")
+
+    # Remove None values and return sorted list
+    valid_users = sorted(list(filter(None, users)))
+    frappe.logger().info(f"Final recipient list: {valid_users}")
+    return valid_users
+
 
 
 def send_notification(doc, user, subject, message, channel):

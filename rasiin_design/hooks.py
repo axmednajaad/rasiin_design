@@ -152,21 +152,21 @@ doc_events = {
 # ---------------
 
 scheduler_events = {
-    "daily": [
-        "rasiin_design.scheduled_tasks.trigger_overdue_notifications"
-    ],
+    # manual trigger command : bench --site ciribey.com execute rasiin_design.tasks.trigger_overdue_check
     "cron": {
-        # Run every day at 8 AM
-        "0 6 * * *": [
-            "rasiin_design.scheduled_tasks.trigger_overdue_notifications"
+         # Test scheduler every minute
+        # "* * * * *": [
+        #     "rasiin_dasks.check_and_notify_overdue_invoices" 
+        # ],
+        "19 20 * * *": [
+            "rasiin_design.tasks.check_and_notify_overdue_invoices",
+            "rasiin_design.tasks.check_and_notify_low_stock"
         ],
-        # Run every day at 11 AM
-        "0 11 * * *": [
-            "rasiin_design.scheduled_tasks.trigger_overdue_notifications"
-        ],
-        # Optional: Run at 3 PM for follow-ups
-        "0 15 * * *": [
-            "rasiin_design.scheduled_tasks.trigger_overdue_notifications"
+         # Somalia time: Every 2 hours from 6 AM to 8 PM 
+        # UTC equivalent: 3 AM to 5 PM (6-3=3, 20-3=17)
+        "0 3-17/2 * * *": [
+            "rasiin_design.scheduled_tasks.check_and_notify_overdue_invoices",
+            "rasiin_design.scheduled_tasks.check_and_notify_low_stock"
         ]
     },
 #	"all": [

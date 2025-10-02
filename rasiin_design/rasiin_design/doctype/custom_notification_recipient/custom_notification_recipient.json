@@ -7,9 +7,8 @@
  "engine": "InnoDB",
  "field_order": [
   "section_break_luyn",
-  "specific_user",
-  "receiver_by_role",
-  "receiver_by_document_field"
+  "recipient_type",
+  "recipient_value"
  ],
  "fields": [
   {
@@ -17,31 +16,29 @@
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "specific_user",
-   "fieldtype": "Link",
+   "default": "User",
+   "fieldname": "recipient_type",
+   "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Specific User",
-   "options": "User"
+   "in_standard_filter": 1,
+   "label": "Recipient Type",
+   "options": "User\nRole",
+   "reqd": 1
   },
   {
-   "fieldname": "receiver_by_role",
-   "fieldtype": "Link",
+   "fieldname": "recipient_value",
+   "fieldtype": "Dynamic Link",
    "in_list_view": 1,
-   "label": "Receiver by Role",
-   "options": "Role"
-  },
-  {
-   "description": "e.g. owner, modified_by, or any custom field linking to User",
-   "fieldname": "receiver_by_document_field",
-   "fieldtype": "Data",
-   "label": "Receiver by Document Field"
+   "label": "Recipient",
+   "options": "recipient_type",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-09-28 15:33:54.588004",
+ "modified": "2025-10-02 14:10:31.276901",
  "modified_by": "Administrator",
  "module": "Rasiin Design",
  "name": "Custom Notification Recipient",
