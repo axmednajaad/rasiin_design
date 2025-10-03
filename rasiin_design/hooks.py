@@ -33,6 +33,9 @@ app_include_css = [
 
 
 app_include_js = [
+    "/assets/rasiin_design/js/notification_system.js" ,
+    
+    # 
     "/assets/rasiin_design/js/new_design.js" ,
     "/assets/rasiin_design/js/customreport.js" , 
     '/assets/rasiin_design/js/lib/tabulator/dist/js/tabulator.min.js',
@@ -155,18 +158,14 @@ scheduler_events = {
     # manual trigger command : bench --site ciribey.com execute rasiin_design.tasks.trigger_overdue_check
     "cron": {
          # Test scheduler every minute
-        # "* * * * *": [
-        #     "rasiin_dasks.check_and_notify_overdue_invoices" 
-        # ],
-        "19 20 * * *": [
-            "rasiin_design.tasks.check_and_notify_overdue_invoices",
-            "rasiin_design.tasks.check_and_notify_low_stock"
+        "* * * * *": [
+            "rasiin_design.tasks.check_and_notify_overdue_invoices" 
         ],
-         # Somalia time: Every 2 hours from 6 AM to 8 PM 
+        # Somalia time: Every 2 hours from 6 AM to 8 PM 
         # UTC equivalent: 3 AM to 5 PM (6-3=3, 20-3=17)
         "0 3-17/2 * * *": [
-            "rasiin_design.scheduled_tasks.check_and_notify_overdue_invoices",
-            "rasiin_design.scheduled_tasks.check_and_notify_low_stock"
+            "rasiin_design.tasks.check_and_notify_overdue_invoices",
+            "rasiin_design.tasks.check_and_notify_low_stock"
         ]
     },
 #	"all": [

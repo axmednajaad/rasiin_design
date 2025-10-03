@@ -1084,10 +1084,16 @@ function make_header_nav(data) {
       $(navhtml).prependTo($(".header_sec").empty())
 
       // Wait for DOM to be ready before setting up events
+        // setTimeout(() => {
+        //     setup_notification_events();
+        //     // fetch_and_render_notifications();
+        // }, 100);
+
+        // Initialize centralized notification system for the header
         setTimeout(() => {
-            setup_notification_events();
-            // fetch_and_render_notifications();
+          initNotificationSystem('.header_sec');
         }, 100);
+
 
     // $('.header_sec').empty('')
     // $(navhtml).appendTo('.header_sec')
@@ -1136,21 +1142,21 @@ frappe.ui.Page = class Page {
 
       make_header_nav(navbardata);
       // Initial fetch of notifications
-      fetch_and_render_notifications();
+      // fetch_and_render_notifications();
 
 
 
       // Real-time listener for new notifications
       // frappe.realtime.on("new_notice", (data) => {
-      frappe.realtime.on("new_notification", (data) => {
-        console.log("new_notification realtime published : ",data)
-        frappe.show_alert("New Notification", 5);
-        // Refresh bell when a new notice comes in
-        fetch_and_render_notifications();
+      // frappe.realtime.on("new_notification", (data) => {
+      //   console.log("new_notification realtime published : ",data)
+      //   frappe.show_alert("New Notification", 5);
+      //   // Refresh bell when a new notice comes in
+      //   fetch_and_render_notifications();
 
-        // exit it
-        return;
-      });
+      //   // exit it
+      //   return;
+      // });
 
 
     }
@@ -2173,7 +2179,7 @@ frappe.views.Workspace = class customWorkspace {
     $(".header_sec").hide()
     // alert("ok")
 
-    get_notification()
+    // get_notification()
 
     //  this.body =
     // console.log
