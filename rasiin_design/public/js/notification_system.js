@@ -25,13 +25,13 @@ const notificationInstances = new Map();
 function initNotificationSystem(containerSelector = 'body') {
     // If an instance for this container already exists, destroy it to prevent memory leaks.
     if (notificationInstances.has(containerSelector)) {
-        console.log(`Destroying existing notification system for: ${containerSelector}`);
+        // console.log(`Destroying existing notification system for: ${containerSelector}`);
         const oldInstance = notificationInstances.get(containerSelector);
         oldInstance.destroy(); // Clean up old event listeners and timers
         notificationInstances.delete(containerSelector);
     }
     
-    console.log(`Initializing new notification system for: ${containerSelector}`);
+    // console.log(`Initializing new notification system for: ${containerSelector}`);
     const notificationSystem = new NotificationSystem(containerSelector);
     notificationInstances.set(containerSelector, notificationSystem);
     return notificationSystem;
@@ -100,7 +100,7 @@ class NotificationSystem {
             order_by: "creation desc",
             limit: 20
         }).then(notifications => {
-            console.log("Fetched notifications:", notifications);
+            // console.log("Fetched notifications:", notifications);
             const badge = $(this.containerSelector).find('.notification-badge');
             const list = $(this.containerSelector).find('.notification-list');
             list.empty();
@@ -136,7 +136,7 @@ class NotificationSystem {
     }
 
     setupNotificationEvents() {
-        console.log("Setting up notification events in:", this.containerSelector);
+        // console.log("Setting up notification events in:", this.containerSelector);
         
         // Use the pre-bound handlers
         $(document).on('click', `${this.containerSelector} .notification-bell-container`, this.handleBellClick);
@@ -185,30 +185,30 @@ class NotificationSystem {
         
         // Debounce same notification clicks
         if (now - this.lastClickTime < this.CLICK_DEBOUNCE_DELAY && this.processingNotifications.has(log_name)) {
-            console.log("Same notification click debounced");
+            // console.log("Same notification click debounced");
             e.stopPropagation();
             e.preventDefault();
             return;
         }
         this.lastClickTime = now;
         
-        console.log("Notification item clicked");
+        // console.log("Notification item clicked");
         const doc_type = $target.data('doc-type');
         const doc_name = $target.data('doc-name');
 
         if (!log_name || !doc_type || !doc_name) {
-            console.error("Missing notification data:", { log_name, doc_type, doc_name });
+            // console.error("Missing notification data:", { log_name, doc_type, doc_name });
             return;
         }
 
         // Prevent duplicate processing
         if (this.processingNotifications.has(log_name)) {
-            console.log("Notification already being processed:", log_name);
+            // console.log("Notification already being processed:", log_name);
             return;
         }
 
         this.processingNotifications.add(log_name);
-        console.log("Processing notification:", log_name);
+        // console.log("Processing notification:", log_name);
 
         // Close dropdown immediately when item is clicked
         this.closeAllNotificationDropdowns();
@@ -216,14 +216,14 @@ class NotificationSystem {
         // Mark as read with enhanced error handling - using the same pattern as your working code
         this.markNotificationAsRead(log_name)
             .then(() => {
-                console.log("Successfully marked as read:", log_name);
+                // console.log("Successfully marked as read:", log_name);
                 // Refresh notifications
                 this.fetchAndRenderNotifications();
                 // Navigate to the document
                 this.navigateToDocument(doc_type, doc_name);
             })
             .catch((error) => {
-                console.error("Error processing notification:", error);
+                // console.error("Error processing notification:", error);
                 // Even if marking fails, still navigate and refresh
                 this.fetchAndRenderNotifications();
                 this.navigateToDocument(doc_type, doc_name);
@@ -316,7 +316,7 @@ class NotificationSystem {
 
     markNotificationAsRead(log_name) {
         return new Promise((resolve, reject) => {
-            console.log("Attempting to mark notification as read via server method:", log_name);
+            // console.log("Attempting to mark notification as read via server method:", log_name);
             
             frappe.call({
                 method: 'rasiin_design.api.notification.mark_notification_as_read',
@@ -325,16 +325,16 @@ class NotificationSystem {
                 },
                 callback: function(r) {
                     if (r.message && r.message.status === 'success') {
-                        console.log("Notification marked as read successfully via server method");
+                        // console.log("Notification marked as read successfully via server method");
                         resolve();
                     } else {
-                        console.error("Failed to mark notification as read:", r.message);
+                        // console.error("Failed to mark notification as read:", r.message);
                         // Even if it fails, we reject but the .then() block in the caller will still navigate
                         reject(r.message || "Unknown server error");
                     }
                 },
                 error: function(r) {
-                    console.error("AJAX Error marking notification as read:", r);
+                    // console.error("AJAX Error marking notification as read:", r);
                     reject(r);
                 }
             });
@@ -343,21 +343,21 @@ class NotificationSystem {
 
     navigateToDocument(doc_type, doc_name) {
         if (doc_type && doc_name) {
-            console.log("Navigating to:", doc_type, doc_name);
+            // console.log("Navigating to:", doc_type, doc_name);
             try {
                 // Add small delay to ensure notification is processed
                 setTimeout(() => {
                     frappe.set_route('Form', doc_type, doc_name);
                 }, 100);
             } catch (error) {
-                console.error("Navigation error:", error);
+                // console.error("Navigation error:", error);
                 // Fallback navigation
                 setTimeout(() => {
                     window.location.href = `/app/${frappe.router.slug(doc_type)}/${doc_name}`;
                 }, 100);
             }
         } else {
-            console.error("Invalid document type or name for navigation");
+            // console.error("Invalid document type or name for navigation");
         }
     }
 
@@ -374,26 +374,24 @@ class NotificationSystem {
     }
     
     handleRealtimeUpdate(data) {
-        // console.log("Real-time notification received:", data);
+        // // console.log("Real-time notification received:", data);
         // frappe.show_alert("New Notification", 5);
-         console.log("Real-time notification received:", data);
+        //  // console.log("Real-time notification received:", data);
     
         if (data.type === 'new_notice') {
             frappe.show_alert({
                 message: __("New Notification"),
                 indicator: 'blue'
             }, 5);
-            this.fetchAndRenderNotifications();
+            // this.fetchAndRenderNotifications();
         }
         else if (data.type === 'notification_read') {
-            frappe.show_alert({
-                message: __("Notification Marked as read success"),
-                indicator: 'blue'
-            }, 5);
-            // Optional: Handle when a notification is marked as read
-            console.log("Notification marked as read:", data.log_name);
-            // You might want to refresh to update the count
-            this.fetchAndRenderNotifications();
+            // frappe.show_alert({
+            //     message: __("Notification Marked as read success"),
+            //     indicator: 'blue'
+            // }, 5);
+            // // console.log("Notification marked as read:", data.log_name);
+            // this.fetchAndRenderNotifications();
         }
 
         //
@@ -409,7 +407,7 @@ class NotificationSystem {
     }
 
     destroy() {
-        console.log(`Destroying notification system and cleaning up events for: ${this.containerSelector}`);
+        // console.log(`Destroying notification system and cleaning up events for: ${this.containerSelector}`);
 
         // Remove all event listeners using the saved references to the bound handlers
         $(document).off('click', `${this.containerSelector} .notification-bell-container`, this.handleBellClick);

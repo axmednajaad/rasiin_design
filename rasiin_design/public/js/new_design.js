@@ -6,7 +6,7 @@ const closeMenuFirstPageIcon = document.querySelector(".close_mennu")
 
 function openFirstPageNav() {
   let navbardata = JSON.parse(localStorage.getItem("navdata") || JSON.parse([]))
-  console.log("navbardata", navbardata)
+ //  console.log("navbardata", navbardata)
 
   const menuFirstPage = document.querySelector("[data-menu-first-page]")
   menuFirstPage.classList.add("open-menu")
@@ -313,13 +313,13 @@ function get_notification() {
 }
 
 
-function 	setup_notifications() {
-  if (frappe.boot.desk_settings.notifications && frappe.session.user !== "Guest") {
-    let notifications = new frappe.ui.Notifications();
-    notifications.make();
-    // console.log(notifications)
-  }
-}
+// function 	setup_notifications() {
+//   if (frappe.boot.desk_settings.notifications && frappe.session.user !== "Guest") {
+//     let notifications = new frappe.ui.Notifications();
+//     notifications.make();
+//     // console.log(notifications)
+//   }
+// }
 
 
 function make_header_nav(data) {
