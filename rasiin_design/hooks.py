@@ -156,18 +156,18 @@ doc_events = {
 
 scheduler_events = {
     # manual trigger command : bench --site ciribey.com execute rasiin_design.tasks.trigger_overdue_check
-    "cron": {
+    # "cron": {
          # Test scheduler every minute
-        "* * * * *": [
-            "rasiin_design.tasks.check_and_notify_overdue_invoices" 
-        ],
+        # "* * * * *": [
+        #     "rasiin_design.tasks.check_and_notify_overdue_invoices" 
+        # ],
         # Somalia time: Every 2 hours from 6 AM to 8 PM 
         # UTC equivalent: 3 AM to 5 PM (6-3=3, 20-3=17)
-        "0 3-17/2 * * *": [
-            "rasiin_design.tasks.check_and_notify_overdue_invoices",
-            "rasiin_design.tasks.check_and_notify_low_stock"
-        ]
-    },
+        # "0 3-17/2 * * *": [
+        #     "rasiin_design.tasks.check_and_notify_overdue_invoices",
+        #     "rasiin_design.tasks.check_and_notify_low_stock"
+        # ]
+    # },
 #	"all": [
 #		"rasiin_design.tasks.all"
 #	],

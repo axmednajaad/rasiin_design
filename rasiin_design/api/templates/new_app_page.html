@@ -1,4 +1,4 @@
-<style>
+<!-- <style>
   * {
   margin: 0;
   padding: 0;
@@ -229,6 +229,281 @@ a {
 
     if (isDropdownOpen && !isTargetInsideDropdown && !isTargetOpenDropdownBtn && !isTargetHeaderRight) {
       dropdown.removeClass("show");
+    }
+  });
+</script> -->
+
+
+
+
+
+
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .home_page_header {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background-color: #0c4872;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 50px;
+  }
+
+  .admin_img {
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+    aspect-ratio: 1;
+    border-radius: 6px;
+    cursor: pointer; /* Added for clarity */
+  }
+
+  .home_page_header_right {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 25px; /* Increased gap for spacing */
+  }
+
+  .user-profile-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  .home_page_dropdown {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    position: absolute;
+    top: 100%;
+    right: 0; /* Align to the right edge */
+    width: 160px;
+    background-color: #fff;
+    border: 1px solid #d3d3e4;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+
+  .show {
+    display: flex;
+  }
+
+  .home_page_dropdown span {
+    padding: 10px;
+    cursor: pointer;
+    color: #333; /* Added for better text color */
+  }
+
+  .home_page_dropdown span:hover {
+    background-color: #f1f1f1; /* Softer hover color */
+  }
+
+  .home_page_app_msg {
+    width: 818px;
+    margin: 0 auto;
+    background-color: #d1ecf1;
+    text-align: center;
+    padding: 16px 0;
+    margin-bottom: 1rem;
+    border-radius: 3px;
+    margin-top: 15px;
+  }
+
+  .home_page_sec {
+    background-color: #0c4872;
+    height: 100vh;
+    width: 100%;
+    overflow-y: scroll;
+    padding-bottom: 50px;
+  }
+
+  .home_page_apps {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px;
+    width: 818px;
+    margin: 40px auto;
+    padding: 0 30px;
+  }
+
+  .home_page_app {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .home_page_app_image {
+    cursor: pointer;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 6px;
+    transition: scale ease-in 0.1s, transform ease-in 0.1s;
+  }
+
+  .home_page_app_image:hover {
+    scale: 1.1;
+    transition: scale ease-in 0.1s, transform ease-in 0.1s;
+  }
+
+  .home_page_app_img {
+    border-radius: 6px;
+    width: 75px;
+    height: 75px;
+    aspect-ratio: 1;
+    padding: 10px;
+    background-color: var(--AppSwitcherIcon-background, white);
+    object-fit: cover;
+    transform-origin: center bottom;
+    transition: box-shadow ease-in 0.1s, transform ease-in 0.1s;
+    box-shadow: var(
+        --AppSwitcherIcon-inset-shadow,
+        inset 0 0 0 1px rgba(0, 0, 0, 0.2)
+      ),
+      0 1px 1px rgba(0, 0, 0, 0.02), 0 2px 2px rgba(0, 0, 0, 0.02),
+      0 4px 4px rgba(0, 0, 0, 0.02), 0 8px 8px rgba(0, 0, 0, 0.02),
+      0 16px 16px rgba(0, 0, 0, 0.02);
+  }
+
+  .home_page_app_label {
+    color: white;
+    font-weight: bold;
+    text-shadow: none;
+    font-size: 14px;
+    margin-top: 7px;
+    text-transform: capitalize;
+    max-width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+  }
+
+  /* mobile desing */
+  @media only screen and (max-width: 1024px) {
+    .home_page_apps {
+      grid-template-columns: repeat(4, 1fr);
+      width: 100%;
+      place-items: center;
+    }
+
+    .home_page_header {
+      padding: 10px 20px; /* Adjusted padding */
+    }
+
+    .home_page_app_msg {
+      width: 98%;
+    }
+  }
+</style>
+
+<section class="home_page_sec">
+  <div class="home_page_header">
+    <div></div>
+    <div class="home_page_header_right">
+      <div class="notification-bell-container nav-item">
+        <i class="fa fa-bell notification-bell-icon"></i>
+        <span class="notification-badge">0</span>
+        <div class="notification-dropdown">
+          <div class="notification-header">Notifications</div>
+          <ul class="notification-list">
+            </ul>
+          <div class="notification-footer">
+            <a href="/app/notification-log">View All</a>
+          </div>
+        </div>
+      </div>
+      <div class="user-profile-container">
+        <span style="color: white"
+          >{{frappe.db.get_value("User" , frappe.session.user ,
+          "full_name")}}</span
+        >
+        <img
+          class="admin_img"
+          src="/files/depositphotos_137014128-stock-illustration-user-profile-icon (1).jpg"
+          alt="imgage"
+        />
+      </div>
+    </div>
+
+    <div class="home_page_dropdown">
+      <span onclick="frappe.ui.toolbar.route_to_user()">My setting</span>
+      <span onclick="frappe.ui.toolbar.clear_cache()">Reload</span>
+      <span onclick="frappe.app.logout()">Logout</span>
+    </div>
+  </div>
+
+  <div class="home_page_app_msg">
+    <span
+      >Hi 👋, Welcome {{frappe.db.get_value("User" , frappe.session.user ,
+      "full_name")}}</span
+    >
+  </div>
+
+  <div class="home_page_apps">
+    {% for d in data %}
+    <a class="app_btn home_page_app" id="{{d.name}}">
+      <div class="home_page_app_image">
+        {% if d.image_icon %}
+        <img class="home_page_app_img" src="{{ d.image_icon }}" alt="image" />
+        {% elif d.icon %}
+        <i
+          class="fas {{ d.icon }} text-[#0C4872] fa-lg text-3xl home_page_app_img"
+        ></i>
+        {% else %}
+        <img class="home_page_app_img" src="/files/images.png" alt="image" />
+        {% endif %}
+      </div>
+      <span class="home_page_app_label" id="{{d.name}}">{{d.label}}</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+
+<script>
+  $(document).ready(function () {
+    // --- Your Existing Dropdown Logic ---
+    const openDropdown = $('.user-profile-container'); // Changed selector to be more specific
+    const dropdown = $('.home_page_dropdown');
+
+    openDropdown.on('click', function (event) {
+      event.stopPropagation(); // Prevent click from bubbling to document
+      dropdown.toggleClass('show');
+    });
+
+    $(document).on('click', function (event) {
+      // If the dropdown is visible and the click is outside of it, hide it
+      if (
+        dropdown.hasClass('show') &&
+        !$(event.target).closest('.home_page_header_right').length
+      ) {
+        dropdown.removeClass('show');
+      }
+    });
+
+    // --- NEW: Initialize the Notification System ---
+    // This function comes from your notification_system.js file.
+    // We target the header to ensure it only looks for a notification bell there.
+    if (typeof initNotificationSystem === 'function') {
+      initNotificationSystem('.home_page_header');
+    } else {
+      console.error('Notification System script not loaded!');
     }
   });
 </script>
