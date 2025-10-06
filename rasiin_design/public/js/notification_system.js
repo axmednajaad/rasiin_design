@@ -10,7 +10,9 @@
  * - Handles component lifecycle by properly destroying and re-initializing
  * when the UI is redrawn.
  * - Uses bound event handlers for robust cleanup to prevent memory leaks.
- */
+ *
+ * 
+**/
 
 // --- Global Instance Management ---
 
@@ -383,15 +385,12 @@ class NotificationSystem {
                 message: __("New Notification"),
                 indicator: 'blue'
             }, 5);
-            // this.fetchAndRenderNotifications();
         }
         else if (data.type === 'notification_read') {
             // frappe.show_alert({
             //     message: __("Notification Marked as read success"),
             //     indicator: 'blue'
             // }, 5);
-            // // console.log("Notification marked as read:", data.log_name);
-            // this.fetchAndRenderNotifications();
         }
 
         //
