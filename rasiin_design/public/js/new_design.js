@@ -266,6 +266,21 @@ if (report_links) {
             ${navitems}
         </div>
         
+        <form class="form-inline fill-width justify-content-end" role="search" onsubmit="return false;">
+          <div class="input-group search-bar text-muted">
+            <input
+              id="navbar-search"
+              type="text"
+              class="form-control"
+              placeholder="${__("Search or type a command ({0})", [frappe.utils.is_mac() ? "⌘ + G" : "Ctrl + G"]) }"
+              aria-haspopup="true"
+            >
+            <span class="search-icon">
+              <svg class="icon icon-sm"><use href="#icon-search"></use></svg>
+            </span>
+          </div>
+        </form>
+        
         <div class="profile__image__name mr-3">
             <span class="nav-link nav-item">${frappe.boot.user.first_name}</span>
             
@@ -354,6 +369,12 @@ function make_header_nav(data) {
         // Initialize centralized notification system for the header
         if (frappe.boot.desk_settings.notifications && frappe.session.user !== "Guest") {
           try { new frappe.ui.Notifications(); } catch (e) { /* noop */ }
+        }
+        if (frappe.boot.desk_settings.search_bar) {
+          try {
+            let awesome_bar = new frappe.search.AwesomeBar();
+            awesome_bar.setup("#navbar-search");
+          } catch (e) { /* noop */ }
         }
 
 
