@@ -16,7 +16,10 @@
     /*
       background-color: #0c4872;
     */
-    background-color: #0c4872;
+    /* background-color: #0c4872;
+    */
+    background-color: #1e293b;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -90,7 +93,8 @@
     /*
       background-color: #0c4872;
     */
-    background-color: #0c4872;
+    /* background-color: #0c4872; */
+    background-color: #1e293b;
     height: 100vh;
     width: 100%;
     overflow-y: scroll;
@@ -187,8 +191,7 @@
         <span class="notification-badge">0</span>
         <div class="notification-dropdown">
           <div class="notification-header">Notifications</div>
-          <ul class="notification-list">
-            </ul>
+          <ul class="notification-list"></ul>
           <div class="notification-footer">
             <a href="/app/notification-log">View All</a>
           </div>
@@ -229,7 +232,7 @@
         <img class="home_page_app_img" src="{{ d.image_icon }}" alt="image" />
         {% elif d.icon %}
         <i
-          class="fas {{ d.icon }} text-[#0C4872] fa-lg text-3xl home_page_app_img"
+          class="fas {{ d.icon }} text-[#1e293b] fa-lg text-3xl home_page_app_img"
         ></i>
         {% else %}
         <img class="home_page_app_img" src="/files/images.png" alt="image" />
@@ -244,29 +247,29 @@
 <script>
   $(document).ready(function () {
     // --- Your Existing Dropdown Logic ---
-    const openDropdown = $('.user-profile-container'); // Changed selector to be more specific
-    const dropdown = $('.home_page_dropdown');
+    const openDropdown = $(".user-profile-container"); // Changed selector to be more specific
+    const dropdown = $(".home_page_dropdown");
 
-    openDropdown.on('click', function (event) {
+    openDropdown.on("click", function (event) {
       event.stopPropagation(); // Prevent click from bubbling to document
-      dropdown.toggleClass('show');
+      dropdown.toggleClass("show");
     });
 
-    $(document).on('click', function (event) {
+    $(document).on("click", function (event) {
       // If the dropdown is visible and the click is outside of it, hide it
       if (
-        dropdown.hasClass('show') &&
-        !$(event.target).closest('.home_page_header_right').length
+        dropdown.hasClass("show") &&
+        !$(event.target).closest(".home_page_header_right").length
       ) {
-        dropdown.removeClass('show');
+        dropdown.removeClass("show");
       }
     });
 
     // --- NEW: Initialize the Notification System ---
     // This function comes from your notification_system.js file.
     // We target the header to ensure it only looks for a notification bell there.
-    if (typeof initNotificationSystem === 'function') {
-      initNotificationSystem('.home_page_header');
+    if (typeof initNotificationSystem === "function") {
+      initNotificationSystem(".home_page_header");
     } else {
       // console.error('Notification System script not loaded!');
     }

@@ -72,7 +72,13 @@ def app_page():
 	# frappe.errprint(get_balance_shet())
 	data = get_workspace_sidebar_items()['pages']
 	# frappe.errprint(data)
-	return frappe.render_template("rasiin_design/api/templates/new_app_page.html", {"data" : data})  , "test"
+	# return frappe.render_template("rasiin_design/api/templates/new_app_page.html", {"data" : data})  , "test"
+
+
+	renderedTemplate = frappe.render_template("rasiin_design/api/templates/new_app_page.html", {"data" : data});
+
+	return [renderedTemplate,data];
+
 	# return frappe.render_template("anfac_retail.anfac_retail.page.dashboard_page.dashboard_page.html", {"data" : data})
 
 

@@ -1,276 +1,381 @@
 .form-tabs-list {
-    z-index: 0 !important;
+  z-index: 0 !important;
 }
-#show{
-    background-color: grey;
-    position: fixed;
-    margin-right: 300px;
+#show {
+  background-color: grey;
+  position: fixed;
+  margin-right: 300px;
 }
-h1{
-    color: white;
+h1 {
+  color: white;
 }
-#show_2{
-    background-color: white;
-    position: fixed;
-    width: 200px;
-    height: 180px;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 10px;
+#show_2 {
+  background-color: white;
+  position: fixed;
+  width: 200px;
+  height: 180px;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 10px;
 }
-#show{
-    background-color: white;
-    position: fixed;
-    width: 500px;
-    height: 200px;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 10px;
-    
+#show {
+  background-color: white;
+  position: fixed;
+  width: 500px;
+  height: 200px;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 10px;
 }
-#btn_2:hover{
-    cursor: pointer;
+#btn_2:hover {
+  cursor: pointer;
 }
-#btn:hover{
-    cursor: pointer;
+#btn:hover {
+  cursor: pointer;
 }
-.bof:hover{
-    background-color: rgb(134, 127, 127);
-    border-radius: 5px;
-    cursor: pointer;
-    color: black;
-    
+.bof:hover {
+  background-color: rgb(134, 127, 127);
+  border-radius: 5px;
+  cursor: pointer;
+  color: black;
 }
 
 /* ...............responsitive for mobile  ................... */
 
 @media only screen and (max-width: 600px) {
-.sec_2{
+  .sec_2 {
     display: grid;
     grid-template-columns: auto auto auto;
-}
-.mob{
+  }
+  .mob {
     display: none;
-}
-
-
+  }
 }
 
 /* .................................................desing for Tablet............. */
 
 @media (min-width: 600px) and (max-width: 1024px) {
-
-    .sec_2{
-            display: grid;
-            grid-template-columns: auto auto auto auto;
-    }
-  
-
-} 
-
+  .sec_2 {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+  }
+}
 
 /* === MODERN NOTIFICATION STYLES (REPLACEMENT) === */
 
 /* --- Notification Bell Container --- */
 .notification-bell-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    margin-right: 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 20px;
 }
 
 .notification-bell-icon {
-    font-size: 1.3rem; /* Slightly larger for better visibility */
-    color: white;
-    transition: transform 0.2s ease-in-out;
+  font-size: 1.3rem; /* Slightly larger for better visibility */
+  color: white;
+  transition: transform 0.2s ease-in-out;
 }
 
 .notification-bell-container:hover .notification-bell-icon {
-    transform: rotate(15deg); /* Fun little hover effect */
+  transform: rotate(15deg); /* Fun little hover effect */
 }
 
 /* --- Modernized Notification Badge --- */
 .notification-badge {
-    position: absolute;
-    top: -5px;
-    right: -8px;
-    background-color: #E53935; /* Softer, more modern red */
-    color: white;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    display: none; /* Hidden by default */
-    align-items: center;
-    justify-content: center;
-    text-indent: 3px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    border: 2px solid #2c3e50; /* Match header background if possible, or use a dark color */
-    box-shadow: 0 0 0 2px rgba(229, 57, 53, 0.4); /* Outer glow */
-    animation: pulse-badge 1.5s infinite; /* Subtle animation for attention */
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  background-color: #e53935; /* Softer, more modern red */
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: none; /* Hidden by default */
+  align-items: center;
+  justify-content: center;
+  text-indent: 3px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border: 2px solid #2c3e50; /* Match header background if possible, or use a dark color */
+  box-shadow: 0 0 0 2px rgba(229, 57, 53, 0.4); /* Outer glow */
+  animation: pulse-badge 1.5s infinite; /* Subtle animation for attention */
 }
 
 @keyframes pulse-badge {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(229, 57, 53, 0.5);
-    }
-    70% {
-        transform: scale(1.05);
-        box-shadow: 0 0 0 8px rgba(229, 57, 53, 0);
-    }
-    100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(229, 57, 53, 0);
-    }
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(229, 57, 53, 0.5);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 8px rgba(229, 57, 53, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(229, 57, 53, 0);
+  }
 }
 
 /* --- Enhanced Notification Dropdown --- */
 .notification-dropdown {
-    display: none;
-    position: absolute;
-    top: calc(100% + 10px) !important; /* Add some space from the bell */
-    right: 0 !important;
-    width: 380px; /* Slightly wider */
-    background-color: #ffffff;
-    border: 1px solid #e0e6ed;
-    border-radius: 8px; /* Softer corners */
-    box-shadow: 0 8px 24px rgba(0, 32, 77, 0.12); /* Softer, deeper shadow */
-    z-index: 99999 !important;
-    overflow: hidden;
-    user-select: none;
-    -webkit-user-select: none;
-    transform-origin: top right;
-    animation: fadeInScale 0.2s ease-out; /* Entrance animation */
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px) !important; /* Add some space from the bell */
+  right: 0 !important;
+  width: 380px; /* Slightly wider */
+  background-color: #ffffff;
+  border: 1px solid #e0e6ed;
+  border-radius: 8px; /* Softer corners */
+  box-shadow: 0 8px 24px rgba(0, 32, 77, 0.12); /* Softer, deeper shadow */
+  z-index: 99999 !important;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  transform-origin: top right;
+  animation: fadeInScale 0.2s ease-out; /* Entrance animation */
 }
 
 @keyframes fadeInScale {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .notification-bell-container .notification-dropdown.show,
 .notification-dropdown.show {
-    display: block !important;
+  display: block !important;
 }
 
 /* --- Refined Header & Footer --- */
 .notification-header,
 .notification-footer {
-    padding: 12px 18px;
-    font-weight: 600;
-    color: #36454F; /* Darker, more readable text */
-    border-bottom: 1px solid #e0e6ed;
-    background-color: #f8f9fa;
-    position: sticky;
-    z-index: 1;
+  padding: 12px 18px;
+  font-weight: 600;
+  color: #36454f; /* Darker, more readable text */
+  border-bottom: 1px solid #e0e6ed;
+  background-color: #f8f9fa;
+  position: sticky;
+  z-index: 1;
 }
 
 .notification-header {
-    top: 0;
+  top: 0;
 }
 
 .notification-footer {
-    bottom: 0;
-    border-top: 1px solid #e0e6ed;
-    text-align: center;
+  bottom: 0;
+  border-top: 1px solid #e0e6ed;
+  text-align: center;
 }
 
 .notification-footer a {
-    color: #007bff;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
 }
 
 .notification-footer a:hover {
-    color: #0056b3;
+  color: #0056b3;
 }
 
 /* --- Notification List & Scrollbar --- */
 .notification-list {
-    list-style: none;
-    padding: 8px 0; /* Add vertical padding */
-    margin: 0;
-    max-height: 400px;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #c1c1c1 transparent;
+  list-style: none;
+  padding: 8px 0; /* Add vertical padding */
+  margin: 0;
+  max-height: 400px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 transparent;
 }
 
-.notification-list::-webkit-scrollbar { width: 6px; }
-.notification-list::-webkit-scrollbar-track { background: transparent; }
-.notification-list::-webkit-scrollbar-thumb { background-color: #c1c1c1; border-radius: 3px; }
-.notification-list::-webkit-scrollbar-thumb:hover { background-color: #a1a1a1; }
+.notification-list::-webkit-scrollbar {
+  width: 6px;
+}
+.notification-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.notification-list::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 3px;
+}
+.notification-list::-webkit-scrollbar-thumb:hover {
+  background-color: #a1a1a1;
+}
 
 /* --- Redesigned Notification Items --- */
 .notification-item {
-    display: flex; /* Using Flexbox for a structured layout */
-    align-items: center;
-    padding: 12px 18px;
-    border-bottom: 1px solid #f0f3f6; /* Lighter divider */
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.2s;
+  display: flex; /* Using Flexbox for a structured layout */
+  align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid #f0f3f6; /* Lighter divider */
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
 }
 
 .notification-item:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .notification-item:hover {
-    background-color: #f8f9fa;
-    transform: translateX(3px); /* Subtle shift on hover */
+  background-color: #f8f9fa;
+  transform: translateX(3px); /* Subtle shift on hover */
 }
 /* For keyboard navigation */
 .notification-item:focus-visible {
-    outline: 2px solid #007bff;
-    outline-offset: -2px;
-    background-color: #f0f4f7;
+  outline: 2px solid #007bff;
+  outline-offset: -2px;
+  background-color: #f0f4f7;
 }
 
 .notification-icon {
-    margin-right: 15px;
-    font-size: 1.5rem;
-    color: #555;
-    flex-shrink: 0;
+  margin-right: 15px;
+  font-size: 1.5rem;
+  color: #555;
+  flex-shrink: 0;
 }
 
 .notification-content {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .notification-content .subject {
-    font-weight: 500;
-    color: #212529;
-    margin-bottom: 4px;
-    line-height: 1.3;
+  font-weight: 500;
+  color: #212529;
+  margin-bottom: 4px;
+  line-height: 1.3;
 }
 
 .notification-content .time {
-    font-size: 0.8rem;
-    color: #6c757d;
+  font-size: 0.8rem;
+  color: #6c757d;
 }
 
 .notification-unread-dot {
-    width: 8px;
-    height: 8px;
-    background-color: #007bff; /* Blue dot for unread */
-    border-radius: 50%;
-    margin-left: 15px;
-    flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  background-color: #007bff; /* Blue dot for unread */
+  border-radius: 50%;
+  margin-left: 15px;
+  flex-shrink: 0;
 }
 
 /* --- Empty State --- */
 .no-notifications {
-    padding: 20px;
-    text-align: center;
-    color: #6c757d;
-    cursor: default;
+  padding: 20px;
+  text-align: center;
+  color: #6c757d;
+  cursor: default;
+}
+
+/* Sidebar Collapse Toggle Button - Inside Sidebar */
+.sidebar-collapse-toggle {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1041;
+  background: var(--sidebar-bg);
+  border: 1px solid var(--sidebar-border);
+  color: var(--sidebar-text);
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--sidebar-transition);
+  opacity: 0.8;
+}
+
+.sidebar-collapse-toggle:hover {
+  opacity: 1;
+  background: var(--sidebar-hover);
+  transform: scale(1.1);
+}
+
+/* Collapsed Sidebar Styles */
+body.rasiin-sidebar-collapsed {
+  --rasiin-leftbar-width: 60px;
+}
+
+body.rasiin-sidebar-collapsed #rasiin-left-sidebar {
+  width: var(--rasiin-leftbar-width);
+}
+
+body.rasiin-sidebar-collapsed .sidebar-label,
+body.rasiin-sidebar-collapsed .sidebar-user-name,
+body.rasiin-sidebar-collapsed .sidebar-user-role,
+body.rasiin-sidebar-collapsed #rasiin-sidebar-logout span {
+  display: none !important;
+}
+
+body.rasiin-sidebar-collapsed .sidebar-user {
+  justify-content: center;
+  padding: 16px 8px;
+}
+
+body.rasiin-sidebar-collapsed .sidebar-user-avatar {
+  margin-right: 0;
+}
+
+body.rasiin-sidebar-collapsed .sidebar-link {
+  justify-content: center;
+  padding: 14px 8px;
+}
+
+body.rasiin-sidebar-collapsed .sidebar-icon {
+  margin-right: 0;
+}
+
+body.rasiin-sidebar-collapsed .sidebar-footer {
+  padding: 16px 8px;
+  text-align: center;
+}
+
+/* Sidebar hover expansion effect */
+body.rasiin-sidebar-collapsed #rasiin-left-sidebar:hover {
+  width: 260px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+body.rasiin-sidebar-collapsed #rasiin-left-sidebar:hover .sidebar-label,
+body.rasiin-sidebar-collapsed #rasiin-left-sidebar:hover .sidebar-user-name,
+body.rasiin-sidebar-collapsed #rasiin-left-sidebar:hover .sidebar-user-role,
+body.rasiin-sidebar-collapsed
+  #rasiin-left-sidebar:hover
+  #rasiin-sidebar-logout
+  span {
+  display: block !important;
+}
+
+body.rasiin-sidebar-collapsed #rasiin-left-sidebar:hover .sidebar-user {
+  justify-content: flex-start;
+  padding: 16px 20px;
+}
+
+body.rasiin-sidebar-collapsed #rasiin-left-sidebar:hover .sidebar-user-avatar {
+  margin-right: 12px;
+}
+
+body.rasiin-sidebar-collapsed #rasiin-left-sidebar:hover .sidebar-link {
+  justify-content: flex-start;
+  padding: 14px 20px;
+}
+
+body.rasiin-sidebar-collapsed #rasiin-left-sidebar:hover .sidebar-icon {
+  margin-right: 12px;
+}
+
+body.rasiin-sidebar-collapsed #rasiin-left-sidebar:hover .sidebar-footer {
+  padding: 16px 20px;
+  text-align: left;
 }
