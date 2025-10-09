@@ -2003,7 +2003,8 @@ frappe.views.Workspace = class customWorkspace {
         $(body).appendTo(home_p);
         $(".app_btn").click(function (e) {
           // alert( "Handler for .click() called." );
-          // console.log(e.currentTarget.id)
+          console.log("Home Module is clicked", e);
+          console.log("Home Module is clicked", e.currentTarget);
           // alert(e.currentTarget.id)
           frappe.db
             .get_doc("Home Page", `${e.currentTarget.id}`)
@@ -2039,140 +2040,6 @@ frappe.views.Workspace = class customWorkspace {
               // console.log(doc.shortcuts)
             });
         });
-        //         frappe.require(['/assets/rasiin_design/js/lib/highcharts/code/highcharts.js' ,'/assets/rasiin_design/js/lib/highcharts/code/modules/exporting.js','/assets/rasiin_design/js/lib/highcharts/code/modules/export-data.js' ], () => {
-        //             // alert("ok ")
-        //            // Income vs Expense
-        //         Highcharts.chart('containerchart', {
-        //             chart: {
-        //             type: 'spline'
-        //             },
-        //             title: {
-        //             text: 'Income Vs Expense'
-        //             },
-        //             subtitle: {
-        //             text: 'Year 2022'
-        //             },
-        //             xAxis: {
-        //             categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        //                 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        //             accessibility: {
-        //                 description: 'Months of the year'
-        //             }
-        //             },
-        //             yAxis: {
-        //             title: {
-        //                 text: 'Amount'
-        //             },
-        //             labels: {
-        //                 // formatter: function () {
-        //                 // return this.value + '°';
-        //                 // }
-        //             }
-        //             },
-        //             tooltip: {
-        //             crosshairs: true,
-        //             shared: true
-        //             },
-        //             plotOptions: {
-        //             spline: {
-        //                 marker: {
-        //                 radius: 4,
-        //                 lineColor: '#666666',
-        //                 lineWidth: 1
-        //                 }
-        //             }
-        //             },
-        //             series: [{
-        //             name: 'Income',
-        //             marker: {
-        //                 symbol: 'square'
-        //             },
-        //             lineColor:"#0f0",
-        //             data : r.message[1][0]['inc']
-        //             // data: [5.2, 5.7, 8.7, 13.9, 18.2, 21.4, 25.0, 26.4, 22.8, 17.5, 12.1, 7.6]
-
-        //             }, {
-        //             name: 'Expense',
-        //             lineColor:"#f00",
-        //             marker: {
-        //                 symbol: 'diamond'
-        //             },
-        //             data : r.message[1][0]['exp']
-        //             // data: [1.5, 1.6, 3.3, 5.9, 10.5, 13.5, 14.5, 14.4, 11.5, 8.7, 4.7, 2.6]
-        //             }]
-        //         });
-
-        //                   // Create the chart
-        // Highcharts.chart('pichart', {
-        //     chart: {
-        //       type: 'pie'
-        //     },
-        //     title: {
-        //       text: 'Balance Sheet'
-        //       },
-
-        //     accessibility: {
-        //       announceNewData: {
-        //         enabled: true
-        //       },
-        //       point: {
-        //         valueSuffix: '$'
-        //       }
-        //     },
-
-        //     plotOptions: {
-        //       series: {
-        //         dataLabels: {
-        //           enabled: true,
-        //           format: '{point.name}: ${point.y:.1f}'
-        //         }
-        //       }
-        //     },
-
-        //     tooltip: {
-        //       headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-        //       pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
-        //     },
-
-        //     series: [
-        //       {
-        //         name: "Browsers",
-        //         colorByPoint: true,
-        //         data: r.message[2]
-
-        //         // [
-        //         //   {
-        //         //     name: "Chrome",
-        //         //     y: 61.04,
-        //         //     drilldown: "Chrome"
-        //         //   },
-        //         //   {
-        //         //     name: "Safari",
-        //         //     y: 9.47,
-        //         //     drilldown: "Safari"
-        //         //   },
-        //         //   {
-        //         //     name: "Edge",
-        //         //     y: 0.0,
-        //         //     drilldown: "Edge"
-        //         //   },
-        //         //   {
-        //         //     name: "Firefox",
-        //         //     y: 8.15,
-        //         //     drilldown: "Firefox"
-        //         //   },
-        //         //   {
-        //         //     name: "Other",
-        //         //     y: 11.02,
-        //         //     drilldown: null
-        //         //   }
-        //         // ]
-        //       }
-        //     ],
-
-        //   });
-
-        //          })
       },
     });
     // frappe.xcall("rasiin_design.api.template.get_html")
