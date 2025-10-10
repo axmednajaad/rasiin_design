@@ -563,6 +563,8 @@ frappe.ui.Page = class Page {
 
 
 
+					<!-- Floot Button -->
+
 					<div class="btn-group-fab" role="group" aria-label="FAB Menu">
 					
 				  </div>
@@ -1549,12 +1551,11 @@ function render_sidebar(pages) {
           border-left-color: var(--sidebar-text-muted);
         }
         
-        #rasiin-left-sidebar li.active a.sidebar-link {
-          background: #3b82f6;
-          border-left: 4px solid #fff;
+        #rasiin-left-sidebar li.active a.sidebar-link { 
+          background: var(--sidebar-active);
+          border-left-color: var(--sidebar-active-border);
           color: #fff;
-          font-weight: 600;
-          box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+          font-weight: 500;
         }
         
         #rasiin-left-sidebar .sidebar-label { 
@@ -1980,16 +1981,11 @@ frappe.views.Workspace = class customWorkspace {
     this.autoSelectFirstModule();
 
     // 🔹 Render a simple placeholder instead of full workspace template
-    // const placeholder = `
-    //   <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:80vh;color:#e2e8f0;text-align:center;">
-    //     <h2 style="margin-bottom:10px;">🏠 Workspace</h2>
-    //     <p>Welcome to your workspace</p>
-    //     <p style="font-size:13px;color:#94a3b8;">Select a module from the sidebar to get started</p>
-    //   </div>
-    // `;
-
     const placeholder = `
-      <div>
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:80vh;color:#e2e8f0;text-align:center;">
+        <h2 style="margin-bottom:10px;">🏠 Workspace</h2>
+        <p>Welcome to your workspace</p>
+        <p style="font-size:13px;color:#94a3b8;">Select a module from the sidebar to get started</p>
       </div>
     `;
 
@@ -2033,35 +2029,6 @@ frappe.views.Workspace = class customWorkspace {
               make_header_nav(navbardata);
 
               console.log("Navbar updated with first module data");
-
-              // --- MODIFICATION START ---
-              // Auto-navigate to the first item in the navbar to prevent
-              // showing the blank workspace message on initial load.
-              if (doc.home_shortcut && doc.home_shortcut.length > 0) {
-                const first = doc.home_shortcut[0];
-                console.log(
-                  "Auto-navigating to first navbar item:",
-                  first.label
-                );
-
-                if (first.type == "Report") {
-                  frappe.set_route(`/app/query-report/${first.link_to}`);
-                } else if (first.type == "Insights Dashboard") {
-                  frappe.set_route(
-                    `/insights/public/dashboard/${first.dashboard_link}`
-                  );
-                } else if (first.type == "Dashboard") {
-                  frappe.set_route(
-                    `/app/dashboard-view/${encodeURIComponent(first.link_to)}`
-                  );
-                } else if (first.link_to) {
-                  // Default for DocType, Page, etc.
-                  frappe.set_route(
-                    `/app/${first.link_to.replace(/\s/g, "-").toLowerCase()}`
-                  );
-                }
-              }
-              // --- MODIFICATION END ---
             })
             .catch((error) => {
               console.error("Error loading first module:", error);
@@ -2101,3 +2068,599 @@ frappe.views.Workspace = class customWorkspace {
 // closeMenuFirstPageIcon.addEventListener("click", () => {
 //   closeFirstPageNav()
 // })
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.page-head {
+  display: none !important;
+}
+
+a {
+  text-decoration: none;
+}
+
+.home_page_header {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background-color: #0c4872;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 50px;
+}
+
+.admin_img {
+  width: 35px;
+  height: 35px;
+  object-fit: cover;
+  aspect-ratio: 1;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.home_page_header_right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.user-profile-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.home_page_dropdown {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 160px;
+  background-color: #fff;
+  border: 1px solid #d3d3e4;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.show {
+  display: flex;
+}
+
+.home_page_dropdown span {
+  padding: 10px;
+  cursor: pointer;
+  color: #333;
+}
+
+.home_page_dropdown span:hover {
+  background-color: #f1f1f1;
+}
+
+.home_page_sec {
+  background-color: #0c4872;
+  min-height: 100vh;
+  width: 100%;
+  overflow-y: scroll;
+  padding-bottom: 50px;
+  display: flex;
+}
+
+/* NEW: Sidebar Styles */
+.home_page_sidebar {
+  width: 280px;
+  background: linear-gradient(180deg, #0c4872 0%, #0a3a5e 100%);
+  color: white;
+  padding: 0;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  position: relative; /* Added for dropdown positioning */
+}
+
+/* Sidebar Header with User Info */
+.sidebar_header {
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative; /* Added for dropdown positioning */
+}
+
+.sidebar_header:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.sidebar_user_info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar_user_img {
+  width: 45px;
+  height: 45px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.sidebar_user_details {
+  flex: 1;
+}
+
+.sidebar_user_name {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+/* IMPROVED: Sidebar Dropdown */
+.sidebar_dropdown {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #d3d3e4;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.sidebar_dropdown.show {
+  display: flex;
+}
+
+.sidebar_dropdown span {
+  padding: 12px 16px;
+  cursor: pointer;
+  color: #333;
+  transition: background-color 0.2s;
+  font-size: 14px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sidebar_dropdown span:last-child {
+  border-bottom: none;
+}
+
+.sidebar_dropdown span:hover {
+  background-color: #f5f7fa;
+}
+
+.sidebar_dropdown span i {
+  width: 16px;
+  text-align: center;
+  color: #0c4872;
+}
+
+.sidebar_apps {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 15px;
+  flex: 1;
+}
+
+.sidebar_app {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.sidebar_app:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(5px);
+}
+
+.sidebar_app.active {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-left: 3px solid #4caf50;
+}
+
+.sidebar_app_icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  margin-right: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar_app_icon img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.sidebar_app_label {
+  font-weight: 500;
+  font-size: 14px;
+  color: white;
+}
+
+/* Sidebar Footer with Logout Button */
+.sidebar_footer {
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: auto;
+}
+
+.logout_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout_btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.logout_btn i {
+  font-size: 16px;
+}
+
+/* UPDATED: Main Content Area */
+.home_page_main {
+  flex: 1;
+  /* padding: 20px; */
+  padding: 0 0px 20px;
+  background-color: #f5f7fa;
+  display: flex;
+  flex-direction: column;
+}
+
+.home_page_apps {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  width: 100%;
+  margin: 20px 0;
+}
+
+.home_page_app {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.home_page_app:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.home_page_app_image {
+  cursor: pointer;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.home_page_app_image:hover {
+  transform: scale(1.1);
+}
+
+.home_page_app_img {
+  border-radius: 6px;
+  width: 75px;
+  height: 75px;
+  aspect-ratio: 1;
+  padding: 10px;
+  background-color: var(--AppSwitcherIcon-background, white);
+  object-fit: cover;
+  transform-origin: center bottom;
+  transition: box-shadow ease-in 0.1s, transform ease-in 0.1s;
+  box-shadow: var(
+      --AppSwitcherIcon-inset-shadow,
+      inset 0 0 0 1px rgba(0, 0, 0, 0.2)
+    ),
+    0 1px 1px rgba(0, 0, 0, 0.02), 0 2px 2px rgba(0, 0, 0, 0.02),
+    0 4px 4px rgba(0, 0, 0, 0.02), 0 8px 8px rgba(0, 0, 0, 0.02),
+    0 16px 16px rgba(0, 0, 0, 0.02);
+}
+
+.home_page_app_label {
+  color: #333;
+  font-weight: bold;
+  font-size: 14px;
+  margin-top: 7px;
+  text-transform: capitalize;
+  max-width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  text-align: center;
+}
+
+/* Main Content Blank Area */
+.main_content_blank {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  margin-top: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.blank_icon {
+  font-size: 64px;
+  color: #0c4872;
+  margin-bottom: 20px;
+  opacity: 0.7;
+}
+
+.blank_title {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.blank_subtitle {
+  font-size: 16px;
+  color: #666;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+/* FIXED: Logout Confirmation Modal - Now Centered */
+.logout_modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout_modal_content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.logout_modal_icon {
+  font-size: 48px;
+  color: #ff6b6b;
+  margin-bottom: 15px;
+}
+
+.logout_modal_title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.logout_modal_text {
+  color: #666;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.logout_modal_actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.logout_modal_btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout_modal_btn.cancel {
+  background: #f1f1f1;
+  color: #333;
+}
+
+.logout_modal_btn.cancel:hover {
+  background: #e0e0e0;
+}
+
+.logout_modal_btn.confirm {
+  background: #ff6b6b;
+  color: white;
+}
+
+.logout_modal_btn.confirm:hover {
+  background: #ff5252;
+  transform: translateY(-2px);
+}
+
+/* Mobile design */
+@media only screen and (max-width: 1024px) {
+  .home_page_sec {
+    flex-direction: column;
+  }
+
+  .home_page_sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 0;
+  }
+
+  .sidebar_apps {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 10px 15px;
+  }
+
+  .sidebar_app {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .home_page_header {
+    padding: 10px 20px;
+  }
+
+  .home_page_apps {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .sidebar_footer {
+    display: none;
+  }
+
+  .sidebar_dropdown {
+    width: 100%;
+    left: 0;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .home_page_apps {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 15px;
+  }
+
+  .home_page_app {
+    padding: 15px;
+  }
+
+  .home_page_app_img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .sidebar_header {
+    padding: 15px;
+  }
+
+  .sidebar_user_img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .sidebar_user_name {
+    font-size: 14px;
+  }
+
+  .logout_modal_actions {
+    flex-direction: column;
+  }
+}
+
+/* Add styles for the dynamically loaded navbar in the workspace */
+.home_page_header .logo__navlinks {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+}
+
+.home_page_header .logo__navlinks .nav-item {
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+  font-weight: 500;
+}
+
+.home_page_header .logo__navlinks .nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+}
+
+/* Dropdown styling */
+.home_page_header .dropdown-menu {
+  background-color: #ffffff;
+  border: 1px solid #d3d3e4;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.home_page_header .dropdown-item {
+  color: #333;
+}
+
+.home_page_header .dropdown-item:hover {
+  background-color: #f5f7fa;
+  color: #0c4872;
+  /* Add styles for iframe-based workspace navigation */
+  .home_page_main {
+    position: relative;
+  }
+
+  #main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #workspace-frame {
+    flex: 1;
+    min-height: 0; /* Important for flexbox sizing */
+  }
+}
