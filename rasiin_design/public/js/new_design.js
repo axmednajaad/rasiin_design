@@ -264,60 +264,58 @@ function make_cust_nav_bar(navbardata) {
     
     <header class="header navbar">
         <div class="logo__navlinks">
-            <a class="mylogo nav-link icon" onclick='window.location.reload()' href="/app" data-logo>
-                <i class="fa fa-home"></i>
-            </a> 
             ${navitems}
         </div>
         
-        <form class="form-inline fill-width justify-content-end" role="search" onsubmit="return false;">
-          <div class="input-group search-bar text-muted">
-            <input
-              id="navbar-search"
-              type="text"
-              class="form-control"
-              placeholder="${__("Search or type a command ({0})", [
-                frappe.utils.is_mac() ? "⌘ + G" : "Ctrl + G",
-              ])}"
-              aria-haspopup="true"
-            >
-            <span class="search-icon">
-              <svg class="icon icon-sm"><use href="#icon-search"></use></svg>
-            </span>
-          </div>
-        </form>
-        
-        <div class="profile__image__name mr-3">
-            <div class="nav-item dropdown dropdown-notifications dropdown-mobile hidden">
-              <button
-                class="btn-reset nav-link notifications-icon"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-                style="color:#fff"
-              >
-                <span class="notifications-seen">
-                  <span class="sr-only">${__("No new notifications")}</span>
-                  <svg class="es-icon icon-sm" style="stroke:none;"><use href="#es-line-notifications"></use></svg>
+        <div class="header-right-section">
+            <form class="form-inline fill-width justify-content-end" role="search" onsubmit="return false;">
+              <div class="input-group search-bar text-muted">
+                <input
+                  id="navbar-search"
+                  type="text"
+                  class="form-control"
+                  placeholder="${__("Search or type a command ({0})", [
+                    frappe.utils.is_mac() ? "⌘ + G" : "Ctrl + G",
+                  ])}"
+                  aria-haspopup="true"
+                >
+                <span class="search-icon">
+                  <svg class="icon icon-sm"><use href="#icon-search"></use></svg>
                 </span>
-                <span class="notifications-unseen">
-                  <span class="sr-only">${__(
-                    "You have unseen notifications"
-                  )}</span>
-                  <svg class="es-icon icon-sm"><use href="#es-line-notifications-unseen"></use></svg>
-                </span>
-              </button>
-              <div class="dropdown-menu notifications-list dropdown-menu-right" role="menu">
-                <div class="notification-list-header">
-                  <div class="header-items"></div>
-                  <div class="header-actions"></div>
-                </div>
-                <div class="notification-list-body">
-                  <div class="panel-notifications"></div>
-                  <div class="panel-events"></div>
-                  <div class="panel-changelog-feed"></div>
-                </div>
               </div>
+            </form>
+            
+            <div class="profile__image__name mr-3">
+                <div class="nav-item dropdown dropdown-notifications dropdown-mobile hidden">
+                  <button
+                    class="btn-reset nav-link notifications-icon"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    <span class="notifications-seen">
+                      <span class="sr-only">${__("No new notifications")}</span>
+                      <svg class="es-icon icon-sm" style="stroke:none;"><use href="#es-line-notifications"></use></svg>
+                    </span>
+                    <span class="notifications-unseen">
+                      <span class="sr-only">${__(
+                        "You have unseen notifications"
+                      )}</span>
+                      <svg class="es-icon icon-sm"><use href="#es-line-notifications-unseen"></use></svg>
+                    </span>
+                  </button>
+                  <div class="dropdown-menu notifications-list dropdown-menu-right" role="menu">
+                    <div class="notification-list-header">
+                      <div class="header-items"></div>
+                      <div class="header-actions"></div>
+                    </div>
+                    <div class="notification-list-body">
+                      <div class="panel-notifications"></div>
+                      <div class="panel-events"></div>
+                      <div class="panel-changelog-feed"></div>
+                    </div>
+                  </div>
+                </div>
             </div>
         </div>
 
@@ -345,35 +343,6 @@ function make_header_nav(data) {
     // Clear the header section first, then prepend
     $(".header_sec").empty();
     $(navhtml).prependTo($(".header_sec"));
-
-    // Ensure header layout doesn't overflow and stays compact
-    (function injectHeaderStyles() {
-      const sid = "rasiin-header-styles";
-      if (document.getElementById(sid)) return;
-
-      const css = `
-            .header.navbar { 
-              display: flex; 
-              align-items: center; 
-              gap: 12px; 
-            }
-            /* ADD THIS NEW RULE */
-            .header.navbar .form-inline {
-              margin-left: auto;
-            }
-            .header.navbar .logo__navlinks { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; flex:0 1 auto; }
-            .header.navbar .logo__navlinks > a.nav-item, 
-            .header.navbar .logo__navlinks > .dropdown.nav-item { margin-right:8px; }
-            .header.navbar .logo__navlinks > a.nav-item { white-space:nowrap; }
-            .header.navbar .profile__image__name { display:flex; align-items:center; gap:12px; flex:0 0 auto; }
-          `;
-
-      const styleEl = document.createElement("style");
-      styleEl.id = sid;
-      styleEl.type = "text/css";
-      styleEl.appendChild(document.createTextNode(css));
-      document.head.appendChild(styleEl);
-    })();
 
     // Build persistent sidebar using same modules source as app_page
     make_persistent_sidebar();
@@ -1433,6 +1402,9 @@ function make_persistent_sidebar() {
       render_sidebar(r.message.pages || []);
       addSidebarCollapseToggle();
     },
+    error: function (err) {
+      console.error("Error loading sidebar:", err);
+    },
   });
 }
 
@@ -1469,263 +1441,6 @@ function render_sidebar(pages) {
   let leftBar = $("#rasiin-left-sidebar");
   if (!leftBar.length) {
     leftBar = $(`<aside id=\"rasiin-left-sidebar\"></aside>`).prependTo(body);
-
-    const styleId = "rasiin-left-sidebar-styles";
-    if (!document.getElementById(styleId)) {
-      const css = `
-        :root { 
-          --rasiin-leftbar-width: 260px;
-          --sidebar-bg: #1e293b;
-          --sidebar-hover: rgba(255,255,255,0.08);
-          --sidebar-active: rgba(59, 130, 246, 0.15);
-          --sidebar-active-border: #3b82f6;
-          --sidebar-text: #e2e8f0;
-          --sidebar-text-muted: #94a3b8;
-          --sidebar-border: rgba(255,255,255,0.05);
-          --sidebar-shadow: 0 0 0 1px rgba(0,0,0,0.1);
-          --sidebar-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        #rasiin-left-sidebar {
-          position: fixed;
-          left: 0; top: 0; bottom: 0;
-          width: var(--rasiin-leftbar-width);
-          overflow-y: auto;
-          background: var(--sidebar-bg);
-          color: var(--sidebar-text);
-          z-index: 1030;
-          padding: 0;
-          display: flex;
-          flex-direction: column;
-          box-shadow: var(--sidebar-shadow);
-          backdrop-filter: blur(10px);
-        }
-        
-        .rasiin-leftbar-enabled header.navbar { margin-left: var(--rasiin-leftbar-width); }
-        .rasiin-leftbar-enabled .page-head { left: var(--rasiin-leftbar-width); right: 0; }
-        .rasiin-leftbar-enabled .page-container { margin-left: var(--rasiin-leftbar-width); }
-        
-        #rasiin-left-sidebar ul { 
-          list-style: none; 
-          padding-left: 0; 
-          margin: 0; 
-        }
-        
-        #rasiin-left-sidebar li { 
-          margin: 0; 
-          position: relative;
-        }
-        
-        #rasiin-left-sidebar a.sidebar-link { 
-          display: flex; 
-          align-items: center; 
-          gap: 12px; 
-          padding: 14px 20px; 
-          color: var(--sidebar-text); 
-          text-decoration: none; 
-          transition: var(--sidebar-transition);
-          border-left: 3px solid transparent;
-          position: relative;
-          overflow: hidden;
-        }
-        
-        #rasiin-left-sidebar a.sidebar-link::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-          transition: left 0.6s ease;
-        }
-        
-        #rasiin-left-sidebar a.sidebar-link:hover::before {
-          left: 100%;
-        }
-        
-        #rasiin-left-sidebar a.sidebar-link:hover { 
-          background: var(--sidebar-hover);
-          border-left-color: var(--sidebar-text-muted);
-        }
-        
-        #rasiin-left-sidebar li.active a.sidebar-link {
-          background: #3b82f6;
-          border-left: 4px solid #fff;
-          color: #fff;
-          font-weight: 600;
-          box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
-        }
-        
-        #rasiin-left-sidebar .sidebar-label { 
-          font-size: 14px; 
-          font-weight: 500; 
-          letter-spacing: 0.1px;
-          flex: 1;
-        }
-        
-        #rasiin-left-sidebar .sidebar-icon { 
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 24px;
-          height: 24px;
-          transition: var(--sidebar-transition);
-        }
-        
-        #rasiin-left-sidebar .sidebar-icon img { 
-          width: 20px; 
-          height: 20px; 
-          border-radius: 4px; 
-          object-fit: cover;
-        }
-        
-        #rasiin-left-sidebar .sidebar-icon i {
-          font-size: 16px;
-          opacity: 0.9;
-        }
-        
-        #rasiin-left-sidebar li.active .sidebar-icon i {
-          opacity: 1;
-        }
-        
-        #rasiin-left-sidebar .desk-sidebar { 
-          display: flex; 
-          flex-direction: column; 
-          height: 100%; 
-          padding: 0;
-        }
-        
-        #rasiin-left-sidebar .sidebar-modules { 
-          flex: 1 1 auto; 
-          overflow-y: auto;
-          padding: 8px 0;
-        }
-        
-        #rasiin-left-sidebar .sidebar-header {
-          padding: 16px 20px 8px;
-          margin-bottom: 0;
-        }
-        
-        #rasiin-left-sidebar .sidebar-title {
-          display: none;
-        }
-        
-        #rasiin-left-sidebar .sidebar-footer { 
-          padding: 16px 20px; 
-          border-top: 1px solid var(--sidebar-border); 
-          background: rgba(0,0,0,0.1);
-        }
-        
-        #rasiin-left-sidebar .sidebar-user { 
-          position: relative; 
-          cursor: pointer;
-          padding: 16px 20px;
-          border-bottom: 1px solid var(--sidebar-border);
-          transition: var(--sidebar-transition);
-        }
-        
-        /* Remove hover background for user section */
-        #rasiin-left-sidebar .sidebar-user:hover {
-          background: transparent;
-        }
-        
-        #rasiin-left-sidebar .sidebar-user-avatar {
-          flex-shrink: 0;
-        }
-        
-        #rasiin-left-sidebar .sidebar-user-avatar .avatar {
-          border: 2px solid var(--sidebar-border);
-          transition: var(--sidebar-transition);
-        }
-        
-        #rasiin-left-sidebar .sidebar-user:hover .sidebar-user-avatar .avatar {
-          border-color: var(--sidebar-active-border);
-        }
-        
-        #rasiin-left-sidebar .sidebar-user-name {
-          font-weight: 600;
-          line-height: 1.3;
-          font-size: 14px;
-        }
-        
-        #rasiin-left-sidebar .sidebar-user-role {
-          font-size: 12px;
-          color: var(--sidebar-text-muted);
-          line-height: 1.3;
-        }
-        
-        #rasiin-left-sidebar .sidebar-user-menu {
-          position: absolute;
-          top: calc(100% + 4px);
-          left: 12px;
-          right: 12px;
-          background: #ffffff;
-          color: #1e293b;
-          border-radius: 8px;
-          box-shadow: 0 10px 25px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.05);
-          display: none;
-          overflow: hidden;
-          z-index: 1000;
-        }
-        
-        #rasiin-left-sidebar .sidebar-user-menu .item {
-          padding: 12px 16px;
-          transition: var(--sidebar-transition);
-          border-bottom: 1px solid #f1f5f9;
-          font-size: 13px;
-        }
-        
-        #rasiin-left-sidebar .sidebar-user-menu .item:last-child {
-          border-bottom: none;
-        }
-        
-        #rasiin-left-sidebar .sidebar-user-menu .item:hover { 
-          background: #f8fafc; 
-        }
-        
-        #rasiin-left-sidebar #rasiin-sidebar-logout {
-          width: 100%;
-          padding: 10px 16px;
-          background: transparent;
-          color: var(--sidebar-text);
-          border: 1px solid var(--sidebar-border);
-          border-radius: 6px;
-          font-weight: 500;
-          transition: var(--sidebar-transition);
-        }
-        
-        #rasiin-left-sidebar #rasiin-sidebar-logout:hover {
-          background: rgba(239, 68, 68, 0.1);
-          color: #ef4444;
-          border-color: rgba(239, 68, 68, 0.3);
-        }
-        
-        /* Scrollbar styling */
-        #rasiin-left-sidebar::-webkit-scrollbar {
-          width: 4px;
-        }
-        
-        #rasiin-left-sidebar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        
-        #rasiin-left-sidebar::-webkit-scrollbar-thumb {
-          background: var(--sidebar-text-muted);
-          border-radius: 2px;
-        }
-        
-        #rasiin-left-sidebar::-webkit-scrollbar-thumb:hover {
-          background: var(--sidebar-text);
-        }
-      `;
-      const styleEl = document.createElement("style");
-      styleEl.id = styleId;
-      styleEl.type = "text/css";
-      styleEl.appendChild(document.createTextNode(css));
-      document.head.appendChild(styleEl);
-    }
-
     body.addClass("rasiin-leftbar-enabled");
   }
 
@@ -1785,13 +1500,13 @@ function render_sidebar(pages) {
           </button>
           <h3 class="sidebar-title"></h3>
         </div>
-        
+
         <div class="sidebar-modules">
           <ul>
             ${items_html}
           </ul>
         </div>
-        
+
         <div class="sidebar-footer">
           <button class="btn btn-sm" id="rasiin-sidebar-logout">
             <i class="fa fa-sign-out fa-fw" style="margin-right:6px;"></i>${__(
@@ -1966,7 +1681,6 @@ frappe.views.Workspace = class customWorkspace {
     $(".header_sec").show();
 
     let home_p = $(".page-container");
-    console.log("home_p before cleanup:", home_p);
     home_p.empty();
 
     // Build persistent sidebar and header immediately
@@ -1978,15 +1692,6 @@ frappe.views.Workspace = class customWorkspace {
 
     // 🔹 Auto-select first module in sidebar after a short delay
     this.autoSelectFirstModule();
-
-    // 🔹 Render a simple placeholder instead of full workspace template
-    // const placeholder = `
-    //   <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:80vh;color:#e2e8f0;text-align:center;">
-    //     <h2 style="margin-bottom:10px;">🏠 Workspace</h2>
-    //     <p>Welcome to your workspace</p>
-    //     <p style="font-size:13px;color:#94a3b8;">Select a module from the sidebar to get started</p>
-    //   </div>
-    // `;
 
     const placeholder = `
       <div>
