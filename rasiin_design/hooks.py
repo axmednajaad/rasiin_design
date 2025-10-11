@@ -1,5 +1,9 @@
 from . import __version__ as app_version
 
+#  "redis_queue": "redis://127.0.0.1:11000",
+#  "redis_cache": "redis://127.0.0.1:13000",
+
+
 app_name = "rasiin_design"
 app_title = "Rasiin Design"
 app_publisher = "Rasiin"

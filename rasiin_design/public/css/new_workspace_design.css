@@ -267,13 +267,20 @@ body.rasiin-sidebar-collapsed #rasiin-left-sidebar:hover .sidebar-footer {
   border-left-color: var(--sidebar-text-muted);
 }
 
-#rasiin-left-sidebar li.active a.sidebar-link {
-  background: #3b82f6;
-  border-left: 4px solid #fff;
-  color: #fff;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
-}
+/* Custom style for the ACTIVE sidebar item */
+/* #rasiin-left-sidebar li.active a.sidebar-link {
+  background: linear-gradient(to left, var(--sidebar-hover), var(--sidebar-bg));
+
+  border-left: 4px solid #facc15;
+
+  color: #ffffff;
+
+  font-weight: 700;
+
+  box-shadow: none;
+} */
+
+/* Debug styles - remove after fixing */
 
 #rasiin-left-sidebar .sidebar-label {
   font-size: 14px;
