@@ -84,3 +84,23 @@ def app_page():
 
 
 
+
+
+@frappe.whitelist()
+def can_user_see_notifications():
+    """
+    Checks if any of the current user's roles have the 'enable_search' field checked.
+    Returns True if at least one role has the permission, otherwise False.
+    """
+    user_roles = frappe.get_roles()
+
+    # Check if any of the user's roles have enable_search enabled
+    roles_with_permission = frappe.get_all('Role', 
+        filters={
+            'name': ['in', user_roles],
+            'enable_search': 1
+        },
+        limit=1
+    )
+    
+    return bool(roles_with_permission)

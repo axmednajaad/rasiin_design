@@ -18,6 +18,47 @@ function closeFirstPageNav() {
   menuFirstPage.classList.remove("open-menu");
 }
 
+// function userHasRole(roleName) {
+//   let hasRole =  frappe.boot.user.roles.includes(roleName);
+
+//   console.log("hasRole : ", hasRole);
+
+//   return hasRole;
+// }
+
+/**
+ * Checks if the current user has notification permissions based on a server-side check.
+ * Caches the result in sessionStorage to avoid repeated API calls.
+ * @returns {Promise<boolean>} A promise that resolves to true or false.
+ */
+function checkNotificationPermission() {
+  return new Promise((resolve) => {
+    const cachedPermission = sessionStorage.getItem("can_see_notifications");
+    console.log("cachedPermission : ", cachedPermission);
+
+    if (cachedPermission) {
+      // If we have a cached value, use it directly.
+      resolve(cachedPermission === "true");
+    } else {
+      // Otherwise, call the server to find out.
+      frappe.call({
+        method: "rasiin_design.api.template.can_user_see_notifications", // 👈 Your new python method
+        callback: (r) => {
+          console.log("can_user_see_notifications api response : ", r);
+          const hasPermission = r.message || false;
+          // Cache the result for the current session
+          sessionStorage.setItem("can_see_notifications", hasPermission);
+          resolve(hasPermission);
+        },
+        error: () => {
+          // On error, default to no permission
+          resolve(false);
+        },
+      });
+    }
+  });
+}
+
 // function get_pages() {
 //   frappe.xcall("frappe.desk.desktop.get_workspace_sidebar_items").then((r) => {
 //     var arr = Array(r.pages[0].content)
@@ -54,7 +95,7 @@ function closeFirstPageNav() {
 //   })
 // }
 
-function make_cust_nav_bar(navbardata) {
+async function make_cust_nav_bar(navbardata) {
   // alert("")
   // console.log("navbardata", navbardata)
   let navitems = ``;
@@ -230,6 +271,154 @@ function make_cust_nav_bar(navbardata) {
     </div>`;
   }
 
+  // navbar = `
+  //   <div class="overlay" data-overlay-first-page></div>
+  //   <div class="overlay" data-overlay-first-page></div>
+  //   <div class="menu" data-menu-first-page>
+  //     <div class="profile__img__close__nav">
+  //     <div class="menu_profile__image__name"></div>
+  //     <div class="close__navbar__icon" data-first-page-close-nav>
+  //       <i class="fa fa-x"></i>
+  //     </div>
+  //     </div>
+
+  //     <div class="menu__companies">
+
+  //     <span class="close_mennu" onclick="closeFirstPageNav()">Close</span>
+  //  ${mobile_links}
+  //     </div>
+
+  //     <div class="menu__profile">
+  //       <div class="dropdown">
+  //         <a style ="color:#fff" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  //         My Profile
+  //         </a>
+  //         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+  //          <button class="dropdown-item" onclick="frappe.ui.toolbar.route_to_user()">My Settings</button>
+  //          <button class="dropdown-item" onclick="frappe.ui.toolbar.clear_cache()">Reload</button>
+  //          <div class="dropdown-divider"></div>
+  //          <button class="dropdown-item" onclick="frappe.app.logout()">Log out</button>
+  //        </div>
+  //       </div>
+  //     </div>
+  //   </div>
+
+  //   <header class="header navbar">
+  //       <div class="logo__navlinks">
+  //           ${navitems}
+  //       </div>
+
+  //       <div class="header-right-section">
+  //           <form class="form-inline fill-width justify-content-end" role="search" onsubmit="return false;">
+  //             <div class="input-group search-bar text-muted">
+  //               <input
+  //                 id="navbar-search"
+  //                 type="text"
+  //                 class="form-control"
+  //                 placeholder="${__("Search or type a command ({0})", [
+  //                   frappe.utils.is_mac() ? "⌘ + G" : "Ctrl + G",
+  //                 ])}"
+  //                 aria-haspopup="true"
+  //               >
+  //               <span class="search-icon">
+  //                 <svg class="icon icon-sm"><use href="#icon-search"></use></svg>
+  //               </span>
+  //             </div>
+  //           </form>
+
+  //           <div class="profile__image__name mr-3">
+  //               <div class="nav-item dropdown dropdown-notifications dropdown-mobile hidden">
+  //                 <button
+  //                   class="btn-reset nav-link notifications-icon"
+  //                   data-toggle="dropdown"
+  //                   aria-haspopup="true"
+  //                   aria-expanded="false"
+  //                 >
+  //                   <span class="notifications-seen">
+  //                     <span class="sr-only">${__("No new notifications")}</span>
+  //                     <svg class="es-icon icon-sm" style="stroke:none;"><use href="#es-line-notifications"></use></svg>
+  //                   </span>
+  //                   <span class="notifications-unseen">
+  //                     <span class="sr-only">${__(
+  //                       "You have unseen notifications"
+  //                     )}</span>
+  //                     <svg class="es-icon icon-sm"><use href="#es-line-notifications-unseen"></use></svg>
+  //                   </span>
+  //                 </button>
+  //                 <div class="dropdown-menu notifications-list dropdown-menu-right" role="menu">
+  //                   <div class="notification-list-header">
+  //                     <div class="header-items"></div>
+  //                     <div class="header-actions"></div>
+  //                   </div>
+  //                   <div class="notification-list-body">
+  //                     <div class="panel-notifications"></div>
+  //                     <div class="panel-events"></div>
+  //                     <div class="panel-changelog-feed"></div>
+  //                   </div>
+  //                 </div>
+  //               </div>
+  //           </div>
+  //       </div>
+
+  //       <div class="open-navbarbtn" data-first-page-open-nav onclick="openFirstPageNav()">
+  //           <i class="fa fa-bars"></i>
+  //       </div>
+  //   </header>
+  //   `;
+
+  // Only show notification icon if user has the required role
+
+  // Only show notification icon if the user has a role with the permission enabled.
+  const canShowNotifications = await checkNotificationPermission(); // ✨ Await the result
+  const notificationIconHTML =
+    // canShowNotifications?
+    `
+
+    <div class="nav-item dropdown dropdown-notifications dropdown-mobile hidden">
+      <button
+        class="btn-reset nav-link notifications-icon"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <span class="notifications-seen">
+          <span class="sr-only">${__("No new notifications")}</span>
+          <svg class="es-icon icon-sm" style="stroke:none;"><use href="#es-line-notifications"></use></svg>
+        </span>
+        <span class="notifications-unseen">
+          <span class="sr-only">${__("You have unseen notifications")}</span>
+          <svg class="es-icon icon-sm"><use href="#es-line-notifications-unseen"></use></svg>
+        </span>
+      </button>
+      <div class="dropdown-menu notifications-list dropdown-menu-right" role="menu">
+        <div class="notification-list-header">
+          <div class="header-items"></div>
+          <div class="header-actions"></div>
+        </div>
+        <div class="notification-list-body">
+          <div class="panel-notifications"></div>
+          <div class="panel-events"></div>
+          <div class="panel-changelog-feed"></div>
+        </div>
+      </div>
+    </div>
+  `;
+  // : ""
+  console.log("canShowNotifications : ", canShowNotifications);
+  console.log("notificationIconHTML : ", notificationIconHTML);
+
+  const chatIconHTML = `
+    <div class="nav-item dropdown dropdown-notifications dropdown-mobile chat-navbar-icon" title="${__(
+      "Show Chats"
+    )}">
+      ${frappe.utils.icon("small-message", "md")}
+      <span class="badge" id="chat-notification-count"></span>
+    </div>
+  `;
+
+  // ${chatIconHTML}
+  
+
   navbar = `
     <div class="overlay" data-overlay-first-page></div>
     <div class="overlay" data-overlay-first-page></div>
@@ -268,55 +457,12 @@ function make_cust_nav_bar(navbardata) {
         </div>
         
         <div class="header-right-section">
-            <form class="form-inline fill-width justify-content-end" role="search" onsubmit="return false;">
-              <div class="input-group search-bar text-muted">
-                <input
-                  id="navbar-search"
-                  type="text"
-                  class="form-control"
-                  placeholder="${__("Search or type a command ({0})", [
-                    frappe.utils.is_mac() ? "⌘ + G" : "Ctrl + G",
-                  ])}"
-                  aria-haspopup="true"
-                >
-                <span class="search-icon">
-                  <svg class="icon icon-sm"><use href="#icon-search"></use></svg>
-                </span>
-              </div>
-            </form>
+          <div class="profile__image__name mr-3">
+            ${notificationIconHTML}
             
-            <div class="profile__image__name mr-3">
-                <div class="nav-item dropdown dropdown-notifications dropdown-mobile hidden">
-                  <button
-                    class="btn-reset nav-link notifications-icon"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    <span class="notifications-seen">
-                      <span class="sr-only">${__("No new notifications")}</span>
-                      <svg class="es-icon icon-sm" style="stroke:none;"><use href="#es-line-notifications"></use></svg>
-                    </span>
-                    <span class="notifications-unseen">
-                      <span class="sr-only">${__(
-                        "You have unseen notifications"
-                      )}</span>
-                      <svg class="es-icon icon-sm"><use href="#es-line-notifications-unseen"></use></svg>
-                    </span>
-                  </button>
-                  <div class="dropdown-menu notifications-list dropdown-menu-right" role="menu">
-                    <div class="notification-list-header">
-                      <div class="header-items"></div>
-                      <div class="header-actions"></div>
-                    </div>
-                    <div class="notification-list-body">
-                      <div class="panel-notifications"></div>
-                      <div class="panel-events"></div>
-                      <div class="panel-changelog-feed"></div>
-                    </div>
-                  </div>
-                </div>
-            </div>
+
+                
+          </div>
         </div>
 
         <div class="open-navbarbtn" data-first-page-open-nav onclick="openFirstPageNav()">
@@ -328,8 +474,8 @@ function make_cust_nav_bar(navbardata) {
   return navbar;
 }
 
-function make_header_nav(data) {
-  let navhtml = make_cust_nav_bar(data);
+async function make_header_nav(data) {
+  let navhtml = await make_cust_nav_bar(data);
 
   if (frappe.boot && frappe.boot.home_page !== "setup-wizard") {
     let route = window.location.href;
@@ -359,14 +505,43 @@ function make_header_nav(data) {
         /* noop */
       }
     }
-    if (frappe.boot.desk_settings.search_bar) {
+
+    // =================================================================
+    // START: MODIFIED CHAT INITIALIZATION BLOCK
+    // =================================================================
+    // console.log("frappe.Chat is : ", frappe.Chat);
+    // console.log(
+    //   "window.frappe_chat_instance is : ",
+    //   window.frappe_chat_instance
+    // );
+    if (frappe.Chat) {
       try {
-        let awesome_bar = new frappe.search.AwesomeBar();
-        awesome_bar.setup("#navbar-search");
+        // If the chat instance doesn't exist, create it for the first time.
+        if (!window.frappe_chat_instance) {
+          window.frappe_chat_instance = new frappe.Chat();
+          // console.log("Frappe Chat Initialized Successfully.");
+        } else {
+          // If the instance already exists, it means the header was just
+          // re-rendered. We just need to re-attach the events to the new icon.
+          window.frappe_chat_instance.setup_events();
+          // console.log("Frappe Chat events re-attached to new header.");
+        }
       } catch (e) {
-        /* noop */
+        console.error("Failed to initialize or re-bind Frappe Chat:", e);
       }
     }
+    // =================================================================
+    // END: MODIFIED CHAT INITIALIZATION BLOCK
+    // =================================================================
+
+    // if (frappe.boot.desk_settings.search_bar) {
+    //   try {
+    //     let awesome_bar = new frappe.search.AwesomeBar();
+    //     awesome_bar.setup("#navbar-search");
+    //   } catch (e) {
+    //     /* noop */
+    //   }
+    // }
 
     // Manage nav overflow into a dynamic "More" dropdown
     try {
@@ -401,9 +576,7 @@ frappe.ui.Page = class Page {
     this.views = {};
 
     this.make();
-    let navbardata = JSON.parse(
-      localStorage.getItem("navdata") || JSON.parse([])
-    );
+    let navbardata = JSON.parse(localStorage.getItem("navdata") || "[]");
 
     // console.log(navbardata)
     frappe.ui.pages[frappe.get_route_str()] = this;
@@ -1401,6 +1574,8 @@ function make_persistent_sidebar() {
       if (!r || !r.message || !r.message.pages) return;
       render_sidebar(r.message.pages || []);
       addSidebarCollapseToggle();
+
+      updateSidebarActiveState();
     },
     error: function (err) {
       console.error("Error loading sidebar:", err);
@@ -1415,7 +1590,6 @@ function addSidebarCollapseToggle() {
 
   toggleBtn.on("click", function () {
     $("body").toggleClass("rasiin-sidebar-collapsed");
-
     // Update toggle icon
     const icon = toggleBtn.find("i");
     if ($("body").hasClass("rasiin-sidebar-collapsed")) {
@@ -1466,6 +1640,11 @@ function render_sidebar(pages) {
     .join("");
 
   const userAvatar = frappe.avatar(frappe.session.user, "avatar-medium");
+  console.log("userAvatar is : ", userAvatar);
+  console.log("frappe.boot.user.full_name : ", frappe.boot.user.full_name);
+  console.log("frappe.boot.user.first_name : ", frappe.boot.user.first_name);
+  console.log("frappe.boot.user : ", frappe.boot.user);
+  console.log("frappe.boot.user.roles : ", frappe.boot.user.roles);
   const userFullName =
     frappe.boot.user.full_name ||
     frappe.boot.user.first_name ||
@@ -1522,6 +1701,14 @@ function render_sidebar(pages) {
   leftBar.find(".sidebar-item").on("click", function () {
     const homeName = $(this).data("home-name");
     if (!homeName) return;
+
+    // ✅ ADD THESE TWO LINES FOR IMMEDIATE FEEDBACK
+    $("#rasiin-left-sidebar .sidebar-item").removeClass("active");
+    $(this).addClass("active");
+
+    // Store the selected workspace name
+    localStorage.setItem("rasiin_active_workspace", homeName);
+
     frappe.db.get_doc("Home Page", `${homeName}`).then((doc) => {
       let navbardata = doc.home_shortcut || [];
       localStorage.removeItem("navdata");
@@ -1545,9 +1732,11 @@ function render_sidebar(pages) {
 
       $(".header_sec").show();
       $(".page-head").show();
+
+      //!---- No longer need
       // active state
-      leftBar.find(".sidebar-item").removeClass("active");
-      $(this).addClass("active");
+      // leftBar.find(".sidebar-item").removeClass("active");
+      // $(this).addClass("active");
     });
   });
 
@@ -1581,6 +1770,32 @@ function render_sidebar(pages) {
     frappe.ui.toolbar.clear_cache();
     userMenu.hide();
   });
+}
+
+function updateSidebarActiveState() {
+  try {
+    const activeWorkspace = localStorage.getItem("rasiin_active_workspace");
+
+    if (!activeWorkspace) {
+      return;
+    }
+
+    const sidebar = $("#rasiin-left-sidebar");
+
+    if (!sidebar.length) return;
+
+    sidebar.find(".sidebar-item").removeClass("active");
+
+    const selector = `.sidebar-item[data-home-name="${activeWorkspace}"]`;
+    const activeItem = sidebar.find(selector);
+
+    if (activeItem.length) {
+      activeItem.addClass("active");
+    } else {
+    }
+  } catch (e) {
+    // console.error("Failed to update sidebar active state:", e);
+  }
 }
 
 // Dynamically collapse overflowing nav items into a More dropdown
@@ -1703,6 +1918,85 @@ frappe.views.Workspace = class customWorkspace {
   }
 
   // New method to auto-select first module
+  // autoSelectFirstModule() {
+  //   // Wait for sidebar to be rendered
+  //   setTimeout(() => {
+  //     const sidebar = $("#rasiin-left-sidebar");
+  //     if (!sidebar.length) {
+  //       console.log("Sidebar not found, retrying...");
+  //       setTimeout(() => this.autoSelectFirstModule(), 500);
+  //       return;
+  //     }
+
+  //     const firstModule = sidebar.find(".sidebar-item").first();
+  //     console.log("firstModule is : ", firstModule);
+
+  //     if (firstModule.length) {
+  //       const homeName = firstModule.data("home-name");
+
+  //       if (homeName) {
+  //         console.log("Auto-selecting first module:", homeName);
+
+  //         // Store the state for the auto-selected module
+  //         localStorage.setItem("rasiin_active_workspace", homeName);
+
+  //         // Remove any existing active class
+  //         // sidebar.find(".sidebar-item").removeClass("active");
+
+  //         // Add active class to first module
+  //         firstModule.addClass("active");
+
+  //         // Load the module data and update navbar
+  //         frappe.db
+  //           .get_doc("Home Page", homeName)
+  //           .then((doc) => {
+  //             let navbardata = doc.home_shortcut || [];
+  //             localStorage.removeItem("navdata");
+  //             localStorage.setItem("navdata", JSON.stringify(navbardata));
+  //             make_header_nav(navbardata);
+
+  //             console.log("Navbar updated with first module data");
+
+  //             // --- MODIFICATION START ---
+  //             // Auto-navigate to the first item in the navbar to prevent
+  //             // showing the blank workspace message on initial load.
+  //             if (doc.home_shortcut && doc.home_shortcut.length > 0) {
+  //               const first = doc.home_shortcut[0];
+  //               console.log(
+  //                 "Auto-navigating to first navbar item:",
+  //                 first.label
+  //               );
+
+  //               if (first.type == "Report") {
+  //                 frappe.set_route(`/app/query-report/${first.link_to}`);
+  //               } else if (first.type == "Insights Dashboard") {
+  //                 frappe.set_route(
+  //                   `/insights/public/dashboard/${first.dashboard_link}`
+  //                 );
+  //               } else if (first.type == "Dashboard") {
+  //                 frappe.set_route(
+  //                   `/app/dashboard-view/${encodeURIComponent(first.link_to)}`
+  //                 );
+  //               } else if (first.link_to) {
+  //                 // Default for DocType, Page, etc.
+  //                 frappe.set_route(
+  //                   `/app/${first.link_to.replace(/\s/g, "-").toLowerCase()}`
+  //                 );
+  //               }
+  //             }
+  //             // --- MODIFICATION END ---
+  //           })
+  //           .catch((error) => {
+  //             console.error("Error loading first module:", error);
+  //           });
+  //       }
+  //     } else {
+  //       console.log("No sidebar modules found");
+  //     }
+  //   }, 1000); // Wait 1 second for sidebar to fully render
+  // }
+
+  // ✅ --- Simplified and Corrected `autoSelectFirstModule` Function
   autoSelectFirstModule() {
     // Wait for sidebar to be rendered
     setTimeout(() => {
@@ -1714,7 +2008,6 @@ frappe.views.Workspace = class customWorkspace {
       }
 
       const firstModule = sidebar.find(".sidebar-item").first();
-      console.log("firstModule is : ", firstModule);
 
       if (firstModule.length) {
         const homeName = firstModule.data("home-name");
@@ -1722,33 +2015,23 @@ frappe.views.Workspace = class customWorkspace {
         if (homeName) {
           console.log("Auto-selecting first module:", homeName);
 
-          // Remove any existing active class
-          sidebar.find(".sidebar-item").removeClass("active");
+          // Step 1: Set the active workspace in localStorage. This is the most important part.
+          localStorage.setItem("rasiin_active_workspace", homeName);
 
-          // Add active class to first module
-          firstModule.addClass("active");
-
-          // Load the module data and update navbar
+          // Step 2: Load the module's data.
           frappe.db
             .get_doc("Home Page", homeName)
             .then((doc) => {
               let navbardata = doc.home_shortcut || [];
-              localStorage.removeItem("navdata");
               localStorage.setItem("navdata", JSON.stringify(navbardata));
+
+              // Step 3: Rebuild the header. This will automatically call updateSidebarActiveState()
+              // and apply the 'active' class correctly based on what we stored in localStorage.
               make_header_nav(navbardata);
 
-              console.log("Navbar updated with first module data");
-
-              // --- MODIFICATION START ---
-              // Auto-navigate to the first item in the navbar to prevent
-              // showing the blank workspace message on initial load.
+              // Step 4: Navigate to the first item in that module.
               if (doc.home_shortcut && doc.home_shortcut.length > 0) {
                 const first = doc.home_shortcut[0];
-                console.log(
-                  "Auto-navigating to first navbar item:",
-                  first.label
-                );
-
                 if (first.type == "Report") {
                   frappe.set_route(`/app/query-report/${first.link_to}`);
                 } else if (first.type == "Insights Dashboard") {
@@ -1760,13 +2043,11 @@ frappe.views.Workspace = class customWorkspace {
                     `/app/dashboard-view/${encodeURIComponent(first.link_to)}`
                   );
                 } else if (first.link_to) {
-                  // Default for DocType, Page, etc.
                   frappe.set_route(
                     `/app/${first.link_to.replace(/\s/g, "-").toLowerCase()}`
                   );
                 }
               }
-              // --- MODIFICATION END ---
             })
             .catch((error) => {
               console.error("Error loading first module:", error);
@@ -1775,7 +2056,7 @@ frappe.views.Workspace = class customWorkspace {
       } else {
         console.log("No sidebar modules found");
       }
-    }, 1000); // Wait 1 second for sidebar to fully render
+    }, 1000);
   }
 
   prepare_container() {

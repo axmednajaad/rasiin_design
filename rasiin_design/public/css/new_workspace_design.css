@@ -5,14 +5,19 @@
 }
 
 :root {
-  --primary-color: #1e293b;
-  --secondary-color: #0f172a;
+  --primary-color: #0c4872;
+  --secondary-color: #0c4872;
   --white-color: #ffffff;
   --black-color: #000000;
   --gray-color: #888;
 
-  --rasiin-leftbar-width: 260px;
-  --sidebar-bg: #1e293b;
+  --rasiin-leftbar-width: 20%;
+  --header-left-margin: 20%;
+
+
+
+  --sidebar-bg: #0c4872;
+  
   --sidebar-hover: rgba(255, 255, 255, 0.08);
   --sidebar-active: rgba(59, 130, 246, 0.15);
   --sidebar-active-border: #3b82f6;
@@ -22,6 +27,52 @@
   --sidebar-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
   --sidebar-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.rasiin-leftbar-enabled header.navbar {
+  /* margin-left: var(--rasiin-leftbar-width);
+   */
+
+   margin-left: var(--rasiin-leftbar-width);
+   /* dynamically calculate the header's width */
+   width: calc(100% - var(--rasiin-leftbar-width));
+   /* transition for a smooth animation when collapsing/expanding */
+   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+.rasiin-leftbar-enabled .page-head {
+  left: var(--rasiin-leftbar-width);
+  right: 0;
+}
+.rasiin-leftbar-enabled .page-container {
+  margin-left: var(--rasiin-leftbar-width);
+}
+
+body.rasiin-sidebar-collapsed {
+  --rasiin-leftbar-width: 60px;
+}
+
+body.rasiin-sidebar-collapsed #rasiin-left-sidebar {
+  width: var(--rasiin-leftbar-width);
+}
+
+/* Change chat icon color to white */
+.chat-navbar-icon svg,
+.chat-navbar-icon .es-icon,
+.chat-navbar-icon .icon-sm {
+  color: white !important;
+  fill: white !important;
+  stroke: white !important;
+}
+
+.chat-navbar-icon svg use {
+  color: white !important;
+  fill: white !important;
+  stroke: white !important;
+}
+/* END Notification icon color */
+
+
 
 a {
   text-decoration: none;
@@ -105,13 +156,6 @@ a {
   transform: scale(1.1);
 }
 
-body.rasiin-sidebar-collapsed {
-  --rasiin-leftbar-width: 60px;
-}
-
-body.rasiin-sidebar-collapsed #rasiin-left-sidebar {
-  width: var(--rasiin-leftbar-width);
-}
 
 body.rasiin-sidebar-collapsed .sidebar-label,
 body.rasiin-sidebar-collapsed .sidebar-user-name,
@@ -207,16 +251,6 @@ body.rasiin-sidebar-collapsed #rasiin-left-sidebar:hover .sidebar-footer {
   backdrop-filter: blur(10px);
 }
 
-.rasiin-leftbar-enabled header.navbar {
-  margin-left: var(--rasiin-leftbar-width);
-}
-.rasiin-leftbar-enabled .page-head {
-  left: var(--rasiin-leftbar-width);
-  right: 0;
-}
-.rasiin-leftbar-enabled .page-container {
-  margin-left: var(--rasiin-leftbar-width);
-}
 
 #rasiin-left-sidebar ul {
   list-style: none;
@@ -238,8 +272,11 @@ body.rasiin-sidebar-collapsed #rasiin-left-sidebar:hover .sidebar-footer {
   text-decoration: none;
   transition: var(--sidebar-transition);
   border-left: 3px solid transparent;
+  
+  border-radius: 0 12px 12px 0;
   position: relative;
   overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #rasiin-left-sidebar a.sidebar-link::before {
@@ -268,17 +305,72 @@ body.rasiin-sidebar-collapsed #rasiin-left-sidebar:hover .sidebar-footer {
 }
 
 /* Custom style for the ACTIVE sidebar item */
-/* #rasiin-left-sidebar li.active a.sidebar-link {
-  background: linear-gradient(to left, var(--sidebar-hover), var(--sidebar-bg));
+#rasiin-left-sidebar li.sidebar-item.active a.sidebar-link {
+   /* background: var(--sidebar-active); */
+  background: linear-gradient(135deg, var(--sidebar-active-border), #1e88e5);
+  border-left: 3px solid var(--sidebar-active-border);
+  color: var(--white-color);
+  font-weight: 600; /* Bolder font for active state */
 
-  border-left: 4px solid #facc15;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  transform: translateX(4px);
+  position: relative;
+  overflow: hidden;
+}
 
-  color: #ffffff;
 
-  font-weight: 700;
+#rasiin-left-sidebar li.sidebar-item.active a.sidebar-link::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  z-index: 1;
+}
 
-  box-shadow: none;
-} */
+#rasiin-left-sidebar li.sidebar-item.active a.sidebar-link::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background: var(--white-color);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+/* Also ensure the icon color is bright when active */
+#rasiin-left-sidebar li.sidebar-item.active .sidebar-icon {
+  color: var(--white-color);
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+#rasiin-left-sidebar li.sidebar-item.active .sidebar-label {
+  color: var(--white-color);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
 
 /* Debug styles - remove after fixing */
 

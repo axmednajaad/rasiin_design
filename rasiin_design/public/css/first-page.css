@@ -1,6 +1,6 @@
 :root {
   /* --header-bg-color: #0c4872; */
-  --header-bg-color: #0f172a;
+  --header-bg-color: #0c4872;
   --white-color: hsl(0, 0%, 100%);
   --black-color: hsl(0, 0%, 0%);
   --green-color: hsl(140, 100%, 29%);
@@ -53,17 +53,15 @@ a {
 /* HEADER STARTS HERE */
 /* HEADER MOBILE SCREENS*/
 .header {
-  background-color: var(--header-bg-color);
+  background-color: var(--header-bg-color) !important;
   /* background-color: #e89b21 !important; */
   display: flex;
   align-items: center;
   gap: 20px;
   padding-top: 10px;
   padding-bottom: 10px;
-  width: 70%;
   opacity: 1;
   transition: all 0.5s ease;
-  /* display: none !important; */
 }
 
 .open-header {
