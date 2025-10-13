@@ -37,6 +37,7 @@
   /* You might also want to adjust text color if needed */
   color: #ffffff !important;
 }
+
 .btn-primary:hover {
   /* background-color: darken(var(--secondary-color), 10%) !important; */
   background-color: var(--secondary-color) !important;
@@ -153,7 +154,8 @@ a {
   right: 16px;
   z-index: 1041;
   background: var(--sidebar-bg);
-  border: 1px solid var(--sidebar-border);
+  /* border: 1px solid var(--sidebar-border); */
+  border: 1px solid rgba(255, 255, 255, 0.4);
   color: var(--sidebar-text);
   border-radius: 6px;
   width: 32px;
