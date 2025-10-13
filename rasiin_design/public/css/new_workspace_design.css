@@ -4,9 +4,10 @@
   box-sizing: border-box;
 }
 
+
 :root {
-  --primary-color: #0c4872;
-  --secondary-color: #0c4872;
+  --primary-color: #3ba584;
+  --secondary-color: #60D2AE;
   --white-color: #ffffff;
   --black-color: #000000;
   --gray-color: #888;
@@ -16,16 +17,31 @@
 
 
 
-  --sidebar-bg: #0c4872;
+  /* --sidebar-bg: #38C79A; */
+  --sidebar-bg: #3ba584;
   
   --sidebar-hover: rgba(255, 255, 255, 0.08);
   --sidebar-active: rgba(59, 130, 246, 0.15);
-  --sidebar-active-border: #3b82f6;
+  --sidebar-active-border: #045d41;
   --sidebar-text: #e2e8f0;
   --sidebar-text-muted: #94a3b8;
   --sidebar-border: rgba(255, 255, 255, 0.05);
   --sidebar-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
   --sidebar-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Button Colors */
+.btn-primary {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  /* You might also want to adjust text color if needed */
+  color: #ffffff !important;
+}
+.btn-primary:hover {
+  /* background-color: darken(var(--secondary-color), 10%) !important; */
+  background-color: var(--secondary-color) !important;
+
+  border-color: var(--sidebar-active-border) !important;
 }
 
 .rasiin-leftbar-enabled header.navbar {
@@ -307,12 +323,12 @@ body.rasiin-sidebar-collapsed #rasiin-left-sidebar:hover .sidebar-footer {
 /* Custom style for the ACTIVE sidebar item */
 #rasiin-left-sidebar li.sidebar-item.active a.sidebar-link {
    /* background: var(--sidebar-active); */
-  background: linear-gradient(135deg, var(--sidebar-active-border), #1e88e5);
-  border-left: 3px solid var(--sidebar-active-border);
+  background: linear-gradient(135deg, var(--sidebar-active-border),--sidebar-active-border);
+  border-left: 3px solid var(--white-color);
   color: var(--white-color);
   font-weight: 600; /* Bolder font for active state */
 
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  /* box-shadow: 0 4px 12px var(--white-color); */
   transform: translateX(4px);
   position: relative;
   overflow: hidden;
@@ -438,7 +454,7 @@ body.rasiin-sidebar-collapsed #rasiin-left-sidebar:hover .sidebar-footer {
   position: relative;
   cursor: pointer;
   padding: 16px 20px;
-  border-bottom: 1px solid var(--sidebar-border);
+  border-bottom: 1px solid var(--white-color);
   transition: var(--sidebar-transition);
 }
 

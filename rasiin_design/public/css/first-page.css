@@ -1,10 +1,8 @@
 :root {
   /* --header-bg-color: #0c4872; */
-  --header-bg-color: #0c4872;
+  --header-bg-color: #3ba584;
   --white-color: hsl(0, 0%, 100%);
   --black-color: hsl(0, 0%, 0%);
-  --green-color: hsl(140, 100%, 29%);
-  --orange-color: hsl(45, 100%, 54%);
   --red-color: hsl(358, 83%, 52%);
   --aqua-color: hsl(183, 99%, 30%);
   --light-green: hsl(182, 34%, 85%);
@@ -109,33 +107,6 @@ a {
   padding: 0rem 0rem !important;
 }
 
-.notification_icons_profile_img {
-  display: flex;
-  flex: 1;
-  /* align-items: center; */
-  /* justify-content: flex-end; */
-  /* margin-right: 65px; */
-  /* gap: 20px; */
-}
-
-.notification__icon,
-.timer__icon {
-  position: relative;
-}
-
-.notification__icon__indicator,
-.timer__icon__indicator {
-  position: absolute;
-  left: 8px;
-  bottom: 5px;
-  padding: 2px 4px;
-  height: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--aqua-color);
-  color: var(--red-color);
-}
 
 .profile__image__name {
   display: none;
@@ -355,24 +326,6 @@ a {
     font-size: 20px;
   }
 
-  .notification__icon,
-  .timer__icon {
-    position: relative;
-  }
-
-  .notification__icon__indicator,
-  .timer__icon__indicator {
-    position: absolute;
-    left: 8px;
-    bottom: 8px;
-    padding: 2px 4px;
-    height: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--aqua-color);
-    color: var(--white-color);
-  }
 
   .profile__image__name {
     display: flex;

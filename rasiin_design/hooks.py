@@ -19,13 +19,13 @@ app_include_css = [
     "/assets/rasiin_design/css/new_workspace_design.css" , 
     
     # 
-    "/assets/rasiin_design/css/new_app_page.css" , 
-    "/assets/rasiin_design/css/new_design.css" , 
-    "/assets/rasiin_design/css/anfac_retailss.css" , 
+    # "/assets/rasiin_design/css/new_app_page.css" , 
+    # "/assets/rasiin_design/css/new_design.css" , 
+    # "/assets/rasiin_design/css/anfac_retailss.css" , 
     "/assets/rasiin_design/css/first-page.css" ,
-    '/assets/rasiin_design/js/lib/tabulator/dist/css/tabulator.min.css',
-    '/assets/rasiin_design/js/lib/tabulator/dist/css/tabulator_simple.min.css',
-    '/assets/rasiin_design/js/lib/fontawesome/css/all.min.css'
+    # '/assets/rasiin_design/js/lib/tabulator/dist/css/tabulator.min.css',
+    # '/assets/rasiin_design/js/lib/tabulator/dist/css/tabulator_simple.min.css',
+    # '/assets/rasiin_design/js/lib/fontawesome/css/all.min.css'
     
     # '/assets/rasiin_design/js/lib/tailwind/index.css'
     # ,

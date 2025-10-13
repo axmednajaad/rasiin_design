@@ -42,7 +42,7 @@ function checkNotificationPermission() {
     } else {
       // Otherwise, call the server to find out.
       frappe.call({
-        method: "rasiin_design.api.template.can_user_see_notifications", // 👈 Your new python method
+        method: "rasiin_design.api.template.can_user_see_notifications",
         callback: (r) => {
           console.log("can_user_see_notifications api response : ", r);
           const hasPermission = r.message || false;
